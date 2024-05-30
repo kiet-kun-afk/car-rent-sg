@@ -63,7 +63,7 @@ public class CarResponse {
     @JsonProperty("branch_id")
     private Integer branchId;
 
-    @JsonProperty("branch_id")
+    @JsonProperty("brand_id")
     private Integer brandId;
 
     @JsonProperty("category_id")

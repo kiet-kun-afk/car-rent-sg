@@ -1,5 +1,9 @@
 package app.service;
 
-public interface CarService {
+import java.util.List;
 
+import app.response.CarResponse;
+
+public interface CarService {
+    List<CarResponse> getAll();
 }
