@@ -42,7 +42,7 @@ public class PasswordResetService {
     public void createPasswordResetToken(String email, String who, String type) throws Exception {
         if (who.equals("customer")) {
 
-            Customer customer = customerRepository.findByEmail(email);
+            Customer customer = customerRepository.findByEmailAndStatusTrue(email);
 
             if (customer == null) {
                 throw new Exception("Customer not found");
@@ -61,7 +61,7 @@ public class PasswordResetService {
 
         } else if (who.equals("staff")) {
 
-            Staff staff = staffRepository.findByEmail(email);
+            Staff staff = staffRepository.findByEmailAndStatusTrue(email);
 
             if (staff == null) {
                 throw new Exception("Staff not found");
