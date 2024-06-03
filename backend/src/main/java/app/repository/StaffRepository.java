@@ -21,7 +21,7 @@ public interface StaffRepository extends JpaRepository<Staff, Integer> {
 
     Staff findByPhoneNumber(String phoneNumber);
 
-    Staff findByEmailOrPhoneNumber(String email, String phoneNumber);
+    Staff findByEmailOrPhoneNumberAndStatusTrue(String email, String phoneNumber);
 
     Optional<Staff> findById(Integer id);
 

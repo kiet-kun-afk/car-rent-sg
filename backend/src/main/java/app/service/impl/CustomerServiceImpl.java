@@ -64,9 +64,17 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setEmail(customerDTP.getEmail());
         customer.setPhoneNumber(customerDTP.getPhoneNumber());
         customer.setPassword(passwordEncoder.encode(customerDTP.getPassword()));
+        customer.setStatus(true);
 
         customerRepository.save(customer);
         return CustomerResponse.registerCustomer(customer);
+    }
+
+    @Override
+    public Customer getAuth() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return customerRepository.findByEmailOrPhoneNumberAndStatusTrue(username, username).get();
     }
 
 }
