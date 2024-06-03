@@ -7,8 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import app.model.Customer;
 import app.model.PasswordResetToken;
+import app.model.Staff;
 import app.repository.CustomerRepository;
 import app.repository.PasswordResetTokenRepository;
+import app.repository.StaffRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -31,39 +33,84 @@ public class PasswordResetService {
     private int expiryMinutes;
 
     private final CustomerRepository customerRepository;
+    private final StaffRepository staffRepository;
     private final PasswordResetTokenRepository tokenRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void createPasswordResetToken(String email) throws Exception {
-        Customer customer = customerRepository.findByEmail(email);
-        if (customer == null) {
-            throw new Exception("Customer not found");
+    public void createPasswordResetToken(String email, String who, String type) throws Exception {
+        if (who.equals("customer")) {
+
+            Customer customer = customerRepository.findByEmail(email);
+
+            if (customer == null) {
+                throw new Exception("Customer not found");
+            }
+
+            PasswordResetToken token = new PasswordResetToken();
+            token.setCustomer(customer);
+            token.setToken(UUID.randomUUID().toString());
+            token.setExpiryDate(LocalDateTime.now().plusMinutes(expiryMinutes));
+
+            tokenRepository.save(token);
+
+            String resetUrl = "http://localhost:8080/api/reset-password?token=" + token.getToken();
+            emailService.sendMail(customer.getEmail(),
+                    "Reset Password", "<a href=\"" + resetUrl + "\">Click to reset your password</a>");
+
+        } else if (who.equals("staff")) {
+
+            Staff staff = staffRepository.findByEmail(email);
+
+            if (staff == null) {
+                throw new Exception("Staff not found");
+            }
+
+            PasswordResetToken token = new PasswordResetToken();
+            token.setStaff(staff);
+            token.setToken(UUID.randomUUID().toString());
+
+            if (type.equals("first")) {
+                token.setExpiryDate(LocalDateTime.now().plusMinutes(43200));
+            } else {
+                token.setExpiryDate(LocalDateTime.now().plusMinutes(expiryMinutes));
+            }
+
+            tokenRepository.save(token);
+
+            String resetUrl = "http://localhost:8080/api/reset-password?token=" + token.getToken();
+            emailService.sendMail(staff.getEmail(),
+                    "Reset Password", "<a href=\"" + resetUrl + "\">Click to reset your password</a>");
+
+        } else {
+            throw new Exception("Can not find anyone to send reset password");
         }
-
-        PasswordResetToken token = new PasswordResetToken();
-        token.setCustomer(customer);
-        token.setToken(UUID.randomUUID().toString());
-        token.setExpiryDate(LocalDateTime.now().plusMinutes(expiryMinutes));
-
-        tokenRepository.save(token);
-
-        String resetUrl = "http://localhost:8080/api/reset-password?token=" + token.getToken();
-        emailService.sendMail(customer.getEmail(), "Reset Password",
-                "<a href=\"" + resetUrl + "\">Click to reset your password</a>");
     }
 
     @Transactional
-    public void resetPassword(String token, String newPassword) throws Exception {
+    public void resetPassword(String token, String newPassword, String who) throws Exception {
         PasswordResetToken resetToken = tokenRepository.findByToken(token);
+
         if (resetToken == null || resetToken.getExpiryDate().isBefore(LocalDateTime.now())) {
             throw new Exception("Token is invalid or expired");
         }
 
-        Customer customer = resetToken.getCustomer();
-        customer.setPassword(passwordEncoder.encode(newPassword));
-        customerRepository.save(customer);
+        if (who.equals("customer")) {
+
+            Customer customer = resetToken.getCustomer();
+            customer.setPassword(passwordEncoder.encode(newPassword));
+            customerRepository.save(customer);
+
+        } else if (who.equals("staff")) {
+
+            Staff staff = resetToken.getStaff();
+            staff.setPassword(passwordEncoder.encode(newPassword));
+            staffRepository.save(staff);
+
+        } else {
+            throw new Exception("Can not find anyone to reset password");
+        }
 
         tokenRepository.delete(resetToken);
     }

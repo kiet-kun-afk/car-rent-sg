@@ -5,10 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import app.dto.login.LoginDTO;
 import app.dto.login.RegisterStaffDTO;
@@ -17,6 +14,7 @@ import app.response.LoginResponse;
 import app.response.ResponseObject;
 import app.response.StaffResponse;
 import app.service.StaffService;
+import app.service.impl.PasswordResetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +35,7 @@ public class StaffLoginController {
     private final StaffService staffService;
 
     @PostMapping(value = { "/login", "/signin" })
-    public ResponseEntity<ResponseObject> login(@Valid @RequestBody LoginDTO staffDTO, BindingResult result) {
+    public ResponseEntity<ResponseObject> login(@Valid @ModelAttribute LoginDTO staffDTO, BindingResult result) {
         try {
             if (result.hasErrors()) {
                 List<String> errors = result.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
@@ -65,7 +63,7 @@ public class StaffLoginController {
     }
 
     @PostMapping(value = { "/register", "/signup" })
-    public ResponseEntity<ResponseObject> register(@Valid @RequestBody RegisterStaffDTO staffDTO,
+    public ResponseEntity<ResponseObject> register(@Valid @ModelAttribute RegisterStaffDTO staffDTO,
             BindingResult result) {
         try {
             if (result.hasErrors()) {
@@ -88,6 +86,28 @@ public class StaffLoginController {
                     .message("Register failed")
                     .data(e.getMessage())
                     .build());
+        }
+    }
+
+    private final PasswordResetService passwordResetService;
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        try {
+            passwordResetService.createPasswordResetToken(email, "staff", "nothing");
+            return ResponseEntity.ok("Password reset link has been sent to your email");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
+        try {
+            passwordResetService.resetPassword(token, newPassword, "staff");
+            return ResponseEntity.ok("Password has been reset successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

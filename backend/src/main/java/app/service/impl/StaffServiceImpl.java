@@ -2,12 +2,12 @@ package app.service.impl;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import app.dto.login.LoginDTO;
@@ -37,10 +37,10 @@ import lombok.RequiredArgsConstructor;
 public class StaffServiceImpl implements StaffService {
 
     private final AuthenticationManager authenticationManager;
-    private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final StaffRepository staffRepository;
     private final RoleRepository roleRepository;
+    private final PasswordResetService passwordResetService;
 
     @Override
     public LoginResponse loginStaff(LoginDTO loginDTO) throws Exception {
@@ -67,10 +67,12 @@ public class StaffServiceImpl implements StaffService {
         Staff staff = new Staff();
         staff.setEmail(staffDTO.getEmail());
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
-        staff.setPassword(passwordEncoder.encode(staffDTO.getPhoneNumber()));
+        staff.setPassword(UUID.randomUUID().toString());
         staff.setRoles(getRoles(staffDTO.getRoles()));
+        staff.setStatus(true);
 
         staffRepository.save(staff);
+        passwordResetService.createPasswordResetToken(staff.getEmail(), "staff", "first");
         return StaffResponse.registerStaff(staff);
     }
 
@@ -100,6 +102,13 @@ public class StaffServiceImpl implements StaffService {
             }
         }
         return roles;
+    }
+
+    @Override
+    public Staff getAuth() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return staffRepository.findByEmailOrPhoneNumberAndStatusTrue(username, username);
     }
 
 }

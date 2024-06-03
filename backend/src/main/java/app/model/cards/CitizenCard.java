@@ -23,7 +23,7 @@ public class CitizenCard {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "address_id")
+    @Column(name = "citizen_id")
     private Integer citizenId;
 
     @Column(name = "id_card", nullable = true)
