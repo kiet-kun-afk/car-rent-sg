@@ -36,15 +36,15 @@ public class StaffLoginController {
 
     @PostMapping(value = { "/login", "/signin" })
     public ResponseEntity<ResponseObject> login(@Valid @ModelAttribute LoginDTO staffDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Login failed, validation")
+                    .data(errors)
+                    .build());
+        }
         try {
-            if (result.hasErrors()) {
-                List<String> errors = result.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
-                return ResponseEntity.badRequest().body(ResponseObject.builder()
-                        .status(400)
-                        .message("Login failed, validation")
-                        .data(errors)
-                        .build());
-            }
             LoginResponse loginResponse = staffService.loginStaff(staffDTO);
             JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
             jwtAuthResponse.setAccessToken(loginResponse.getToken());

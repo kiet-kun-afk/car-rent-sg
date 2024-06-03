@@ -65,15 +65,15 @@ public class CustomerLoginController {
     @PostMapping(value = { "/register", "/signup" })
     public ResponseEntity<ResponseObject> register(@Valid @ModelAttribute RegisterCustomerDTO customerDTO,
             BindingResult result) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Register failed, validation")
+                    .data(errors)
+                    .build());
+        }
         try {
-            if (result.hasErrors()) {
-                List<String> errors = result.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
-                return ResponseEntity.badRequest().body(ResponseObject.builder()
-                        .status(400)
-                        .message("Register failed, validation")
-                        .data(errors)
-                        .build());
-            }
             CustomerResponse customer = customerService.registerCustomer(customerDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
