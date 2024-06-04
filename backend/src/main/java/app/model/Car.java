@@ -66,7 +66,7 @@ public class Car {
     private Boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "branch_id", nullable = false)
+    @JoinColumn(name = "branch_id")
     private Branch branch;
 
     @ManyToOne
@@ -74,6 +74,5 @@ public class Car {
     private Brand brand;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 }

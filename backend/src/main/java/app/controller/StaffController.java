@@ -1,17 +1,5 @@
 package app.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
-
-import app.dto.CarDTO;
-import app.response.CarResponse;
-import app.response.ResponseObject;
-import app.service.CarService;
-// import app.service.impl.CarServiceImpl;
-
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -21,101 +9,108 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.dto.StaffDTO;
+import app.response.ResponseObject;
+import app.response.StaffResponse;
+import app.service.impl.StaffServiceImpl;
+import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("${api.prefix}/cars")
+@RequestMapping("${api.prefix}/staffs")
 @RequiredArgsConstructor
-public class CarController {
+public class StaffController {
 
-    private final CarService carService;
+    private final StaffServiceImpl staffService;
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<CarResponse> carResponse = carService.getAll();
+            List<StaffResponse> staffReponses = staffService.getAll();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .data(staffReponses)
                     .build());
         } catch (Exception e) {
+            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Update staff failed")
                     .data(e.getMessage())
                     .build());
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getone(@PathVariable("id") Integer id) {
+    @GetMapping("/{email}")
+    public ResponseEntity<ResponseObject> getEmail(@PathVariable("email") String email) {
         try {
-            CarResponse carResponse = carService.getOne(id);
+            StaffResponse staffResponse = staffService.getOne(email);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .data(staffResponse)
                     .build());
         } catch (Exception e) {
+            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Update staff failed")
                     .data(e.getMessage())
                     .build());
         }
-
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseObject> Post(@RequestBody CarDTO carDTO) {
+    public ResponseEntity<ResponseObject> Post(@RequestBody StaffDTO staffDTO) {
         try {
-            CarResponse carResponse = carService.Post(carDTO);
+            StaffResponse staffResponse = staffService.Post(staffDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .data(staffResponse)
                     .build());
         } catch (Exception e) {
+            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Update staff failed")
                     .data(e.getMessage())
                     .build());
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ResponseObject> Put(@PathVariable("id") Integer id, @RequestBody CarDTO carDTO) {
+    @PutMapping("/{email}")
+    public ResponseEntity<ResponseObject> Put(@PathVariable("email") String email, @RequestBody StaffDTO staffDTO) {
         try {
-            CarResponse carResponse = carService.Put(id, carDTO);
+            StaffResponse staffResponse = staffService.Put(email, staffDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .data(staffResponse)
                     .build());
         } catch (Exception e) {
+            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Update staff failed")
                     .data(e.getMessage())
                     .build());
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseObject> Delete(@PathVariable("id") Integer id) {
+    @DeleteMapping("/{email}")
+    public ResponseEntity<ResponseObject> Delete(@PathVariable("email") String email) {
         try {
-            carService.Delete(id);
+            staffService.Delete(email);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .build());
         } catch (Exception e) {
+            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Update staff failed")
                     .data(e.getMessage())
                     .build());
         }
     }
-
 }

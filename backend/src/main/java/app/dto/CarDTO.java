@@ -61,6 +61,7 @@ public class CarDTO {
     @Past(message = "Registration is in the past")
     private LocalDateTime registrationDate;
 
+
     private Boolean status;
 
     @NotNull(message = "Branch id is not null")
@@ -74,4 +75,5 @@ public class CarDTO {
     @NotNull(message = "Category id seats is not null")
     @Positive(message = "Category id seats is positive")
     private Integer categoryId;
+
 }

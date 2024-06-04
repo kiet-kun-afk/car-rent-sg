@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+
 import org.springframework.web.bind.annotation.*;
 
 import app.dto.login.LoginDTO;
@@ -14,7 +15,9 @@ import app.response.CustomerResponse;
 import app.response.LoginResponse;
 import app.response.ResponseObject;
 import app.service.CustomerService;
+
 import app.service.impl.PasswordResetService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +39,7 @@ public class CustomerLoginController {
 
     @PostMapping(value = { "/login", "/signin" })
     public ResponseEntity<ResponseObject> login(@Valid @ModelAttribute LoginDTO customerDTO, BindingResult result) {
+
         try {
             if (result.hasErrors()) {
                 List<String> errors = result.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
@@ -110,4 +114,5 @@ public class CustomerLoginController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 }

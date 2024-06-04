@@ -71,7 +71,7 @@ public class CarResponse {
         this.rightImage = car.getRightImage();
         this.leftImage = car.getLeftImage();
         this.describe = car.getDescribe();
-        this.registrationDate = car.getRegistrationDate();
+        this.registrationDate = (Date) car.getRegistrationDate();
         this.status = car.getStatus();
         this.branchId = car.getBranch().getBranchId();
         this.branchName = car.getBranch().getBranchName();

@@ -17,6 +17,12 @@ import app.model.Staff;
  */
 public interface StaffRepository extends JpaRepository<Staff, Integer> {
 
+    Optional<Staff> findByEmail(String email);
+
+    Staff findByPhoneNumber(String phoneNumber);
+
+    Staff findByEmailOrPhoneNumber(String email, String phoneNumber);
+
     Staff findByEmailAndStatusTrue(String email);
 
     Staff findByPhoneNumberAndStatusTrue(String phoneNumber);

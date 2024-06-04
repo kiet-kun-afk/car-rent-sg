@@ -54,7 +54,6 @@ public class Staff extends BaseEntity {
     @JoinTable(name = "staff_roles", joinColumns = @JoinColumn(name = "staff_id", referencedColumnName = "staff_id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
 
-    @Column(nullable = false)
     private Boolean status;
 
     @Column(name = "avatar_image")
