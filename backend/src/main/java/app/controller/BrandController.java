@@ -1,17 +1,5 @@
 package app.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
-
-import app.dto.CarDTO;
-import app.response.CarResponse;
-import app.response.ResponseObject;
-import app.service.CarService;
-// import app.service.impl.CarServiceImpl;
-
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -21,107 +9,109 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-/**
- * CarController
- * Version: 1.0
- * Date: 5/24/2024
- * Modification Logs
- * DATE AUTHOR DESCRIPTION
- * -------------------------------------
- * 5/24/2024 kiet-kun-afk Create
- */
+import app.dto.BrandDTO;
+
+import app.response.BrandReponse;
+import app.response.ResponseObject;
+import app.service.impl.BrandServiceImpl;
+import lombok.RequiredArgsConstructor;
+
 @RestController
-@RequestMapping("${api.prefix}/cars")
+@RequestMapping("${api.prefix}/brands")
 @RequiredArgsConstructor
-public class CarController {
+public class BrandController {
 
-    private final CarService carService;
+    private final BrandServiceImpl brandService;
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<CarResponse> carResponse = carService.getAll();
+            List<BrandReponse> brandReponse = brandService.getALL();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .data(brandReponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Get all brand failed")
                     .data(e.getMessage())
                     .build());
         }
+
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getone(@PathVariable("id") Integer id) {
+    public ResponseEntity<ResponseObject> getOne(@PathVariable Integer id) {
         try {
-            CarResponse carResponse = carService.getOne(id);
+            BrandReponse brandResponse = brandService.getOne(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .message("Get all brand successfully")
+                    .data(brandResponse)
                     .build());
         } catch (Exception e) {
+            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Get brand id failed")
                     .data(e.getMessage())
                     .build());
         }
-
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseObject> Post(@RequestBody CarDTO carDTO) {
+    public ResponseEntity<ResponseObject> Post(@RequestBody BrandDTO brandDTO) {
         try {
-            CarResponse carResponse = carService.Post(carDTO);
+            BrandReponse brandReponse = brandService.Post(brandDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .message("Get all brand successfully")
+                    .data(brandReponse)
                     .build());
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Get all brand failed")
                     .data(e.getMessage())
                     .build());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseObject> Put(@PathVariable("id") Integer id, @RequestBody CarDTO carDTO) {
+    public ResponseEntity<ResponseObject> Put(@PathVariable Integer id, @RequestBody BrandDTO brandDTO) {
         try {
-            CarResponse carResponse = carService.Put(id, carDTO);
+            BrandReponse brandReponse = brandService.Put(id, brandDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .message("Get all brand successfully")
+                    .data(brandReponse)
                     .build());
         } catch (Exception e) {
+            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Get all brand failed")
                     .data(e.getMessage())
                     .build());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseObject> Delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<ResponseObject> Delete(@PathVariable Integer id) {
         try {
-            carService.Delete(id);
+            brandService.Delete(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Get all brand failed")
                     .data(e.getMessage())
                     .build());
         }

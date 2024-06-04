@@ -1,6 +1,8 @@
 package app.response;
 
-import java.sql.Date;
+import java.time.LocalDate;
+// import java.sql.Date;
+// import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,7 +33,7 @@ public class StaffResponse {
     private String phoneNumber;
 
     @JsonProperty("birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     private String email;
 

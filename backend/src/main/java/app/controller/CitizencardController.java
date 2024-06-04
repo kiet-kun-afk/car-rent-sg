@@ -1,19 +1,8 @@
 package app.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
-
-import app.dto.CarDTO;
-import app.response.CarResponse;
-import app.response.ResponseObject;
-import app.service.CarService;
-// import app.service.impl.CarServiceImpl;
-
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,108 +10,101 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-/**
- * CarController
- * Version: 1.0
- * Date: 5/24/2024
- * Modification Logs
- * DATE AUTHOR DESCRIPTION
- * -------------------------------------
- * 5/24/2024 kiet-kun-afk Create
- */
+import app.dto.CitizencardDTO;
+import app.response.CitizencardResponse;
+import app.response.ResponseObject;
+import app.service.impl.CitizencardServiceImpl;
+import lombok.RequiredArgsConstructor;
+
 @RestController
-@RequestMapping("${api.prefix}/cars")
+@RequestMapping("${api.prefix}/citizencards")
 @RequiredArgsConstructor
-public class CarController {
-
-    private final CarService carService;
+public class CitizencardController {
+    @Autowired
+    CitizencardServiceImpl citizendcardservice;
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<CarResponse> carResponse = carService.getAll();
+            List<CitizencardResponse> citizencardReponses = citizendcardservice.getAll();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .data(citizencardReponses)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Update citizen failed")
                     .data(e.getMessage())
                     .build());
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getone(@PathVariable("id") Integer id) {
+    public ResponseEntity<ResponseObject> getById(@PathVariable("id") Integer id) {
+
         try {
-            CarResponse carResponse = carService.getOne(id);
+            CitizencardResponse citizencardResponse = citizendcardservice.getOne(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .data(citizencardResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
-                    .data(e.getMessage())
+                    .message(e.getMessage())
                     .build());
         }
-
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseObject> Post(@RequestBody CarDTO carDTO) {
+    public ResponseEntity<ResponseObject> post(@RequestBody CitizencardDTO citizencardDTO) {
         try {
-            CarResponse carResponse = carService.Post(carDTO);
+            CitizencardResponse citizencardResponse = citizendcardservice.Post(citizencardDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .data(citizencardResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
-                    .data(e.getMessage())
+                    .message(e.getMessage())
                     .build());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseObject> Put(@PathVariable("id") Integer id, @RequestBody CarDTO carDTO) {
+    public ResponseEntity<ResponseObject> post(@PathVariable("id") Integer id,
+            @RequestBody CitizencardDTO citizencardDTO) {
         try {
-            CarResponse carResponse = carService.Put(id, carDTO);
+            CitizencardResponse citizencardResponse = citizendcardservice.Put(id, citizencardDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
-                    .data(carResponse)
+                    .data(citizencardResponse)
                     .build());
         } catch (Exception e) {
+            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
-                    .data(e.getMessage())
+                    .message(e.getMessage())
                     .build());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseObject> Delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<ResponseObject> delete(@PathVariable("id") Integer id) {
         try {
-            carService.Delete(id);
+            citizendcardservice.Delete(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
-                    .data(e.getMessage())
+                    .message(e.getMessage())
                     .build());
         }
     }

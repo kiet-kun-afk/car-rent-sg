@@ -8,6 +8,12 @@ import app.model.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
+    Customer findByPhoneNumber(String phoneNumber);
+
+    Customer findByEmail(String email);
+
+    Optional<Customer> findByEmailOrPhoneNumber(String email, String phoneNumber);
+
     Customer findByPhoneNumberAndStatusTrue(String phoneNumber);
 
     Customer findByEmailAndStatusTrue(String email);
