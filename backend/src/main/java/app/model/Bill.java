@@ -1,6 +1,6 @@
 package app.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,9 +21,8 @@ public class Bill {
     @Column(name = "bill_id")
     private Integer billId;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "pay_date", nullable = false)
-    private Date payDate;
+    private LocalDateTime payDate;
 
     @Column(name = "pay_cost", nullable = false)
     private Double payCost;
@@ -33,7 +32,7 @@ public class Bill {
 
     private String describe;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "contract_id", nullable = false)
     private Contract contract;
 

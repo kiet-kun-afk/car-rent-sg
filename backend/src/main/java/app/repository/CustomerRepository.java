@@ -1,5 +1,6 @@
 package app.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,9 +13,20 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     Customer findByEmailAndStatusTrue(String email);
 
+    Customer findByEmail(String email);
+
     Optional<Customer> findByEmailOrPhoneNumberAndStatusTrue(String email, String phoneNumber);
 
-    Boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
 
-    Boolean existsByPhoneNumber(String phoneNumber);
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    boolean existsByPhoneNumberAndCustomerIdNot(String phoneNumber, Integer customerId);
+
+    boolean existsByEmailAndCustomerIdNot(String email, Integer customerId);
+
+    List<Customer> findByStatusTrue();
+
+    List<Customer> findByStatusFalse();
+
 }

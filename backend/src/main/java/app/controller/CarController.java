@@ -12,15 +12,6 @@ import app.response.ResponseObject;
 import app.service.CarService;
 import lombok.RequiredArgsConstructor;
 
-/**
- * CarController
- * Version: 1.0
- * Date: 5/24/2024
- * Modification Logs
- * DATE AUTHOR DESCRIPTION
- * -------------------------------------
- * 5/24/2024 kiet-kun-afk Create
- */
 @RestController
 @RequestMapping("${api.prefix}/cars")
 @RequiredArgsConstructor
