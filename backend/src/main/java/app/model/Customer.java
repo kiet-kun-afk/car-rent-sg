@@ -1,6 +1,8 @@
 package app.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import app.model.cards.CitizenCard;
 import app.model.cards.DriverLicense;
@@ -16,30 +18,30 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "customers", uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "phone_number" }),
-        @UniqueConstraint(columnNames = { "email" }) })
-public class Customer {
+@Table(name = "customers")
+public class Customer extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "customer_id")
     private Integer customerId;
 
-    @Column(name = "first_name")
-    private String firstName;
+    // @Column(name = "first_name")
+    // private String firstName;
 
-    @Column(name = "last_name")
-    private String lastName;
+    // @Column(name = "last_name")
+    // private String lastName;
+
+    @Column(name = "full_name")
+    private String fullName;
 
     private Boolean gender;
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Column(nullable = false)
     private String email;
@@ -51,17 +53,18 @@ public class Customer {
     private String avatarImage;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "citizen_id")
     private CitizenCard citizenCard;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "driver_license_id")
     private DriverLicense driverLicense;
 }

@@ -22,15 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-/**
- * CarController
- * Version: 1.0
- * Date: 5/24/2024
- * Modification Logs
- * DATE AUTHOR DESCRIPTION
- * -------------------------------------
- * 5/24/2024 kiet-kun-afk Create
- */
 @RestController
 @RequestMapping("${api.prefix}/cars")
 @RequiredArgsConstructor

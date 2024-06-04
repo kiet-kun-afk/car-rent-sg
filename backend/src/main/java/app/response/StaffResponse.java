@@ -1,11 +1,8 @@
 package app.response;
 
 import java.time.LocalDate;
-// import java.sql.Date;
-// import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import app.model.Role;
 import app.model.Staff;
@@ -18,45 +15,44 @@ import lombok.Setter;
 @NoArgsConstructor
 public class StaffResponse {
 
-    @JsonProperty("staff_id")
     private Integer staffId;
 
-    @JsonProperty("first_name")
-    private String firstName;
+    // private String firstName;
 
-    @JsonProperty("last_name")
-    private String lastName;
+    // private String lastName;
+
+    private String fullName;
 
     private Boolean gender;
 
-    @JsonProperty("phone_number")
     private String phoneNumber;
 
-    @JsonProperty("birth_date")
     private LocalDate birthDate;
 
     private String email;
 
-    @JsonProperty("staff_roles")
     private List<String> roles;
 
     private Boolean status;
 
-    @JsonProperty("avatar_image")
     private String avatarImage;
 
-    private String password;
+    // @JsonIgnore
+    // private String password;
 
-    @JsonProperty("address_id")
     private Integer address;
 
-    @JsonProperty("citizen_id")
     private Integer citizenCard;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     public StaffResponse(Staff staff) {
         this.staffId = staff.getStaffId();
-        this.firstName = staff.getFirstName();
-        this.lastName = staff.getLastName();
+        // this.firstName = staff.getFirstName();
+        // this.lastName = staff.getLastName();
+        this.fullName = staff.getFullName();
         this.gender = staff.getGender();
         this.phoneNumber = staff.getPhoneNumber();
         this.birthDate = staff.getBirthDate();
@@ -64,9 +60,10 @@ public class StaffResponse {
         this.roles = staff.getRoles().stream().map(Role::getName).toList();
         this.status = staff.getStatus();
         this.avatarImage = staff.getAvatarImage();
-        this.password = staff.getPassword();
         this.address = staff.getAddress().getAddressId();
         this.citizenCard = staff.getCitizenCard().getCitizenId();
+        this.createdAt = staff.getCreatedAt();
+        this.updatedAt = staff.getUpdatedAt();
     }
 
     public static StaffResponse fromStaff(Staff staff) {
@@ -79,7 +76,6 @@ public class StaffResponse {
         response.setEmail(staff.getEmail());
         response.setPhoneNumber(staff.getPhoneNumber());
         response.setRoles(staff.getRoles().stream().map(Role::getName).toList());
-        response.setPassword(staff.getPassword());
         // response.setFirstName(staff.getFirstName());
         // response.setLastName(staff.getLastName());
         // response.setGender(staff.getGender());
