@@ -2,17 +2,7 @@ package app.model;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -70,7 +60,7 @@ public class Car {
     private String describe;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "registration_date")
+    @Column(name = "registration_date", nullable = false)
     private Date registrationDate;
 
     @Column(nullable = false)
@@ -81,11 +71,9 @@ public class Car {
     private Branch branch;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id")
+    @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
 }

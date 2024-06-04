@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 import app.dto.CarDTO;
 import app.response.CarResponse;
 import app.response.ResponseObject;
-
-import app.service.impl.CarServiceImpl;
+import app.service.CarService;
+// import app.service.impl.CarServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,8 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 /**
  * CarController
@@ -39,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class CarController {
 
-    private final CarServiceImpl carService;
+    private final CarService carService;
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
@@ -60,7 +57,7 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getone(@PathVariable("id") Integer id){
+    public ResponseEntity<ResponseObject> getone(@PathVariable("id") Integer id) {
         try {
             CarResponse carResponse = carService.getOne(id);
             return ResponseEntity.ok(ResponseObject.builder()
@@ -79,7 +76,7 @@ public class CarController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseObject> Post(@RequestBody CarDTO carDTO){
+    public ResponseEntity<ResponseObject> Post(@RequestBody CarDTO carDTO) {
         try {
             CarResponse carResponse = carService.Post(carDTO);
             return ResponseEntity.ok(ResponseObject.builder()
@@ -92,17 +89,17 @@ public class CarController {
                     .status(400)
                     .message("Get all car failed")
                     .data(e.getMessage())
-                    .build());  
+                    .build());
         }
-}
+    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseObject> Put(@PathVariable("id") Integer id , @RequestBody CarDTO carDTO){
+    public ResponseEntity<ResponseObject> Put(@PathVariable("id") Integer id, @RequestBody CarDTO carDTO) {
         try {
             CarResponse carResponse = carService.Put(id, carDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")    
+                    .message("Get all car successfully")
                     .data(carResponse)
                     .build());
         } catch (Exception e) {
@@ -110,12 +107,12 @@ public class CarController {
                     .status(400)
                     .message("Get all car failed")
                     .data(e.getMessage())
-                    .build());  
+                    .build());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseObject> Delete(@PathVariable("id") Integer id){
+    public ResponseEntity<ResponseObject> Delete(@PathVariable("id") Integer id) {
         try {
             carService.Delete(id);
             return ResponseEntity.ok(ResponseObject.builder()
@@ -131,5 +128,3 @@ public class CarController {
     }
 
 }
-
-
