@@ -10,13 +10,13 @@ public interface CarService {
 
 	public List<CarResponse> getAll();
 
-	public CarResponse getOne(Integer id);
+	public CarResponse getOne(String registrationPlate);
 
 	public CarResponse Post(CarDTO carDTO);
 
 	public CarResponse Put(Integer id, CarDTO carDTO);
 
-	public void Delete(Integer id);
+	public void Delete(String registrationPlate) throws Exception;
 
 	// public CarResponse DeletePut(Integer id, CarDTO carDTO);
 

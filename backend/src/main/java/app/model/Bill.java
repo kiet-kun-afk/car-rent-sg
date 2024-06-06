@@ -39,4 +39,5 @@ public class Bill {
     @ManyToOne
     @JoinColumn(name = "staff_id")
     private Staff staff;
+
 }

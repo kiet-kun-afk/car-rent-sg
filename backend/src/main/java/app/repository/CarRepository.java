@@ -7,4 +7,6 @@ import app.model.Car;
 public interface CarRepository extends JpaRepository<Car, Integer> {
 
     Car findByRegistrationPlateAndStatusTrue(String registrationPlate);
+
+    Car findByRegistrationPlate(String registrationPlate);
 }

@@ -74,5 +74,4 @@ public class CarDTO {
     @NotNull(message = "Category id seats is not null")
     @Positive(message = "Category id seats is positive")
     private Integer categoryId;
-
 }

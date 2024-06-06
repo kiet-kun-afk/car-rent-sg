@@ -34,7 +34,7 @@ public class AddressController {
                     .data(addresses)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
+
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Get all address failed")
@@ -52,7 +52,7 @@ public class AddressController {
                     .data(addresses)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
+
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Can not found address")

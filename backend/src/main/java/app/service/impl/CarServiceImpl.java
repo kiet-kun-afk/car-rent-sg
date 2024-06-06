@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.dto.CarDTO;
+import app.exception.DataNotFoundException;
 // import app.exception.InvalidParamException;
 import app.model.Branch;
 import app.model.Brand;
@@ -46,23 +47,19 @@ public class CarServiceImpl implements CarService, Serializable {
 
 	@Override
 	public List<CarResponse> getAll() {
-		// TODO Auto-generated method stub
 
 		return carres.findAll().stream().map(CarResponse::fromCarResponse).toList();
 	}
 
 	@Override
-	public CarResponse getOne(Integer id) {
-		Car car = carres.findById(id).orElse(null);
-		// TODO Auto-generated method stub
+	public CarResponse getOne(String registrationPlate) {
+		Car car = carres.findByRegistrationPlate(registrationPlate);
+
 		return CarResponse.fromCarResponse(car);
 	}
 
 	@Override
 	public CarResponse Post(CarDTO carDTO) {
-		// if(carres.existsById(carDTO.getCarId())){
-		// throw new InvalidParamException("id is already registered");
-		// }
 
 		Branch branchid = brachesres.findById(carDTO.getBranchId()).orElse(null);
 		System.out.println(branchid);
@@ -75,7 +72,6 @@ public class CarServiceImpl implements CarService, Serializable {
 		car.setBackImage(carDTO.getBackImage());
 		car.setBranch(branchid);
 		car.setBrand(brandid);
-		// carDTO.setCarId(car.getCarId());
 		car.setCarName(carDTO.getCarName());
 		car.setCategory(categoryid);
 		car.setDescribe(carDTO.getDescribe());
@@ -98,9 +94,6 @@ public class CarServiceImpl implements CarService, Serializable {
 
 	@Override
 	public CarResponse Put(Integer id, CarDTO carDTO) {
-		// if(!carres.existsById(id)){
-		// return null;
-		// }
 		Branch branchid = brachesres.findById(carDTO.getBranchId()).orElse(null);
 		System.out.println(branchid);
 
@@ -143,22 +136,14 @@ public class CarServiceImpl implements CarService, Serializable {
 	}
 
 	@Override
-	public void Delete(Integer id) {
-		if (carres.existsById(id)) {
-			Car car = new Car();
-			car.setStatus(false);
-			// carres.save(car);
+	public void Delete(String registrationPlate) throws Exception {
+		Car car = carres.findByRegistrationPlateAndStatusTrue(registrationPlate);
+
+		if (car == null) {
+			throw new DataNotFoundException("Car not found with id ");
 		}
+		car.setStatus(false);
+		carres.save(car);
 	}
-
-	// @Override
-	// public CarResponse DeletePut(Integer id, CarDTO carDTO) {
-	// Car car = carres.findById(id).orElse(null);
-
-	// if (car != null) {
-	// Car car1 = new Car();
-	// car1.setStatus(false);
-	// }
-	// }
 
 }

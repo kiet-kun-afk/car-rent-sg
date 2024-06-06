@@ -17,10 +17,6 @@ public class StaffResponse {
 
     private Integer staffId;
 
-    // private String firstName;
-
-    // private String lastName;
-
     private String fullName;
 
     private Boolean gender;
@@ -37,9 +33,6 @@ public class StaffResponse {
 
     private String avatarImage;
 
-    // @JsonIgnore
-    // private String password;
-
     private Integer address;
 
     private Integer citizenCard;
@@ -50,8 +43,6 @@ public class StaffResponse {
 
     public StaffResponse(Staff staff) {
         this.staffId = staff.getStaffId();
-        // this.firstName = staff.getFirstName();
-        // this.lastName = staff.getLastName();
         this.fullName = staff.getFullName();
         this.gender = staff.getGender();
         this.phoneNumber = staff.getPhoneNumber();

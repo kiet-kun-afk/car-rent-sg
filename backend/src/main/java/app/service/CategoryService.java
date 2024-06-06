@@ -3,18 +3,17 @@ package app.service;
 import java.util.List;
 
 import app.dto.CategoryDTO;
-
-import app.response.CategoryReponse;
+import app.response.CategoryResponse;
 
 public interface CategoryService {
 
-    public List<CategoryReponse> getAll();
+    public List<CategoryResponse> getAll();
 
-    public CategoryReponse getOne(Integer id);
+    public CategoryResponse getOne(Integer id);
 
-    public CategoryReponse Post(CategoryDTO categoryDTO);
+    public CategoryResponse Post(CategoryDTO categoryDTO);
 
-    public CategoryReponse Put(Integer id, CategoryDTO categoryDTO);
+    public CategoryResponse Put(Integer id, CategoryDTO categoryDTO);
 
     public void Delete(Integer id) throws Exception;
 

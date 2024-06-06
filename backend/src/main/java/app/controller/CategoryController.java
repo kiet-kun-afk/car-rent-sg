@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.dto.CategoryDTO;
-import app.response.CategoryReponse;
+import app.response.CategoryResponse;
 import app.response.ResponseObject;
 
 import app.service.impl.CategoryServiceImpl;
@@ -32,7 +32,7 @@ public class CategoryController {
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<CategoryReponse> categoryReponses = categoryService.getAll();
+            List<CategoryResponse> categoryReponses = categoryService.getAll();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .data(categoryReponses)
@@ -50,7 +50,7 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getOne(@PathVariable Integer id) {
         try {
-            CategoryReponse categoryReponse = categoryService.getOne(id);
+            CategoryResponse categoryReponse = categoryService.getOne(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Get all category successfully")
@@ -68,7 +68,7 @@ public class CategoryController {
     @PostMapping("")
     public ResponseEntity<ResponseObject> Post(@RequestBody CategoryDTO categoryDTO) {
         try {
-            CategoryReponse categoryReponse = categoryService.Post(categoryDTO);
+            CategoryResponse categoryReponse = categoryService.Post(categoryDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Create category successfully")
@@ -86,7 +86,7 @@ public class CategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseObject> Put(@PathVariable Integer id, @RequestBody CategoryDTO categoryDTO) {
         try {
-            CategoryReponse categoryReponse = categoryService.Put(id, categoryDTO);
+            CategoryResponse categoryReponse = categoryService.Put(id, categoryDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Update category successfully")

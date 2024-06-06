@@ -3,16 +3,16 @@ package app.service;
 import java.util.List;
 
 import app.dto.CitizencardDTO;
-import app.response.CitizencardResponse;
+import app.response.CitizenCardResponse;
 
-public interface CitizencardService {
-    public List<CitizencardResponse> getAll();
+public interface CitizenCardService {
+    public List<CitizenCardResponse> getAll();
 
-    public CitizencardResponse getOne(Integer id);
+    public CitizenCardResponse getOne(Integer id);
 
-    public CitizencardResponse Post(CitizencardDTO citizencardDTO);
+    public CitizenCardResponse Post(CitizencardDTO citizencardDTO);
 
-    public CitizencardResponse Put(Integer id, CitizencardDTO citizencardDTO);
+    public CitizenCardResponse Put(Integer id, CitizencardDTO citizencardDTO);
 
     public void Delete(Integer id) throws Exception;
 }

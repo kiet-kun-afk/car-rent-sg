@@ -23,7 +23,7 @@ import app.model.Role;
 import app.model.Staff;
 import app.model.cards.CitizenCard;
 import app.repository.AddressRepository;
-import app.repository.CitizencardRepository;
+import app.repository.CitizenCardRepository;
 import app.repository.RoleRepository;
 import app.repository.StaffRepository;
 import app.response.LoginResponse;
@@ -49,7 +49,7 @@ public class StaffServiceImpl implements StaffService {
     private final StaffRepository staffRepository;
     private final RoleRepository roleRepository;
     private final AddressRepository addressRepository;
-    private final CitizencardRepository citizenRepository;
+    private final CitizenCardRepository citizenRepository;
     private final ValidService validService;
     private final PasswordResetService passwordResetService;
 
