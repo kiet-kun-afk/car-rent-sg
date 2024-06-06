@@ -1,10 +1,18 @@
 package app.service;
 
-import app.dto.CardDTO;
-import app.model.cards.CitizenCard;
+import java.util.List;
+
+import app.dto.CitizenCardDTO;
+import app.response.CitizenCardResponse;
 
 public interface CitizenCardService {
-    public CitizenCard createWithStaffId(Integer staffId, CardDTO cardDTO) throws Exception;
+    public List<CitizenCardResponse> getAll();
 
-    public CitizenCard createWithCustomerId(Integer customerId, CardDTO cardDTO) throws Exception;
+    public CitizenCardResponse getOne(Integer id);
+
+    public CitizenCardResponse Post(CitizenCardDTO citizencardDTO);
+
+    public CitizenCardResponse Put(Integer id, CitizenCardDTO citizencardDTO);
+
+    public void Delete(Integer id) throws Exception;
 }
