@@ -36,6 +36,8 @@ public class CitizenCardServiceImpl implements CitizenCardService {
         CitizenCard citizenCard = new CitizenCard();
 
         citizenCard.setIdCard(citizenCardDTO.getIdCard());
+
+        // how to upload image with String type
         citizenCard.setBackImage(citizenCardDTO.getBackImage());
         citizenCard.setFrontImage(citizenCardDTO.getFrontImage());
         citizenCardRes.save(citizenCard);

@@ -16,6 +16,7 @@ public class CitizenCardDTO {
     @NotNull(message = "id card is not null")
     private String idCard;
 
+    // can't upload file
     @NotBlank
     private String frontImage;
 
