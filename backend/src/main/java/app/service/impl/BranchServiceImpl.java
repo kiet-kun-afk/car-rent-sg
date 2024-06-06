@@ -26,13 +26,11 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public List<BranchResponse> getAll() {
-        // TODO Auto-generated method stub
         return branchRes.findAll().stream().map(BranchResponse::fromBranchResponse).toList();
     }
 
     @Override
     public BranchResponse getOne(Integer id) {
-        // TODO Auto-generated method stub
         Branch branch = branchRes.findById(id).orElse(null);
         return BranchResponse.fromBranchResponse(branch);
 
@@ -40,10 +38,6 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public BranchResponse post(BranchDTO branchDTO) {
-
-        // addressRes.findById(branchDTO.getAddressid()).orElse(null);
-        // System.out.println("addressid: " + addressid);
-
         Branch branch = new Branch();
         branch.setAddress(addressRes.findById(branchDTO.getAddressid()).orElse(null));
         branch.setEmail(branchDTO.getEmail());
@@ -56,12 +50,10 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public BranchResponse put(Integer id, BranchDTO branchDTO) {
-        // TODO Auto-generated method stub
+        Optional<Branch> optionalBranch = branchRes.findById(id);
 
-        Optional<Branch> optinalBranch = branchRes.findById(id);
-
-        if (optinalBranch.isPresent()) {
-            Branch branch = optinalBranch.get();
+        if (optionalBranch.isPresent()) {
+            Branch branch = optionalBranch.get();
 
             branch.setEmail(branchDTO.getEmail());
             branch.setBranchName(branchDTO.getBranchName());

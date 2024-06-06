@@ -24,13 +24,11 @@ public class AddressServiceImpl implements AddressService, Serializable {
 
     @Override
     public List<AddressResponse> getALL() {
-        // TODO Auto-generated method stub
         return addressRes.findAll().stream().map(AddressResponse::fromCarResponse).toList();
     }
 
     @Override
     public AddressResponse getOne(Integer id) {
-        // TODO Auto-generated method stub
         Address address = addressRes.findById(id).orElse(null);
 
         return AddressResponse.fromCarResponse(address);
@@ -54,12 +52,11 @@ public class AddressServiceImpl implements AddressService, Serializable {
 
     @Override
     public AddressResponse Put(Integer id, AddressDTO addressDTO) {
-        // TODO Auto-generated method stub
 
-        Optional<Address> optionaladdress = addressRes.findById(id);
+        Optional<Address> optionalAddress = addressRes.findById(id);
 
-        if (optionaladdress.isPresent()) {
-            Address address = optionaladdress.get();
+        if (optionalAddress.isPresent()) {
+            Address address = optionalAddress.get();
             address.setDistrict(addressDTO.getDistrict());
             address.setProvince(addressDTO.getProvince());
             address.setStreet(addressDTO.getStreet());

@@ -4,17 +4,17 @@ import java.util.List;
 
 import app.dto.BrandDTO;
 
-import app.response.BrandReponse;
+import app.response.BrandResponse;
 
 public interface BrandService {
 
-    public List<BrandReponse> getALL();
+    public List<BrandResponse> getALL();
 
-    public BrandReponse getOne(Integer id);
+    public BrandResponse getOne(Integer id);
 
-    public BrandReponse Post(BrandDTO brandDTO);
+    public BrandResponse Post(BrandDTO brandDTO);
 
-    public BrandReponse Put(Integer id, BrandDTO brandDTO);
+    public BrandResponse Put(Integer id, BrandDTO brandDTO);
 
     public void Delete(Integer id) throws Exception;
 

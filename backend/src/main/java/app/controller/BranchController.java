@@ -19,7 +19,7 @@ import app.service.impl.BranchServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("${api.prefix}/branchs")
+@RequestMapping("${api.prefix}/branches")
 @RequiredArgsConstructor
 public class BranchController {
     private final BranchServiceImpl branchService;
@@ -66,7 +66,6 @@ public class BranchController {
                     .data(branchResponse)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("null response")
@@ -84,7 +83,6 @@ public class BranchController {
                     .data(branchResponse)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message(e.getMessage())
@@ -100,7 +98,6 @@ public class BranchController {
                     .status(200)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message(e.getMessage())

@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import app.dto.CitizencardDTO;
+import app.dto.CitizenCardDTO;
 import app.exception.InvalidParamException;
 import app.model.cards.*;
 import app.repository.*;
@@ -27,30 +27,28 @@ public class CitizenCardServiceImpl implements CitizenCardService {
 
     @Override
     public CitizenCardResponse getOne(Integer id) {
-        // TODO Auto-generated method stub
         CitizenCard citizenCard = citizenCardRes.findById(id).orElse(null);
         return CitizenCardResponse.fromCitizenCard(citizenCard);
     }
 
     @Override
-    public CitizenCardResponse Post(CitizencardDTO citizencardDTO) {
-        // TODO Auto-generated method stub
-        CitizenCard citizencard = new CitizenCard();
+    public CitizenCardResponse Post(CitizenCardDTO citizenCardDTO) {
+        CitizenCard citizenCard = new CitizenCard();
 
-        citizencard.setIdCard(citizencardDTO.getIdCard());
-        citizencard.setBackImage(citizencardDTO.getBackImage());
-        citizencard.setFrontImage(citizencardDTO.getFrontImage());
-        citizenCardRes.save(citizencard);
+        citizenCard.setIdCard(citizenCardDTO.getIdCard());
+        citizenCard.setBackImage(citizenCardDTO.getBackImage());
+        citizenCard.setFrontImage(citizenCardDTO.getFrontImage());
+        citizenCardRes.save(citizenCard);
 
-        return CitizenCardResponse.fromCitizenCard(citizencard);
+        return CitizenCardResponse.fromCitizenCard(citizenCard);
 
     }
 
     @Override
-    public CitizenCardResponse Put(Integer id, CitizencardDTO citizencardDTO) {
-        Optional<CitizenCard> optionalcitizencard = citizenCardRes.findById(id);
+    public CitizenCardResponse Put(Integer id, CitizenCardDTO citizencardDTO) {
+        Optional<CitizenCard> optionalCitizenCard = citizenCardRes.findById(id);
 
-        if (optionalcitizencard.isPresent()) {
+        if (optionalCitizenCard.isPresent()) {
             CitizenCard citizencard = new CitizenCard();
 
             citizencard.setIdCard(citizencardDTO.getIdCard());
@@ -59,14 +57,14 @@ public class CitizenCardServiceImpl implements CitizenCardService {
             citizenCardRes.save(citizencard);
             return CitizenCardResponse.fromCitizenCard(citizencard);
         } else {
-            throw new RuntimeException("Citizencard not found with id " + id);
+            throw new RuntimeException("Citizen card not found with id " + id);
         }
     }
 
     @Override
     public void Delete(Integer id) throws Exception {
         if (!citizenCardRes.existsById(id)) {
-            throw new InvalidParamException("Citizencard not found");
+            throw new InvalidParamException("Citizen card not found");
         }
         citizenCardRes.deleteById(id);
     }

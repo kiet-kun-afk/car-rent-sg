@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CitizencardDTO {
+public class CitizenCardDTO {
 
     @NotNull(message = "id card is not null")
     private String idCard;

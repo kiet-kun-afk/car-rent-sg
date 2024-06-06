@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.dto.BrandDTO;
 
-import app.response.BrandReponse;
+import app.response.BrandResponse;
 import app.response.ResponseObject;
 import app.service.impl.BrandServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +29,10 @@ public class BrandController {
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<BrandReponse> brandReponse = brandService.getALL();
+            List<BrandResponse> brandResponse = brandService.getALL();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .data(brandReponse)
+                    .data(brandResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
@@ -47,14 +47,13 @@ public class BrandController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getOne(@PathVariable Integer id) {
         try {
-            BrandReponse brandResponse = brandService.getOne(id);
+            BrandResponse brandResponse = brandService.getOne(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Get all brand successfully")
                     .data(brandResponse)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Get brand id failed")
@@ -66,11 +65,11 @@ public class BrandController {
     @PostMapping("")
     public ResponseEntity<ResponseObject> Post(@RequestBody BrandDTO brandDTO) {
         try {
-            BrandReponse brandReponse = brandService.Post(brandDTO);
+            BrandResponse brandResponse = brandService.Post(brandDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Get all brand successfully")
-                    .data(brandReponse)
+                    .data(brandResponse)
                     .build());
 
         } catch (Exception e) {
@@ -85,14 +84,13 @@ public class BrandController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseObject> Put(@PathVariable Integer id, @RequestBody BrandDTO brandDTO) {
         try {
-            BrandReponse brandReponse = brandService.Put(id, brandDTO);
+            BrandResponse brandResponse = brandService.Put(id, brandDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Get all brand successfully")
-                    .data(brandReponse)
+                    .data(brandResponse)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Get all brand failed")

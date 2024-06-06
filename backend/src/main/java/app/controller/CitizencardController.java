@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.dto.CitizencardDTO;
+import app.dto.CitizenCardDTO;
 import app.response.CitizenCardResponse;
 import app.response.ResponseObject;
 import app.service.impl.CitizenCardServiceImpl;
@@ -25,12 +25,12 @@ import lombok.RequiredArgsConstructor;
 public class CitizenCardController {
 
     @Autowired
-    CitizenCardServiceImpl citizendcardservice;
+    CitizenCardServiceImpl citizenCardService;
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<CitizenCardResponse> citizencardReponses = citizendcardservice.getAll();
+            List<CitizenCardResponse> citizencardReponses = citizenCardService.getAll();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .data(citizencardReponses)
@@ -48,10 +48,10 @@ public class CitizenCardController {
     public ResponseEntity<ResponseObject> getById(@PathVariable("id") Integer id) {
 
         try {
-            CitizenCardResponse citizencardResponse = citizendcardservice.getOne(id);
+            CitizenCardResponse citizenCardResponse = citizenCardService.getOne(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .data(citizencardResponse)
+                    .data(citizenCardResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
@@ -62,12 +62,12 @@ public class CitizenCardController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseObject> post(@RequestBody CitizencardDTO citizencardDTO) {
+    public ResponseEntity<ResponseObject> post(@RequestBody CitizenCardDTO citizenCardDTO) {
         try {
-            CitizenCardResponse citizencardResponse = citizendcardservice.Post(citizencardDTO);
+            CitizenCardResponse citizenCardResponse = citizenCardService.Post(citizenCardDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .data(citizencardResponse)
+                    .data(citizenCardResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
@@ -79,15 +79,14 @@ public class CitizenCardController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseObject> post(@PathVariable("id") Integer id,
-            @RequestBody CitizencardDTO citizencardDTO) {
+            @RequestBody CitizenCardDTO citizenCardDTO) {
         try {
-            CitizenCardResponse citizencardResponse = citizendcardservice.Put(id, citizencardDTO);
+            CitizenCardResponse citizenCardResponse = citizenCardService.Put(id, citizenCardDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .data(citizencardResponse)
+                    .data(citizenCardResponse)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message(e.getMessage())
@@ -98,7 +97,7 @@ public class CitizenCardController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> delete(@PathVariable("id") Integer id) {
         try {
-            citizendcardservice.Delete(id);
+            citizenCardService.Delete(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .build());
