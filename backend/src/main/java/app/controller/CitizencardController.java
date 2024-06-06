@@ -20,7 +20,7 @@ import app.service.impl.CitizenCardServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("${api.prefix}/citizencards")
+@RequestMapping("${api.prefix}/citizenCards")
 @RequiredArgsConstructor
 public class CitizenCardController {
 
@@ -30,10 +30,10 @@ public class CitizenCardController {
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<CitizenCardResponse> citizencardReponses = citizenCardService.getAll();
+            List<CitizenCardResponse> citizenCardResponses = citizenCardService.getAll();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .data(citizencardReponses)
+                    .data(citizenCardResponses)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()

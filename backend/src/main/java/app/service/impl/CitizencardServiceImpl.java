@@ -45,17 +45,17 @@ public class CitizenCardServiceImpl implements CitizenCardService {
     }
 
     @Override
-    public CitizenCardResponse Put(Integer id, CitizenCardDTO citizencardDTO) {
+    public CitizenCardResponse Put(Integer id, CitizenCardDTO citizenCardDTO) {
         Optional<CitizenCard> optionalCitizenCard = citizenCardRes.findById(id);
 
         if (optionalCitizenCard.isPresent()) {
-            CitizenCard citizencard = new CitizenCard();
+            CitizenCard citizenCard = new CitizenCard();
 
-            citizencard.setIdCard(citizencardDTO.getIdCard());
-            citizencard.setBackImage(citizencardDTO.getBackImage());
-            citizencard.setFrontImage(citizencardDTO.getFrontImage());
-            citizenCardRes.save(citizencard);
-            return CitizenCardResponse.fromCitizenCard(citizencard);
+            citizenCard.setIdCard(citizenCardDTO.getIdCard());
+            citizenCard.setBackImage(citizenCardDTO.getBackImage());
+            citizenCard.setFrontImage(citizenCardDTO.getFrontImage());
+            citizenCardRes.save(citizenCard);
+            return CitizenCardResponse.fromCitizenCard(citizenCard);
         } else {
             throw new RuntimeException("Citizen card not found with id " + id);
         }
