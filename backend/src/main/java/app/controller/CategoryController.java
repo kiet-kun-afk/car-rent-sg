@@ -22,7 +22,7 @@ import app.service.impl.CategoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("${api.prefix}/categorys")
+@RequestMapping("${api.prefix}/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
