@@ -10,21 +10,21 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CitizencardResponse {
+public class CitizenCardResponse {
     private Integer citizenId;
 
     private Integer idCard;
     private String frontImage;
     private String backImage;
 
-    public CitizencardResponse(CitizenCard citizencard) {
-        this.citizenId = citizencard.getCitizenId();
-        this.idCard = citizencard.getIdCard();
-        this.frontImage = citizencard.getFrontImage();
-        this.backImage = citizencard.getBackImage();
+    public CitizenCardResponse(CitizenCard citizenCard) {
+        this.citizenId = citizenCard.getCitizenId();
+        this.idCard = citizenCard.getIdCard();
+        this.frontImage = citizenCard.getFrontImage();
+        this.backImage = citizenCard.getBackImage();
     }
 
-    public static CitizencardResponse fromCitizencard(CitizenCard citizencard) {
-        return new CitizencardResponse(citizencard);
+    public static CitizenCardResponse fromCitizenCard(CitizenCard citizenCard) {
+        return new CitizenCardResponse(citizenCard);
     }
 }

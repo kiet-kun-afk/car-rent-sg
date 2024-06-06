@@ -14,5 +14,7 @@ import app.model.Car;
  * 5/24/2024 kiet-kun-afk Create
  */
 public interface CarRepository extends JpaRepository<Car, Integer> {
+    Car findByRegistrationPlateAndStatusTrue(String registrationPlate);
 
+    Car findByRegistrationPlate(String registrationPlate);
 }

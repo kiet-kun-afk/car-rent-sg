@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
+// import java.time.LocalDateTime;
+// import java.util.Date;
 
 import app.model.Car;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -56,7 +58,7 @@ public class CarResponse {
     private String describe;
 
     @JsonProperty("registration_date")
-    private Date registrationDate;
+    private LocalDate registrationDate;
 
     private Boolean status;
 
@@ -87,7 +89,7 @@ public class CarResponse {
         this.rightImage = car.getRightImage();
         this.leftImage = car.getLeftImage();
         this.describe = car.getDescribe();
-        this.registrationDate = (Date) car.getRegistrationDate();
+        this.registrationDate = car.getRegistrationDate();
         this.status = car.getStatus();
         this.branchId = car.getBranch().getBranchId();
         this.branchName = car.getBranch().getBranchName();

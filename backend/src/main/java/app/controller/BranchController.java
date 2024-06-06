@@ -27,10 +27,10 @@ public class BranchController {
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<BranchResponse> branchReponses = branchService.getAll();
+            List<BranchResponse> branchResponses = branchService.getAll();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .data(branchReponses)
+                    .data(branchResponses)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()

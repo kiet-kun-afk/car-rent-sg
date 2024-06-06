@@ -1,6 +1,6 @@
 package app.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class Bill {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "pay_date", nullable = false)
-    private Date payDate;
+    private LocalDate payDate;
 
     @Column(name = "pay_cost", nullable = false)
     private Double payCost;
@@ -40,4 +40,5 @@ public class Bill {
     @ManyToOne
     @JoinColumn(name = "staff_id")
     private Staff staff;
+
 }

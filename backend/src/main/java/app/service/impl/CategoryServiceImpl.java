@@ -10,8 +10,7 @@ import app.dto.CategoryDTO;
 import app.exception.InvalidParamException;
 import app.model.Category;
 import app.repository.CategoryRepository;
-
-import app.response.CategoryReponse;
+import app.response.CategoryResponse;
 import app.service.CategoryService;
 
 @Service
@@ -21,38 +20,38 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRes;
 
     @Override
-    public List<CategoryReponse> getAll() {
+    public List<CategoryResponse> getAll() {
         // TODO Auto-generated method stub
-        return categoryRes.findAll().stream().map(CategoryReponse::fromCategoryResponse).toList();
+        return categoryRes.findAll().stream().map(CategoryResponse::fromCategoryResponse).toList();
     }
 
     @Override
-    public CategoryReponse getOne(Integer id) {
+    public CategoryResponse getOne(Integer id) {
         // TODO Auto-generated method stub
         Category category = categoryRes.findById(id).orElse(null);
-        return CategoryReponse.fromCategoryResponse(category);
+        return CategoryResponse.fromCategoryResponse(category);
     }
 
     @Override
-    public CategoryReponse Post(CategoryDTO categoryDTO) {
+    public CategoryResponse Post(CategoryDTO categoryDTO) {
 
         Category category = new Category();
 
         category.setCategoryName(categoryDTO.getCategoryName());
         categoryRes.save(category);
 
-        return CategoryReponse.fromCategoryResponse(category);
+        return CategoryResponse.fromCategoryResponse(category);
     }
 
     @Override
-    public CategoryReponse Put(Integer id, CategoryDTO categoryDTO) {
+    public CategoryResponse Put(Integer id, CategoryDTO categoryDTO) {
         Optional<Category> optionalcategory = categoryRes.findById(id);
 
         if (optionalcategory.isPresent()) {
             Category category = optionalcategory.get();
             category.setCategoryName(categoryDTO.getCategoryName());
             categoryRes.save(category);
-            return CategoryReponse.fromCategoryResponse(category);
+            return CategoryResponse.fromCategoryResponse(category);
         } else {
             throw new RuntimeException("Car not found with id " + id);
         }

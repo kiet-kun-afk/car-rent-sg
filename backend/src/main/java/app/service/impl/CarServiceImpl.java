@@ -1,7 +1,7 @@
 package app.service.impl;
 
 import java.io.Serializable;
-import java.util.Date;
+// import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.dto.CarDTO;
+import app.exception.DataNotFoundException;
 // import app.exception.InvalidParamException;
 import app.model.Branch;
 import app.model.Brand;
@@ -53,8 +54,8 @@ public class CarServiceImpl implements CarService, Serializable {
 	}
 
 	@Override
-	public CarResponse getOne(Integer id) {
-		Car car = carres.findById(id).orElse(null);
+	public CarResponse getOne(String registrationPlate) {
+		Car car = carres.findByRegistrationPlate(registrationPlate);
 		// TODO Auto-generated method stub
 		return CarResponse.fromCarResponse(car);
 	}
@@ -86,7 +87,7 @@ public class CarServiceImpl implements CarService, Serializable {
 		car.setFuelType(carDTO.getFuelType());
 		car.setLeftImage(carDTO.getLeftImage());
 		car.setNumberOfSeat(carDTO.getNumberOfSeat());
-		car.setRegistrationDate((Date) carDTO.getRegistrationDate());
+		car.setRegistrationDate(carDTO.getRegistrationDate());
 		car.setRegistrationPlate(carDTO.getRegistrationPlate());
 		car.setRentCost(carDTO.getRentCost());
 		car.setRightImage(carDTO.getRightImage());
@@ -126,7 +127,7 @@ public class CarServiceImpl implements CarService, Serializable {
 			car.setFuelType(carDTO.getFuelType());
 			car.setLeftImage(carDTO.getLeftImage());
 			car.setNumberOfSeat(carDTO.getNumberOfSeat());
-			car.setRegistrationDate((Date) carDTO.getRegistrationDate());
+			car.setRegistrationDate(carDTO.getRegistrationDate());
 			car.setRegistrationPlate(carDTO.getRegistrationPlate());
 			car.setRentCost(carDTO.getRentCost());
 			car.setRightImage(carDTO.getRightImage());
@@ -144,22 +145,14 @@ public class CarServiceImpl implements CarService, Serializable {
 	}
 
 	@Override
-	public void Delete(Integer id) {
-		if (carres.existsById(id)) {
-			Car car = new Car();
-			car.setStatus(false);
-			// carres.save(car);
+	public void Delete(String registrationPlate) throws Exception {
+		Car car = carres.findByRegistrationPlateAndStatusTrue(registrationPlate);
+
+		if (car == null) {
+			throw new DataNotFoundException("Car not found with id ");
 		}
+		car.setStatus(false);
+		carres.save(car);
 	}
-
-	// @Override
-	// public CarResponse DeletePut(Integer id, CarDTO carDTO) {
-	// Car car = carres.findById(id).orElse(null);
-
-	// if (car != null) {
-	// Car car1 = new Car();
-	// car1.setStatus(false);
-	// }
-	// }
 
 }

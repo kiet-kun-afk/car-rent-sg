@@ -1,6 +1,7 @@
 package app.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+// import java.util.Date;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,15 +24,15 @@ public class Contract {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "create_date", nullable = false)
-    private Date createDate;
+    private LocalDate createDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "start_date", nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "end_date", nullable = false)
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(name = "rent_cost", nullable = false)
     private Double rentCost;

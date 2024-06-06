@@ -56,10 +56,10 @@ public class CarController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getone(@PathVariable("id") Integer id) {
+    @GetMapping("/{registrationPlate}")
+    public ResponseEntity<ResponseObject> getOne(@PathVariable("registrationPlate") String registrationPlate) {
         try {
-            CarResponse carResponse = carService.getOne(id);
+            CarResponse carResponse = carService.getOne(registrationPlate);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Get all car successfully")
@@ -111,10 +111,10 @@ public class CarController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseObject> Delete(@PathVariable("id") Integer id) {
+    @DeleteMapping("/{registrationPlate}")
+    public ResponseEntity<ResponseObject> Delete(@PathVariable("registrationPlate") String registrationPlate) {
         try {
-            carService.Delete(id);
+            carService.Delete(registrationPlate);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .build());

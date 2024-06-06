@@ -55,8 +55,8 @@ public class StaffResponse {
 
     public StaffResponse(Staff staff) {
         this.staffId = staff.getStaffId();
-        this.firstName = staff.getFirstName();
-        this.lastName = staff.getLastName();
+        // this.firstName = staff.getFirstName();
+        // this.lastName = staff.getLastName();
         this.gender = staff.getGender();
         this.phoneNumber = staff.getPhoneNumber();
         this.birthDate = staff.getBirthDate();

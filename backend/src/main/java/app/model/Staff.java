@@ -31,11 +31,11 @@ public class Staff {
     @Column(name = "staff_id")
     private Integer staffId;
 
-    @Column(name = "first_name")
-    private String firstName;
+    // @Column(name = "first_name")
+    // private String firstName;
 
-    @Column(name = "last_name")
-    private String lastName;
+    // @Column(name = "last_name")
+    // private String lastName;
 
     private Boolean gender;
 

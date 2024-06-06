@@ -9,46 +9,46 @@ import org.springframework.stereotype.Service;
 import app.dto.CitizencardDTO;
 import app.exception.InvalidParamException;
 import app.model.cards.*;
-import app.repository.CitizencardRepository;
-import app.response.CitizencardResponse;
-import app.service.CitizencardService;
+import app.repository.*;
+import app.response.CitizenCardResponse;
+import app.service.CitizenCardService;
 
 @Service
-public class CitizencardServiceImpl implements CitizencardService {
+public class CitizenCardServiceImpl implements CitizenCardService {
 
     @Autowired
-    CitizencardRepository citizencardRes;
+    CitizenCardRepository citizenCardRes;
 
     @Override
-    public List<CitizencardResponse> getAll() {
-        // TODO Auto-generated method stub
-        return citizencardRes.findAll().stream().map(CitizencardResponse::fromCitizencard).toList();
+    public List<CitizenCardResponse> getAll() {
+
+        return citizenCardRes.findAll().stream().map(CitizenCardResponse::fromCitizenCard).toList();
     }
 
     @Override
-    public CitizencardResponse getOne(Integer id) {
+    public CitizenCardResponse getOne(Integer id) {
         // TODO Auto-generated method stub
-        CitizenCard citizencard = citizencardRes.findById(id).orElse(null);
-        return CitizencardResponse.fromCitizencard(citizencard);
+        CitizenCard citizenCard = citizenCardRes.findById(id).orElse(null);
+        return CitizenCardResponse.fromCitizenCard(citizenCard);
     }
 
     @Override
-    public CitizencardResponse Post(CitizencardDTO citizencardDTO) {
+    public CitizenCardResponse Post(CitizencardDTO citizencardDTO) {
         // TODO Auto-generated method stub
         CitizenCard citizencard = new CitizenCard();
 
         citizencard.setIdCard(citizencardDTO.getIdCard());
         citizencard.setBackImage(citizencardDTO.getBackImage());
         citizencard.setFrontImage(citizencardDTO.getFrontImage());
-        citizencardRes.save(citizencard);
+        citizenCardRes.save(citizencard);
 
-        return CitizencardResponse.fromCitizencard(citizencard);
+        return CitizenCardResponse.fromCitizenCard(citizencard);
 
     }
 
     @Override
-    public CitizencardResponse Put(Integer id, CitizencardDTO citizencardDTO) {
-        Optional<CitizenCard> optionalcitizencard = citizencardRes.findById(id);
+    public CitizenCardResponse Put(Integer id, CitizencardDTO citizencardDTO) {
+        Optional<CitizenCard> optionalcitizencard = citizenCardRes.findById(id);
 
         if (optionalcitizencard.isPresent()) {
             CitizenCard citizencard = new CitizenCard();
@@ -56,8 +56,8 @@ public class CitizencardServiceImpl implements CitizencardService {
             citizencard.setIdCard(citizencardDTO.getIdCard());
             citizencard.setBackImage(citizencardDTO.getBackImage());
             citizencard.setFrontImage(citizencardDTO.getFrontImage());
-            citizencardRes.save(citizencard);
-            return CitizencardResponse.fromCitizencard(citizencard);
+            citizenCardRes.save(citizencard);
+            return CitizenCardResponse.fromCitizenCard(citizencard);
         } else {
             throw new RuntimeException("Citizencard not found with id " + id);
         }
@@ -65,10 +65,10 @@ public class CitizencardServiceImpl implements CitizencardService {
 
     @Override
     public void Delete(Integer id) throws Exception {
-        if (!citizencardRes.existsById(id)) {
+        if (!citizenCardRes.existsById(id)) {
             throw new InvalidParamException("Citizencard not found");
         }
-        citizencardRes.deleteById(id);
+        citizenCardRes.deleteById(id);
     }
 
 }

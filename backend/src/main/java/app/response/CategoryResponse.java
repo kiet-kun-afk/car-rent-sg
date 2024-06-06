@@ -10,18 +10,18 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryReponse {
+public class CategoryResponse {
 
     private Integer categoryId;
 
     private String categoryName;
 
-    public CategoryReponse(Category category) {
+    public CategoryResponse(Category category) {
         this.categoryId = category.getCategoryId();
         this.categoryName = category.getCategoryName();
     }
 
-    public static CategoryReponse fromCategoryResponse(Category category) {
-        return new CategoryReponse(category);
+    public static CategoryResponse fromCategoryResponse(Category category) {
+        return new CategoryResponse(category);
     }
 }

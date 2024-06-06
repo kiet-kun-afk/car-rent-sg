@@ -23,7 +23,7 @@ import app.model.Role;
 import app.model.Staff;
 import app.model.cards.CitizenCard;
 import app.repository.AddressRepository;
-import app.repository.CitizencardRepository;
+import app.repository.CitizenCardRepository;
 import app.repository.RoleRepository;
 import app.repository.StaffRepository;
 import app.response.LoginResponse;
@@ -50,7 +50,7 @@ public class StaffServiceImpl implements StaffService {
     private final StaffRepository staffRepository;
     private final RoleRepository roleRepository;
     private final AddressRepository addressRepository;
-    private final CitizencardRepository citizenRepository;
+    private final CitizenCardRepository citizenRepository;
 
     @Override
     public LoginResponse loginStaff(LoginDTO loginDTO) throws Exception {
@@ -136,10 +136,10 @@ public class StaffServiceImpl implements StaffService {
         staff.setAvatarImage(staffDTO.getAvatarImage());
         staff.setBirthDate(staffDTO.getBirthDate());
         staff.setEmail(staffDTO.getEmail());
-        staff.setFirstName(staffDTO.getFirstName());
+        // staff.setFirstName(staffDTO.getFirstName());
         staff.setGender(staffDTO.getGender());
         staff.setRoles(getRoles(staffDTO.getRoles()));
-        staff.setLastName(staffDTO.getLastName());
+        // staff.setLastName(staffDTO.getLastName());
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
         staff.setPassword(staffDTO.getPassword());
         staff.setStatus(staffDTO.getStatus());
@@ -164,10 +164,10 @@ public class StaffServiceImpl implements StaffService {
         staff.setAvatarImage(staffDTO.getAvatarImage());
         staff.setBirthDate(staffDTO.getBirthDate());
         staff.setEmail(staffDTO.getEmail());
-        staff.setFirstName(staffDTO.getFirstName());
+        // staff.setFirstName(staffDTO.getFirstName());
         staff.setGender(staffDTO.getGender());
         staff.setRoles(getRoles(staffDTO.getRoles()));
-        staff.setLastName(staffDTO.getLastName());
+        // staff.setLastName(staffDTO.getLastName());
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
         staff.setPassword(staffDTO.getPassword());
         staff.setStatus(staffDTO.getStatus());

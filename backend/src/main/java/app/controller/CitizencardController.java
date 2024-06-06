@@ -14,22 +14,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.dto.CitizencardDTO;
-import app.response.CitizencardResponse;
+import app.response.CitizenCardResponse;
 import app.response.ResponseObject;
-import app.service.impl.CitizencardServiceImpl;
+import app.service.impl.CitizenCardServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("${api.prefix}/citizencards")
 @RequiredArgsConstructor
-public class CitizencardController {
+public class CitizenCardController {
+
     @Autowired
-    CitizencardServiceImpl citizendcardservice;
+    CitizenCardServiceImpl citizendcardservice;
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<CitizencardResponse> citizencardReponses = citizendcardservice.getAll();
+            List<CitizenCardResponse> citizencardReponses = citizendcardservice.getAll();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .data(citizencardReponses)
@@ -47,7 +48,7 @@ public class CitizencardController {
     public ResponseEntity<ResponseObject> getById(@PathVariable("id") Integer id) {
 
         try {
-            CitizencardResponse citizencardResponse = citizendcardservice.getOne(id);
+            CitizenCardResponse citizencardResponse = citizendcardservice.getOne(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .data(citizencardResponse)
@@ -63,7 +64,7 @@ public class CitizencardController {
     @PostMapping("")
     public ResponseEntity<ResponseObject> post(@RequestBody CitizencardDTO citizencardDTO) {
         try {
-            CitizencardResponse citizencardResponse = citizendcardservice.Post(citizencardDTO);
+            CitizenCardResponse citizencardResponse = citizendcardservice.Post(citizencardDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .data(citizencardResponse)
@@ -80,7 +81,7 @@ public class CitizencardController {
     public ResponseEntity<ResponseObject> post(@PathVariable("id") Integer id,
             @RequestBody CitizencardDTO citizencardDTO) {
         try {
-            CitizencardResponse citizencardResponse = citizendcardservice.Put(id, citizencardDTO);
+            CitizenCardResponse citizencardResponse = citizendcardservice.Put(id, citizencardDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .data(citizencardResponse)
