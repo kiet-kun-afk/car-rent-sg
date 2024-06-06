@@ -8,15 +8,15 @@ import app.model.cards.DriverLicense;
 
 public interface DriverLicenseRepository extends JpaRepository<DriverLicense, Integer> {
 
-	boolean existsByIdCard(Integer idCard);
+	boolean existsByIdCard(String idCard);
 
-	DriverLicense findByIdCard(Integer idCard);
+	DriverLicense findByIdCard(String idCard);
 
 	@Query("""
 			SELECT d FROM DriverLicense d
 			JOIN Customer cu
 			ON d.driverLicenseId = cu.driverLicense.driverLicenseId
-			WHERE cu.customerId = :customerId
+			WHERE cu.phoneNumber = :phoneNumber
 				""")
-	DriverLicense findByCustomerId(@Param("customerId") Integer customerId);
+	DriverLicense findByCustomer(@Param("phoneNumber") String phoneNumber);
 }

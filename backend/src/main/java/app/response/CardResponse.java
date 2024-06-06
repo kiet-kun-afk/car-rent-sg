@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 public class CardResponse {
 
-    private Integer idCard;
+    private String idCard;
 
     private String frontImage;
 

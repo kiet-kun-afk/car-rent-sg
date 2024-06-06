@@ -18,6 +18,8 @@ public interface CustomerService {
 
     public Customer getAuth();
 
+    public CustomerResponse getOneByPhoneNumber(String phoneNumber) throws Exception;
+
     public List<CustomerResponse> getAllCustomer();
 
     public List<CustomerResponse> getAllAndStatusFalse();
@@ -26,9 +28,9 @@ public interface CustomerService {
 
     public CustomerResponse updateCustomer(CustomerDTO customerDTO) throws Exception;
 
-    public void deleteCustomer(String email) throws Exception;
+    public void deleteCustomer(String phoneNumber) throws Exception;
 
-    public void recoverCustomer(String email) throws Exception;
+    public void recoverCustomer(String phoneNumber) throws Exception;
 
     public void changePassword(ChangePasswordDTO changePasswordDTO) throws Exception;
 }

@@ -1,6 +1,6 @@
 package app.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -60,7 +60,7 @@ public class Car {
     private String describe;
 
     @Column(name = "registration_date", nullable = false)
-    private LocalDateTime registrationDate;
+    private LocalDate registrationDate;
 
     @Column(nullable = false)
     private Boolean status;

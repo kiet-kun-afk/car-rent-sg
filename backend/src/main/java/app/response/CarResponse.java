@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import app.model.Car;
 
@@ -43,7 +43,7 @@ public class CarResponse {
 
     private String describe;
 
-    private LocalDateTime registrationDate;
+    private LocalDate registrationDate;
 
     private Boolean status;
 
@@ -71,7 +71,7 @@ public class CarResponse {
         this.rightImage = car.getRightImage();
         this.leftImage = car.getLeftImage();
         this.describe = car.getDescribe();
-        this.registrationDate = (Date) car.getRegistrationDate();
+        this.registrationDate = car.getRegistrationDate();
         this.status = car.getStatus();
         this.branchId = car.getBranch().getBranchId();
         this.branchName = car.getBranch().getBranchName();

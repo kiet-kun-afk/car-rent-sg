@@ -12,17 +12,21 @@ import app.exception.InvalidParamException;
 import app.model.Car;
 import app.model.Contract;
 import app.model.Customer;
+import app.model.Staff;
 import app.repository.CarRepository;
 import app.repository.ContractRepository;
 import app.response.ContractResponse;
 import app.service.ContractService;
+import app.service.CustomerService;
+import app.service.StaffService;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ContractServiceImpl implements ContractService {
 
-    private final CustomerServiceImpl customerService;
+    private final CustomerService customerService;
+    private final StaffService staffService;
     private final FileService fileService;
     private final FormatterService formatterService;
     private final ContractRepository contractRepository;
@@ -30,26 +34,35 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public ContractResponse createContract(String registrationPlate, ContractDTO contractDTO) throws Exception {
+
         Customer customer = customerService.getAuth();
-        LocalDateTime createDate = formatterService.stringToDateTime(contractDTO.getCreateDate());
-        LocalDateTime startDate = formatterService.stringToDateTime(contractDTO.getStartDate());
-        LocalDateTime endDate = formatterService.stringToDateTime(contractDTO.getEndDate());
 
         Car car = carRepository.findByRegistrationPlateAndStatusTrue(registrationPlate);
         if (car == null) {
             throw new DataNotFoundException("Car not found");
         }
 
+        LocalDateTime startDate = validDate(contractDTO.getStartDate());
+        LocalDateTime endDate = validDate(contractDTO.getEndDate());
+
+        if (!formatterService.isBefore(startDate, endDate)) {
+            throw new InvalidParamException("Start date must be before end date");
+        }
+
+        if (!isContractValidForCar(registrationPlate, startDate, endDate)) {
+            throw new InvalidParamException("Contract is not valid for car: is overlapping date");
+        }
+
         Double rentCost = car.getRentCost();
 
-        long numberDay = daysBetween(startDate, endDate);
+        long numberDay = daysBetween(startDate, endDate) + 1;
 
         Double totalRentCost = (Double) (numberDay * rentCost);
 
         Contract contract = new Contract();
         contract.setCustomer(customer);
         contract.setCar(car);
-        contract.setCreateDate(createDate);
+        contract.setCreateDate(LocalDateTime.now());
         contract.setStartDate(startDate);
         contract.setEndDate(endDate);
         contract.setRentCost(rentCost);
@@ -71,46 +84,130 @@ public class ContractServiceImpl implements ContractService {
         }
     }
 
-    @Override
-    public ContractResponse updateContract(ContractDTO contractDTO) throws Exception {
+    private LocalDateTime validDate(String dateStr) throws Exception {
+        LocalDateTime date = formatterService.stringToDateTime(dateStr);
+        if (!formatterService.isFuture(date)) {
+            throw new InvalidParamException("Start/End date must be future");
+        }
+        return date;
+    }
 
-        throw new UnsupportedOperationException("Unimplemented method 'updateContract'");
+    public boolean isContractValidForCar(String registrationPlate, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Contract> contractList = contractRepository.findByRegistrationPlate(registrationPlate);
+
+        for (Contract contract : contractList) {
+            if (isDateOverlap(contract.getStartDate(), contract.getEndDate(), startDate, endDate)) {
+                return false; // is overlapping
+            }
+        }
+        return true; // is not overlapping
+    }
+
+    public boolean isContractValidForCarExcludingCurrent(String registrationPlate, LocalDateTime startDate,
+            LocalDateTime endDate, Integer currentContractId) {
+        List<Contract> contractList = contractRepository.findByRegistrationPlateExcludingContractId(registrationPlate,
+                currentContractId);
+
+        for (Contract contract : contractList) {
+            if (isDateOverlap(contract.getStartDate(), contract.getEndDate(), startDate, endDate)) {
+                return false; // is overlapping
+            }
+        }
+        return true; // is not overlapping
+    }
+
+    private boolean isDateOverlap(LocalDateTime existingStart, LocalDateTime existingEnd, LocalDateTime newStart,
+            LocalDateTime newEnd) {
+        return !newStart.isAfter(existingEnd) && !newEnd.isBefore(existingStart);
+    }
+
+    @Override
+    public ContractResponse updateContract(Integer contractId, ContractDTO contractDTO) throws Exception {
+        Customer customer = customerService.getAuth();
+        Contract contract = contractRepository.findByContractIdAndCustomerId(contractId, customer.getCustomerId());
+        if (contract == null) {
+            throw new DataNotFoundException("Contract not found or not belong to customer");
+        }
+        LocalDateTime startDate = validDate(contractDTO.getStartDate());
+        LocalDateTime endDate = validDate(contractDTO.getEndDate());
+
+        if (!formatterService.isBefore(startDate, endDate)) {
+            throw new InvalidParamException("Start date must be before end date");
+        }
+
+        if (!isContractValidForCarExcludingCurrent(contract.getCar().getRegistrationPlate(), startDate, endDate,
+                contractId)) {
+            throw new InvalidParamException("Contract is not valid for car: is overlapping date");
+        }
+
+        Double rentCost = contract.getCar().getRentCost();
+
+        long numberDay = daysBetween(startDate, endDate) + 1;
+
+        Double totalRentCost = (Double) (numberDay * rentCost);
+        contract.setStartDate(startDate);
+        contract.setEndDate(endDate);
+        contract.setRentCost(rentCost);
+        contract.setNumberDay(numberDay);
+        contract.setTotalRentCost(totalRentCost);
+        contract.setWayToPay(contractDTO.getWayToPay());
+        contract.setAttachment(fileService.saveAttachment(contractDTO.getFile()));
+        contractRepository.save(contract);
+        return ContractResponse.fromContract(contract);
     }
 
     @Override
     public void deleteContract(Integer contractId) throws Exception {
-
-        throw new UnsupportedOperationException("Unimplemented method 'deleteContract'");
+        Contract contract = contractRepository.findById(contractId)
+                .orElseThrow(() -> new DataNotFoundException("Contract not found"));
+        contractRepository.delete(contract);
     }
 
     @Override
     public void confirmContract(Integer contractId) throws Exception {
-
-        throw new UnsupportedOperationException("Unimplemented method 'confirmContract'");
+        try {
+            Staff staff = staffService.getAuth();
+            Contract contract = contractRepository.findByContractIdAndNoStaff(contractId);
+            contract.setStaff(staff);
+            contractRepository.save(contract);
+        } catch (Exception e) {
+            throw new DataNotFoundException("The contract has been confirmed or something is wrong");
+        }
     }
 
     @Override
-    public void completePayContract(Integer contractId) throws Exception {
-
-        throw new UnsupportedOperationException("Unimplemented method 'completePayContract'");
+    public void completePayContract(Integer contractId, Double deposit) throws Exception {
+        try {
+            Contract contract = contractRepository.findByContractIdAndConfirmed(contractId);
+            contract.setDeposit(deposit);
+            contractRepository.save(contract);
+        } catch (Exception e) {
+            throw new DataNotFoundException("The contract has not been confirmed or something is wrong");
+        }
     }
 
     @Override
     public List<ContractResponse> getAllContract() {
-
-        throw new UnsupportedOperationException("Unimplemented method 'getAllContract'");
+        List<Contract> contracts = contractRepository.findAll();
+        return contracts.stream().map(ContractResponse::fromContract).toList();
     }
 
     @Override
-    public List<ContractResponse> getAllContractByCustomerId(Integer customerId) {
-
-        throw new UnsupportedOperationException("Unimplemented method 'getAllContractByCustomerId'");
+    public List<ContractResponse> getAllContractByCustomer(String phoneNumber) {
+        List<Contract> contracts = contractRepository.findByCustomerPhoneNumber(phoneNumber);
+        return contracts.stream().map(ContractResponse::fromContract).toList();
     }
 
     @Override
-    public List<ContractResponse> getAllContractByStaffId(Integer staffId) {
+    public List<ContractResponse> getAllContractByStaff(String email) {
+        List<Contract> contracts = contractRepository.findByStaffEmail(email);
+        return contracts.stream().map(ContractResponse::fromContract).toList();
+    }
 
-        throw new UnsupportedOperationException("Unimplemented method 'getAllContractByStaffId'");
+    @Override
+    public List<ContractResponse> getAllContractByCar(String registrationPlate) {
+        List<Contract> contractList = contractRepository.findByRegistrationPlate(registrationPlate);
+        return contractList.stream().map(ContractResponse::fromContract).toList();
     }
 
 }

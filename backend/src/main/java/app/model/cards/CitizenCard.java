@@ -20,7 +20,7 @@ public class CitizenCard {
     private Integer citizenId;
 
     @Column(name = "id_card", nullable = true)
-    private Integer idCard;
+    private String idCard;
 
     @Column(name = "front_image", nullable = true)
     private String frontImage;

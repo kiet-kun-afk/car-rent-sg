@@ -20,7 +20,7 @@ public class DriverLicense {
     private Integer driverLicenseId;
 
     @Column(name = "id_card", nullable = false)
-    private Integer idCard;
+    private String idCard;
 
     @Column(name = "front_image", nullable = false)
     private String frontImage;
