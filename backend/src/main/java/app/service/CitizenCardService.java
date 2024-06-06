@@ -16,3 +16,4 @@ public interface CitizenCardService {
 
     public void Delete(Integer id) throws Exception;
 }
+
