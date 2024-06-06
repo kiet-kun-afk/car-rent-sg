@@ -10,9 +10,9 @@ public interface CitizenCardService {
 
     public CitizenCardResponse getOne(Integer id);
 
-    public CitizenCardResponse Post(CitizenCardDTO citizencardDTO);
+    public CitizenCardResponse Post(CitizenCardDTO citizenCardDTO);
 
-    public CitizenCardResponse Put(Integer id, CitizenCardDTO citizencardDTO);
+    public CitizenCardResponse Put(Integer id, CitizenCardDTO citizenCardDTO);
 
     public void Delete(Integer id) throws Exception;
 }
