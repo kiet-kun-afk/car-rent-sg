@@ -19,20 +19,17 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public List<BillResponse> getAll() {
-        // TODO Auto-generated method stub
         return billRepository.findAll().stream().map(BillResponse::fromBill).toList();
     }
 
     @Override
     public BillResponse getOne(Integer id) {
-        // TODO Auto-generated method stub
         Bill bill = billRepository.findById(id).orElse(null);
         return BillResponse.fromBill(bill);
     }
 
     @Override
     public BillResponse Post(BillDTO billDTO) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'Post'");
     }
 

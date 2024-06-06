@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BrandReponse {
+public class BrandResponse {
 
     private Integer brandId;
 
@@ -20,7 +20,7 @@ public class BrandReponse {
 
     private String countryOrigin;
 
-    public BrandReponse(Brand brand) {
+    public BrandResponse(Brand brand) {
         this.brandId = brand.getBrandId();
         this.brandImage = brand.getBrandImage();
         this.brandName = brand.getBrandName();
@@ -28,8 +28,8 @@ public class BrandReponse {
 
     }
 
-    public static BrandReponse fromBrandResponse(Brand brand) {
-        return new BrandReponse(brand);
+    public static BrandResponse fromBrandResponse(Brand brand) {
+        return new BrandResponse(brand);
     }
 
 }

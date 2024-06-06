@@ -162,7 +162,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public StaffResponse Put(String email, StaffDTO staffDTO) throws Exception {
-        // TODO Auto-generated method stub
+
         Address address = addressRepository.findById(staffDTO.getAddress()).orElse(null);
         CitizenCard citizencard = citizenRepository.findById(staffDTO.getCitizenCard()).orElse(null);
 
@@ -188,7 +188,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void Delete(String email) throws Exception {
-        // TODO Auto-generated method stub
+
         Staff staff = staffRepository.findByEmailAndStatusTrue(email);
         if (staff == null) {
             throw new DataNotFoundException("Couldn't find staff");

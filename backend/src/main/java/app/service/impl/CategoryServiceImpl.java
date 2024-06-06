@@ -21,13 +21,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryResponse> getAll() {
-        // TODO Auto-generated method stub
+
         return categoryRes.findAll().stream().map(CategoryResponse::fromCategoryResponse).toList();
     }
 
     @Override
     public CategoryResponse getOne(Integer id) {
-        // TODO Auto-generated method stub
+
         Category category = categoryRes.findById(id).orElse(null);
         return CategoryResponse.fromCategoryResponse(category);
     }

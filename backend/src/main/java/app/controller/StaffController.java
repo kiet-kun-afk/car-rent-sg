@@ -28,13 +28,12 @@ public class StaffController {
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<StaffResponse> staffReponses = staffService.getAll();
+            List<StaffResponse> staffResponses = staffService.getAll();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .data(staffReponses)
+                    .data(staffResponses)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Update staff failed")
@@ -52,7 +51,6 @@ public class StaffController {
                     .data(staffResponse)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Update staff failed")
@@ -70,7 +68,6 @@ public class StaffController {
                     .data(staffResponse)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Update staff failed")
@@ -88,7 +85,6 @@ public class StaffController {
                     .data(staffResponse)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Update staff failed")
@@ -105,7 +101,6 @@ public class StaffController {
                     .status(200)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Update staff failed")

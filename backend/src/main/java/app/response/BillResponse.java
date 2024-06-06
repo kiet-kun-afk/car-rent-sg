@@ -1,6 +1,6 @@
 package app.response;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import app.model.Bill;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.Setter;
 public class BillResponse {
     private Integer BillId;
 
-    private LocalDate payDate;
+    private LocalDateTime payDate;
 
     private Double payCost;
 

@@ -29,7 +29,6 @@ public class BillsController {
                     .data(billResponse)
                     .build());
         } catch (Exception e) {
-            // TODO: handle exception
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Get all car failed")

@@ -3,14 +3,13 @@ package app.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.dto.BrandDTO;
 import app.exception.InvalidParamException;
 import app.model.Brand;
 import app.repository.BrandRepository;
-import app.response.BrandReponse;
+import app.response.BrandResponse;
 import app.service.BrandService;
 import lombok.RequiredArgsConstructor;
 
@@ -21,21 +20,21 @@ public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRes;
 
     @Override
-    public List<BrandReponse> getALL() {
-        return brandRes.findAll().stream().map(BrandReponse::fromBrandResponse).toList();
+    public List<BrandResponse> getALL() {
+        return brandRes.findAll().stream().map(BrandResponse::fromBrandResponse).toList();
     }
 
     @Override
-    public BrandReponse getOne(Integer id) {
-        // TODO Auto-generated method stub
+    public BrandResponse getOne(Integer id) {
+
         Brand brand = brandRes.findById(id).orElse(null);
-        return BrandReponse.fromBrandResponse(brand);
+        return BrandResponse.fromBrandResponse(brand);
 
     }
 
     @Override
-    public BrandReponse Post(BrandDTO brandDTO) {
-        // TODO Auto-generated method stub
+    public BrandResponse Post(BrandDTO brandDTO) {
+
         Brand brand = new Brand();
 
         brand.setBrandImage(brandDTO.getBrandImage());
@@ -43,21 +42,21 @@ public class BrandServiceImpl implements BrandService {
         brand.setCountryOrigin(brandDTO.getCountryOrigin());
 
         brandRes.save(brand);
-        return BrandReponse.fromBrandResponse(brand);
+        return BrandResponse.fromBrandResponse(brand);
     }
 
     @Override
-    public BrandReponse Put(Integer id, BrandDTO brandDTO) {
-        // TODO Auto-generated method stub
-        Optional<Brand> optionalbrand = brandRes.findById(id);
+    public BrandResponse Put(Integer id, BrandDTO brandDTO) {
 
-        if (optionalbrand.isPresent()) {
-            Brand brand = optionalbrand.get();
+        Optional<Brand> optionalBrand = brandRes.findById(id);
+
+        if (optionalBrand.isPresent()) {
+            Brand brand = optionalBrand.get();
             brand.setBrandImage(brandDTO.getBrandImage());
             brand.setBrandName(brandDTO.getBrandName());
             brand.setCountryOrigin(brandDTO.getCountryOrigin());
             brandRes.save(brand);
-            return BrandReponse.fromBrandResponse(brand);
+            return BrandResponse.fromBrandResponse(brand);
         } else {
             throw new RuntimeException("Car not found with id " + id);
         }
