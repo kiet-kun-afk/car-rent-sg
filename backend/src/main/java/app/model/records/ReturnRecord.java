@@ -1,20 +1,20 @@
 package app.model.records;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import app.model.Contract;
 import app.model.Staff;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,9 +33,8 @@ public class ReturnRecord {
     @Column(name = "return_id")
     private Integer returnId;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "return_date", nullable = false)
-    private Date returnDate;
+    private LocalDateTime returnDate;
 
     @Column(name = "kilometer_number", nullable = false)
     private Integer kilometerNumber;
@@ -50,7 +49,7 @@ public class ReturnRecord {
     @JoinColumn(name = "staff_id")
     private Staff staff;
 
-    @ManyToOne
-    @JoinColumn(name = "contract_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "contract_id", nullable = false)
     private Contract contract;
 }

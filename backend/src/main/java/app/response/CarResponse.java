@@ -6,11 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-// import java.time.LocalDateTime;
-// import java.util.Date;
 
 import app.model.Car;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Setter
 @Getter
@@ -18,57 +15,42 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @NoArgsConstructor
 public class CarResponse {
 
-    @JsonProperty("car_id")
     private Integer carId;
 
-    @JsonProperty("registration_plate")
     private String registrationPlate;
 
-    @JsonProperty("car_name")
     private String carName;
 
-    @JsonProperty("rent_cost")
     private Double rentCost;
 
-    @JsonProperty("number_of_seat")
     private Integer numberOfSeat;
 
     private String transmission;
 
-    @JsonProperty("fuel_type")
     private String fuelType;
 
-    @JsonProperty("fuel_consumption")
     private String fuelConsumption;
 
     private String features;
 
-    @JsonProperty("front_image")
     private String frontImage;
 
-    @JsonProperty("back_image")
     private String backImage;
 
-    @JsonProperty("right_image")
     private String rightImage;
 
-    @JsonProperty("left_image")
     private String leftImage;
 
     private String describe;
 
-    @JsonProperty("registration_date")
     private LocalDate registrationDate;
 
     private Boolean status;
 
-    @JsonProperty("branch_id")
     private Integer branchId;
 
-    @JsonProperty("brand_id")
     private Integer brandId;
 
-    @JsonProperty("category_id")
     private Integer categoryId;
     private String branchName;
     private String brandName;

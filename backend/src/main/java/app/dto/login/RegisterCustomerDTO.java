@@ -16,6 +16,9 @@ public class RegisterCustomerDTO {
     @NotBlank(message = "Phone number is required")
     private String phoneNumber;
 
+    @NotBlank(message = "Full name is required")
+    private String fullName;
+
     @NotBlank(message = "Password is required")
     private String password;
 

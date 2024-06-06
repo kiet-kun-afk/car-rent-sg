@@ -5,10 +5,13 @@ import java.util.List;
 import app.dto.StaffDTO;
 import app.dto.login.LoginDTO;
 import app.dto.login.RegisterStaffDTO;
+import app.model.Staff;
 import app.response.LoginResponse;
 import app.response.StaffResponse;
 
 public interface StaffService {
+
+    public Staff getAuth();
 
     public LoginResponse loginStaff(LoginDTO staffDTO) throws Exception;
 

@@ -4,12 +4,12 @@ import java.util.HashSet;
 import java.util.List;
 // import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import app.dto.StaffDTO;
@@ -45,12 +45,13 @@ import lombok.RequiredArgsConstructor;
 public class StaffServiceImpl implements StaffService {
 
     private final AuthenticationManager authenticationManager;
-    private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final StaffRepository staffRepository;
     private final RoleRepository roleRepository;
     private final AddressRepository addressRepository;
     private final CitizenCardRepository citizenRepository;
+    private final ValidService validService;
+    private final PasswordResetService passwordResetService;
 
     @Override
     public LoginResponse loginStaff(LoginDTO loginDTO) throws Exception {
@@ -70,17 +71,24 @@ public class StaffServiceImpl implements StaffService {
             throw new InvalidParamException("Email is already registered");
         }
 
-        if (staffRepository.existsByPhoneNumber(staffDTO.getPhoneNumber())) {
+        String phoneNumber = staffDTO.getPhoneNumber();
+        if (!validService.validatePhoneNumber(phoneNumber)) {
+            throw new InvalidParamException("Phone number is not valid");
+        }
+
+        if (staffRepository.existsByPhoneNumber(phoneNumber)) {
             throw new InvalidParamException("Phone number is already registered");
         }
 
         Staff staff = new Staff();
         staff.setEmail(staffDTO.getEmail());
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
-        staff.setPassword(passwordEncoder.encode(staffDTO.getPhoneNumber()));
+        staff.setPassword(UUID.randomUUID().toString());
         staff.setRoles(getRoles(staffDTO.getRoles()));
+        staff.setStatus(true);
 
         staffRepository.save(staff);
+        passwordResetService.createPasswordResetToken(staff.getEmail(), "staff", "first");
         return StaffResponse.registerStaff(staff);
     }
 
@@ -188,6 +196,13 @@ public class StaffServiceImpl implements StaffService {
         staff.setStatus(false);
         staffRepository.save(staff);
 
+    }
+
+    @Override
+    public Staff getAuth() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Staff staff = staffRepository.findByEmailAndStatusTrue(email);
+        return staff;
     }
 
 }

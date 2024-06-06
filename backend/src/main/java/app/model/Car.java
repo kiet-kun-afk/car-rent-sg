@@ -1,7 +1,6 @@
 package app.model;
 
 import java.time.LocalDate;
-// import java.util.Date;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -60,7 +59,6 @@ public class Car {
 
     private String describe;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "registration_date", nullable = false)
     private LocalDate registrationDate;
 

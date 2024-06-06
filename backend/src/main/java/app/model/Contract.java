@@ -1,7 +1,6 @@
 package app.model;
 
-import java.time.LocalDate;
-// import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,23 +21,20 @@ public class Contract {
     @Column(name = "contract_id")
     private Integer contractId;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "create_date", nullable = false)
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @Column(name = "rent_cost", nullable = false)
     private Double rentCost;
 
     @Column(name = "number_day", nullable = false)
-    private Integer numberDay;
+    private long numberDay;
 
     @Column(name = "total_rent_cost", nullable = false)
     private Double totalRentCost;
@@ -61,6 +57,8 @@ public class Contract {
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id", nullable = false)
+    @JoinColumn(name = "staff_id")
     private Staff staff;
+
+    private String attachment;
 }

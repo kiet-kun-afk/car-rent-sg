@@ -30,7 +30,7 @@ public class Branch {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 }

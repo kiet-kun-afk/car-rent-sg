@@ -14,7 +14,7 @@ import lombok.Setter;
 public class CitizencardDTO {
 
     @NotNull(message = "id card is not null")
-    private Integer idCard;
+    private String idCard;
 
     @NotBlank
     private String frontImage;

@@ -1,7 +1,6 @@
 package app.service.impl;
 
 import java.io.Serializable;
-// import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +47,6 @@ public class CarServiceImpl implements CarService, Serializable {
 
 	@Override
 	public List<CarResponse> getAll() {
-		// TODO Auto-generated method stub
 
 		return carres.findAll().stream().map(CarResponse::fromCarResponse).toList();
 	}
@@ -56,15 +54,12 @@ public class CarServiceImpl implements CarService, Serializable {
 	@Override
 	public CarResponse getOne(String registrationPlate) {
 		Car car = carres.findByRegistrationPlate(registrationPlate);
-		// TODO Auto-generated method stub
+
 		return CarResponse.fromCarResponse(car);
 	}
 
 	@Override
 	public CarResponse Post(CarDTO carDTO) {
-		// if(carres.existsById(carDTO.getCarId())){
-		// throw new InvalidParamException("id is already registered");
-		// }
 
 		Branch branchid = brachesres.findById(carDTO.getBranchId()).orElse(null);
 		System.out.println(branchid);
@@ -77,7 +72,6 @@ public class CarServiceImpl implements CarService, Serializable {
 		car.setBackImage(carDTO.getBackImage());
 		car.setBranch(branchid);
 		car.setBrand(brandid);
-		// carDTO.setCarId(car.getCarId());
 		car.setCarName(carDTO.getCarName());
 		car.setCategory(categoryid);
 		car.setDescribe(carDTO.getDescribe());
@@ -100,9 +94,6 @@ public class CarServiceImpl implements CarService, Serializable {
 
 	@Override
 	public CarResponse Put(Integer id, CarDTO carDTO) {
-		// if(!carres.existsById(id)){
-		// return null;
-		// }
 		Branch branchid = brachesres.findById(carDTO.getBranchId()).orElse(null);
 		System.out.println(branchid);
 
