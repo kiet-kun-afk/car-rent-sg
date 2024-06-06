@@ -9,8 +9,7 @@ import lombok.*;
 @Getter
 public class ContractDTO {
 
-    @NotBlank(message = "Create date is required")
-    private String createDate;
+    private Integer contractId;
 
     @NotBlank(message = "Start date is required")
     private String startDate;

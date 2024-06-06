@@ -51,11 +51,17 @@ public class CustomerServiceImpl implements CustomerService {
             throw new InvalidParamException("Email is already registered");
         }
 
-        if (customerRepository.existsByPhoneNumber(customerDTO.getPhoneNumber())) {
+        String phoneNumber = customerDTO.getPhoneNumber();
+        if (!validService.validatePhoneNumber(phoneNumber)) {
+            throw new InvalidParamException("Phone number is invalid");
+        }
+
+        if (customerRepository.existsByPhoneNumber(phoneNumber)) {
             throw new InvalidParamException("Phone number is already registered");
         }
 
-        if (!validService.validatePassword(customerDTO.getPassword())) {
+        String password = customerDTO.getPassword();
+        if (!validService.validatePassword(password)) {
             throw new InvalidParamException("Password is invalid");
         }
 
@@ -66,6 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = new Customer();
         customer.setEmail(customerDTO.getEmail());
         customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        customer.setFullName(customerDTO.getFullName());
         customer.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
         customer.setStatus(true);
 
@@ -135,20 +142,20 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(String email) throws Exception {
-        Customer customer = customerRepository.findByEmail(email);
+    public void deleteCustomer(String phoneNumber) throws Exception {
+        Customer customer = customerRepository.findByPhoneNumber(phoneNumber);
         if (customer == null) {
-            throw new DataNotFoundException("Not found customer with email " + email);
+            throw new DataNotFoundException("Not found customer with phone number " + phoneNumber);
         }
         customer.setStatus(false);
         customerRepository.save(customer);
     }
 
     @Override
-    public void recoverCustomer(String email) throws Exception {
-        Customer customer = customerRepository.findByEmail(email);
+    public void recoverCustomer(String phoneNumber) throws Exception {
+        Customer customer = customerRepository.findByPhoneNumber(phoneNumber);
         if (customer == null) {
-            throw new DataNotFoundException("Not found customer with email " + email);
+            throw new DataNotFoundException("Not found customer with phone number " + phoneNumber);
         }
         customer.setStatus(true);
         customerRepository.save(customer);
@@ -171,6 +178,12 @@ public class CustomerServiceImpl implements CustomerService {
         }
         customer.setPassword(passwordEncoder.encode(newPass));
         customerRepository.save(customer);
+    }
+
+    @Override
+    public CustomerResponse getOneByPhoneNumber(String phoneNumber) throws Exception {
+        Customer customer = customerRepository.findByPhoneNumber(phoneNumber);
+        return CustomerResponse.fromCustomer(customer);
     }
 
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -59,8 +59,7 @@ public class CarDTO {
     private String describe;
 
     @Past(message = "Registration is in the past")
-    private LocalDateTime registrationDate;
-
+    private LocalDate registrationDate;
 
     private Boolean status;
 

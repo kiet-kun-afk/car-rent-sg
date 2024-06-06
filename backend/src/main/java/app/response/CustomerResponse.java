@@ -76,6 +76,7 @@ public class CustomerResponse {
         response.setCustomerId(customer.getCustomerId());
         response.setEmail(customer.getEmail());
         response.setPhoneNumber(customer.getPhoneNumber());
+        response.setFullName(customer.getFullName());
         // response.setFirstName(customer.getFirstName());
         // response.setLastName(customer.getLastName());
         // response.setGender(customer.getGender());

@@ -23,7 +23,8 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAll() {
         try {
             List<CustomerResponse> customerResponse = customerService.getAllCustomer();
@@ -40,6 +41,7 @@ public class CustomerController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @GetMapping("/status-false")
     public ResponseEntity<ResponseObject> getAllStatusFalse() {
         try {
@@ -57,6 +59,7 @@ public class CustomerController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @GetMapping("/status-true")
     public ResponseEntity<ResponseObject> getAllStatusTrue() {
         try {
@@ -74,10 +77,11 @@ public class CustomerController {
         }
     }
 
-    @DeleteMapping("/delete/{email}")
-    public ResponseEntity<ResponseObject> deleteCustomer(@PathVariable("email") String email) {
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @DeleteMapping("/delete/{phoneNumber}")
+    public ResponseEntity<ResponseObject> deleteCustomer(@PathVariable("phoneNumber") String phoneNumber) {
         try {
-            customerService.deleteCustomer(email);
+            customerService.deleteCustomer(phoneNumber);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Delete customer successfully")
@@ -90,10 +94,11 @@ public class CustomerController {
         }
     }
 
-    @PutMapping("/recover/{email}")
-    public ResponseEntity<ResponseObject> recoverCustomer(@PathVariable("email") String email) {
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PutMapping("/recover/{phoneNumber}")
+    public ResponseEntity<ResponseObject> recoverCustomer(@PathVariable("phoneNumber") String phoneNumber) {
         try {
-            customerService.recoverCustomer(email);
+            customerService.recoverCustomer(phoneNumber);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Recover customer successfully")
@@ -151,6 +156,24 @@ public class CustomerController {
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Update customer successfully")
+                    .data(customerResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{phoneNumber}")
+    public ResponseEntity<ResponseObject> getCustomerByPhoneNumber(@PathVariable("phoneNumber") String phoneNumber) {
+        try {
+            CustomerResponse customerResponse = customerService.getOneByPhoneNumber(phoneNumber);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get customer successfully")
                     .data(customerResponse)
                     .build());
         } catch (Exception e) {

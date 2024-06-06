@@ -26,23 +26,23 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Staff staff = staffRepository.findByPhoneNumberAndStatusTrue(username);
+        Staff staff = staffRepository.findByEmailAndStatusTrue(username);
         if (staff == null) {
-            Customer customer = customerRepository.findByEmailAndStatusTrue(username);
+            Customer customer = customerRepository.findByPhoneNumberAndStatusTrue(username);
             if (customer == null) {
                 throw new UsernameNotFoundException("Could not find");
             }
             Set<GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(customer.getEmail()));
 
-            return new org.springframework.security.core.userdetails.User(customer.getEmail(), customer.getPassword(),
-                    authorities);
+            return new org.springframework.security.core.userdetails.User(customer.getPhoneNumber(),
+                    customer.getPassword(), authorities);
         } else {
             Set<GrantedAuthority> authorities = staff.getRoles().stream()
                     .map(role -> new SimpleGrantedAuthority(role.getName()))
                     .collect(Collectors.toSet());
 
-            return new org.springframework.security.core.userdetails.User(staff.getEmail(), staff.getPassword(),
-                    authorities);
+            return new org.springframework.security.core.userdetails.User(staff.getEmail(),
+                    staff.getPassword(), authorities);
         }
     }
 

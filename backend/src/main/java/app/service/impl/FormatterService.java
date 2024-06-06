@@ -38,14 +38,18 @@ public class FormatterService {
         return dateTimeStr.format(dateTimeFormatter);
     }
 
-    public boolean isFuture(LocalDate date) {
-        LocalDate today = LocalDate.now();
+    public boolean isFuture(LocalDateTime date) {
+        LocalDateTime today = LocalDateTime.now();
         return date.isAfter(today);
     }
 
-    public boolean isPast(LocalDate date) {
-        LocalDate today = LocalDate.now();
+    public boolean isPast(LocalDateTime date) {
+        LocalDateTime today = LocalDateTime.now();
         return date.isBefore(today);
+    }
+
+    public boolean isBefore(LocalDateTime startDate, LocalDateTime endDate) {
+        return startDate.isBefore(endDate);
     }
 
     public LocalDate toLocalDate(LocalDateTime dateTime) {

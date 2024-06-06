@@ -13,7 +13,7 @@ import lombok.Setter;
 public class CitizencardResponse {
     private Integer citizenId;
 
-    private Integer idCard;
+    private String idCard;
     private String frontImage;
     private String backImage;
 

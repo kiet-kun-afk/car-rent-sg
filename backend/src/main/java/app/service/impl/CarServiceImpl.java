@@ -1,7 +1,6 @@
 package app.service.impl;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,7 +85,7 @@ public class CarServiceImpl implements CarService, Serializable {
 		car.setFuelType(carDTO.getFuelType());
 		car.setLeftImage(carDTO.getLeftImage());
 		car.setNumberOfSeat(carDTO.getNumberOfSeat());
-		car.setRegistrationDate((Date) carDTO.getRegistrationDate());
+		car.setRegistrationDate(carDTO.getRegistrationDate());
 		car.setRegistrationPlate(carDTO.getRegistrationPlate());
 		car.setRentCost(carDTO.getRentCost());
 		car.setRightImage(carDTO.getRightImage());
@@ -126,7 +125,7 @@ public class CarServiceImpl implements CarService, Serializable {
 			car.setFuelType(carDTO.getFuelType());
 			car.setLeftImage(carDTO.getLeftImage());
 			car.setNumberOfSeat(carDTO.getNumberOfSeat());
-			car.setRegistrationDate((Date) carDTO.getRegistrationDate());
+			car.setRegistrationDate(carDTO.getRegistrationDate());
 			car.setRegistrationPlate(carDTO.getRegistrationPlate());
 			car.setRentCost(carDTO.getRentCost());
 			car.setRightImage(carDTO.getRightImage());
