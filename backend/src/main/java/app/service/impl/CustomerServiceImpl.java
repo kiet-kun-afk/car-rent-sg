@@ -186,4 +186,9 @@ public class CustomerServiceImpl implements CustomerService {
         return CustomerResponse.fromCustomer(customer);
     }
 
+    @Override
+    public CustomerResponse getCurrentCustomer() {
+        return CustomerResponse.fromCustomer(getAuth());
+    }
+
 }

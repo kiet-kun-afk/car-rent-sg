@@ -208,4 +208,43 @@ public class ContractController {
                     .build());
         }
     }
+
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @GetMapping("/all-not-delivery-yet")
+    public ResponseEntity<ResponseObject> listContractNotDeliveryYet() {
+        try {
+            List<ContractResponse> contractResponses = contractService.listContractNotDeliveryYet();
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get all contract successfully")
+                    .data(contractResponses)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get all contract failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @GetMapping("/all-not-delivery-yet-by-phone/{phoneNumber}")
+    public ResponseEntity<ResponseObject> listContractByPhoneNumberNotDeliveryYet(@PathVariable String phoneNumber) {
+        try {
+            List<ContractResponse> contractResponses = contractService
+                    .listContractByPhoneNumberNotDeliveryYet(phoneNumber);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get all contract successfully")
+                    .data(contractResponses)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get all contract failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
 }

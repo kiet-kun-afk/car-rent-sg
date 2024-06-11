@@ -210,4 +210,15 @@ public class ContractServiceImpl implements ContractService {
         return contractList.stream().map(ContractResponse::fromContract).toList();
     }
 
+    @Override
+    public List<ContractResponse> listContractByPhoneNumberNotDeliveryYet(String phoneNumber) {
+        List<Contract> contracts = contractRepository.findContractsWithoutDeliveryRecordsByPhoneNumber(phoneNumber);
+        return contracts.stream().map(ContractResponse::fromContract).toList();
+    }
+
+    @Override
+    public List<ContractResponse> listContractNotDeliveryYet() {
+        List<Contract> contracts = contractRepository.findContractsWithoutDeliveryRecords();
+        return contracts.stream().map(ContractResponse::fromContract).toList();
+    }
 }

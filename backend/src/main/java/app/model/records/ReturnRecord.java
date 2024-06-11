@@ -2,7 +2,6 @@ package app.model.records;
 
 import java.time.LocalDateTime;
 
-import app.model.Contract;
 import app.model.Staff;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -50,6 +49,6 @@ public class ReturnRecord {
     private Staff staff;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "contract_id", nullable = false)
-    private Contract contract;
+    @JoinColumn(name = "delivery_record_id", nullable = false)
+    private DeliveryRecord deliveryRecord;
 }

@@ -24,4 +24,8 @@ public interface ContractService {
     public List<ContractResponse> getAllContractByStaff(String email);
 
     public List<ContractResponse> getAllContractByCar(String registrationPlate);
+
+    public List<ContractResponse> listContractByPhoneNumberNotDeliveryYet(String phoneNumber);
+
+    public List<ContractResponse> listContractNotDeliveryYet();
 }
