@@ -1,7 +1,7 @@
 package app.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.dto.CarDTO;
@@ -9,11 +9,13 @@ import app.response.CarResponse;
 import app.response.ResponseObject;
 import app.service.CarService;
 // import app.service.impl.CarServiceImpl;
-
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -118,4 +120,25 @@ public class CarController {
         }
     }
 
+    @GetMapping("/index")
+    public ResponseEntity<ResponseObject> index(
+            @RequestParam(required = false) @Nullable Integer numberOfSeat,
+            @RequestParam Optional<Integer> pageNumber,
+            @RequestParam Optional<Integer> pageSize) {
+
+        try {
+            Page<CarResponse> cars = carService.getCarsForIndex(pageNumber.orElse(0), pageSize.orElse(8));
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get all car successfully")
+                    .data(cars)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get all car failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
 }
