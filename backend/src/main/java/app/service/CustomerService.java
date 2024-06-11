@@ -33,4 +33,6 @@ public interface CustomerService {
     public void recoverCustomer(String phoneNumber) throws Exception;
 
     public void changePassword(ChangePasswordDTO changePasswordDTO) throws Exception;
+
+    public CustomerResponse getCurrentCustomer();
 }

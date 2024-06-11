@@ -60,4 +60,19 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 			WHERE s.email = :email
 			""")
 	List<Contract> findByStaffEmail(@Param("email") String email);
+
+	@Query("""
+			SELECT c FROM Contract c
+			WHERE c.id NOT IN (SELECT dr.contract.id FROM DeliveryRecord dr)
+			AND c.customer.phoneNumber = :phoneNumber
+			AND c.staff IS NOT NULL
+			""")
+	List<Contract> findContractsWithoutDeliveryRecordsByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
+	@Query("""
+			SELECT c FROM Contract c
+			WHERE c.id NOT IN (SELECT dr.contract.id FROM DeliveryRecord dr)
+			AND c.staff IS NOT NULL
+			""")
+	List<Contract> findContractsWithoutDeliveryRecords();
 }

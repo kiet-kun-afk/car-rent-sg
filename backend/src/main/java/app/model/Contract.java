@@ -2,6 +2,7 @@ package app.model;
 
 import java.time.LocalDateTime;
 
+import app.model.records.DeliveryRecord;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -61,4 +62,7 @@ public class Contract {
     private Staff staff;
 
     private String attachment;
+
+    @OneToOne(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private DeliveryRecord deliveryRecord;
 }
