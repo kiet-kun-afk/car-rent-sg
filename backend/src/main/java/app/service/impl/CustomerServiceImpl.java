@@ -430,7 +430,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setStatus(customerDTO.getStatus() == null ? customer.getStatus()
                 : customerDTO.getStatus());
         customer.setAvatarImage(customerDTO.getAvatarImageFile() == null ? customer.getAvatarImage()
-                : fileService.saveImage(customerDTO.getAvatarImageFile()));
+                : fileService.upload(customerDTO.getAvatarImageFile()));
         return CustomerResponse.fromCustomer(customerRepository.save(customer));
     }
 

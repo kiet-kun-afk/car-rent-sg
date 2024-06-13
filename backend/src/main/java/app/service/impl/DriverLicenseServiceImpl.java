@@ -35,8 +35,8 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
         }
 
         driverLicense.setIdCard(cardDTO.getIdCard());
-        driverLicense.setBackImage(fileService.saveImage(cardDTO.getBackImage()));
-        driverLicense.setFrontImage(fileService.saveImage(cardDTO.getFrontImage()));
+        driverLicense.setBackImage(fileService.upload(cardDTO.getBackImage()));
+        driverLicense.setFrontImage(fileService.upload(cardDTO.getFrontImage()));
         customerAuth.setDriverLicense(driverLicenseRepository.save(driverLicense));
         return driverLicense;
     }
