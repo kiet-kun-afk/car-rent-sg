@@ -11,7 +11,7 @@ import app.response.StaffResponse;
 
 public interface StaffService {
 
-    public Staff getAuth();
+    public Staff getAuth() throws Exception;
 
     public LoginResponse loginStaff(LoginDTO staffDTO) throws Exception;
 
@@ -26,4 +26,6 @@ public interface StaffService {
     public StaffResponse Put(String email, StaffDTO staffDTO) throws Exception;
 
     public void Delete(String email) throws Exception;
+
+    public StaffResponse getCurrentStaff() throws Exception;
 }

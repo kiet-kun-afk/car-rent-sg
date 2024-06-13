@@ -370,10 +370,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer getAuth() {
+    public Customer getAuth() throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        return customerRepository.findByEmailOrPhoneNumberAndStatusTrue(username, username).get();
+        Customer customer = customerRepository.findByPhoneNumberAndStatusTrue(username);
+        if (customer == null) {
+            throw new DataNotFoundException("Customer not found");
+        }
+        return customer;
     }
 
     @Override
@@ -476,7 +480,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse getCurrentCustomer() {
+    public CustomerResponse getCurrentCustomer() throws Exception {
         return CustomerResponse.fromCustomer(getAuth());
     }
 

@@ -16,7 +16,7 @@ public interface CustomerService {
 
     public CustomerResponse registerCustomer(RegisterCustomerDTO customerDTO) throws Exception;
 
-    public Customer getAuth();
+    public Customer getAuth() throws Exception;
 
     public CustomerResponse getOneByPhoneNumber(String phoneNumber) throws Exception;
 
@@ -34,5 +34,5 @@ public interface CustomerService {
 
     public void changePassword(ChangePasswordDTO changePasswordDTO) throws Exception;
 
-    public CustomerResponse getCurrentCustomer();
+    public CustomerResponse getCurrentCustomer() throws Exception;
 }
