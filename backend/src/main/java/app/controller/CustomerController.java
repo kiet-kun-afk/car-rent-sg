@@ -197,7 +197,8 @@ public class CustomerController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message(e.getMessage())
+                    .message("Get current customer failed")
+                    .data(e.getMessage())
                     .build());
         }
     }

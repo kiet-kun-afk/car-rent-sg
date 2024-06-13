@@ -199,10 +199,18 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public Staff getAuth() {
+    public Staff getAuth() throws Exception {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Staff staff = staffRepository.findByEmailAndStatusTrue(email);
+        if (staff == null) {
+            throw new DataNotFoundException("Staff not found");
+        }
         return staff;
+    }
+
+    @Override
+    public StaffResponse getCurrentStaff() throws Exception {
+        return StaffResponse.fromStaff(getAuth());
     }
 
 }
