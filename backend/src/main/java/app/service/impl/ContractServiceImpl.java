@@ -71,7 +71,7 @@ public class ContractServiceImpl implements ContractService {
         contract.setDeposit(contractDTO.getDeposit());
         contract.setStatusPayment(true);
         contract.setWayToPay(contractDTO.getWayToPay());
-        contract.setAttachment(fileService.saveAttachment(contractDTO.getFile()));
+        contract.setAttachment(fileService.upload(contractDTO.getFile()));
         contractRepository.save(contract);
         return ContractResponse.fromContract(contract);
     }
@@ -151,7 +151,7 @@ public class ContractServiceImpl implements ContractService {
         contract.setNumberDay(numberDay);
         contract.setTotalRentCost(totalRentCost);
         contract.setWayToPay(contractDTO.getWayToPay());
-        contract.setAttachment(fileService.saveAttachment(contractDTO.getFile()));
+        contract.setAttachment(fileService.upload(contractDTO.getFile()));
         contractRepository.save(contract);
         return ContractResponse.fromContract(contract);
     }
