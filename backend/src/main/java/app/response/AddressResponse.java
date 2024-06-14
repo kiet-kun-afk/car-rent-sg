@@ -12,12 +12,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AddressResponse {
 
-    // @JsonProperty
     private Integer addressId;
 
     private String province;
 
-    // @JsonProperty
     private String district;
 
     private String ward;

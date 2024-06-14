@@ -33,9 +33,6 @@ public class CustomerResponse {
 
     private String avatarImage;
 
-    // @JsonIgnore
-    // private String password;
-
     private Integer addressId;
 
     private Integer citizenCardId;
