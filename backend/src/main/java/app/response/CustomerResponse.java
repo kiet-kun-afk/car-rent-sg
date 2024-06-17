@@ -33,10 +33,16 @@ public class CustomerResponse {
 
     private String avatarImage;
 
+    // private LocalDateTime registerDate;
+
     // @JsonIgnore
     // private String password;
 
     private Integer addressId;
+
+    private String addressStreet;
+    private String addressProvince;
+    private String addressdistrict;
 
     private Integer citizenCardId;
 
@@ -45,6 +51,8 @@ public class CustomerResponse {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private String idCard;
 
     public CustomerResponse(Customer customer) {
         this.customerId = customer.getCustomerId();
@@ -57,14 +65,25 @@ public class CustomerResponse {
         this.email = customer.getEmail();
         this.status = customer.getStatus();
         this.avatarImage = customer.getAvatarImage();
+
         this.addressId = customer.getAddress() == null ? null
                 : customer.getAddress().getAddressId();
+
+        this.addressStreet = customer.getAddress() == null ? null : customer.getAddress().getStreet();
+        this.addressProvince = customer.getAddress() == null ? null : customer.getAddress().getProvince();
+        this.addressdistrict = customer.getAddress() == null ? null : customer.getAddress().getDistrict();
+
         this.citizenCardId = customer.getCitizenCard() == null ? null
                 : customer.getCitizenCard().getCitizenId();
+
         this.driverLicenseId = customer.getDriverLicense() == null ? null
                 : customer.getDriverLicense().getDriverLicenseId();
+
+        this.idCard = customer.getDriverLicense() == null ? null : customer.getDriverLicense().getIdCard();
+
         this.createdAt = customer.getCreatedAt();
         this.updatedAt = customer.getUpdatedAt();
+
     }
 
     public static CustomerResponse fromCustomer(Customer customer) {

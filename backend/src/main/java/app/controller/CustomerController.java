@@ -19,11 +19,12 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("${api.prefix}/customers")
 @RequiredArgsConstructor
+@CrossOrigin
 public class CustomerController {
 
     private final CustomerService customerService;
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAll() {
         try {
@@ -41,7 +42,7 @@ public class CustomerController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @GetMapping("/status-false")
     public ResponseEntity<ResponseObject> getAllStatusFalse() {
         try {
@@ -59,7 +60,7 @@ public class CustomerController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @GetMapping("/status-true")
     public ResponseEntity<ResponseObject> getAllStatusTrue() {
         try {
@@ -77,7 +78,7 @@ public class CustomerController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @DeleteMapping("/delete/{phoneNumber}")
     public ResponseEntity<ResponseObject> deleteCustomer(@PathVariable("phoneNumber") String phoneNumber) {
         try {
@@ -94,7 +95,7 @@ public class CustomerController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @PutMapping("/recover/{phoneNumber}")
     public ResponseEntity<ResponseObject> recoverCustomer(@PathVariable("phoneNumber") String phoneNumber) {
         try {
@@ -166,7 +167,7 @@ public class CustomerController {
         }
     }
 
-    @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()")
     @GetMapping("/{phoneNumber}")
     public ResponseEntity<ResponseObject> getCustomerByPhoneNumber(@PathVariable("phoneNumber") String phoneNumber) {
         try {

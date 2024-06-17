@@ -26,12 +26,6 @@ public class Customer extends BaseEntity {
     @Column(name = "customer_id")
     private Integer customerId;
 
-    // @Column(name = "first_name")
-    // private String firstName;
-
-    // @Column(name = "last_name")
-    // private String lastName;
-
     @Column(name = "full_name")
     private String fullName;
 
