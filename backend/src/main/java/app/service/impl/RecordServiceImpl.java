@@ -30,7 +30,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public RecordResponse createDeliveryRecord(Integer contractId, RecordDTO recordDTO) throws Exception {
-        Contract contract = contractRepository.findByContractIdAndConfirmed(contractId);
+        Contract contract = contractRepository.findByContractIdAndPayComplete(contractId);
         if (contract == null) {
             throw new InvalidParamException("Maybe contract is not found or is not confirmed");
         }
@@ -40,7 +40,8 @@ public class RecordServiceImpl implements RecordService {
         deliveryRecord.setStaff(staff);
         deliveryRecord.setFuelNumber(recordDTO.getFuelNumber());
         deliveryRecord.setKilometerNumber(recordDTO.getKilometerNumber());
-        deliveryRecord.setDeliveryDate(LocalDateTime.now());
+        deliveryRecord.setDate(LocalDateTime.now());
+        deliveryRecord.setNotes(recordDTO.getNotes());
         deliveryRecord.setStatus(true);
         deliveryRecordRepository.save(deliveryRecord);
         return RecordResponse.fromDeliveryRecord(deliveryRecord);
@@ -62,10 +63,12 @@ public class RecordServiceImpl implements RecordService {
         returnRecord.setStaff(staff);
         returnRecord.setFuelNumber(recordDTO.getFuelNumber());
         returnRecord.setKilometerNumber(recordDTO.getKilometerNumber());
-        returnRecord.setReturnDate(LocalDateTime.now());
+        returnRecord.setDate(LocalDateTime.now());
+        returnRecord.setNotes(recordDTO.getNotes());
+        returnRecord.setSurcharges(recordDTO.getSurcharges() == null ? 0 : recordDTO.getSurcharges());
         returnRecord.setStatus(true);
-        deliveryRecordRepository.save(deliveryRecord);
         recordRepository.save(returnRecord);
+        deliveryRecordRepository.save(deliveryRecord);
         return RecordResponse.fromReturnRecord(returnRecord);
     }
 

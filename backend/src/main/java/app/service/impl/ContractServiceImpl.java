@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import app.dto.ContractDTO;
 import app.exception.DataNotFoundException;
@@ -31,6 +32,7 @@ public class ContractServiceImpl implements ContractService {
     private final FormatterService formatterService;
     private final ContractRepository contractRepository;
     private final CarRepository carRepository;
+    private final EmailService emailService;
 
     @Override
     public ContractResponse createContract(String registrationPlate, ContractDTO contractDTO) throws Exception {
@@ -166,6 +168,20 @@ public class ContractServiceImpl implements ContractService {
         contractRepository.delete(contract);
     }
 
+    @Transactional
+    private void continueContract(Contract contract) throws Exception {
+        emailService.sendMail(contract.getCustomer().getEmail(), "Gửi yêu cầu thuê xe",
+                "Bạn vừa gửi yêu cầu thuê xe "
+                        + contract.getCar().getCarName()
+                        + ", vui lòng tiến hành đặt cọc ngay tại đây "
+                        + "{đường dẫn} "
+                        + " để hoàn tất việc đặt xe, tổng cộng: "
+                        + contract.getTotalRentCost()
+                        + " tiền cọc: "
+                        + contract.getTotalRentCost() * 0.2
+                        + "(20%) tổng tiền");
+    }
+
     @Override
     public void confirmContract(Integer contractId) throws Exception {
         try {
@@ -173,6 +189,7 @@ public class ContractServiceImpl implements ContractService {
             Contract contract = contractRepository.findByContractIdAndNoStaff(contractId);
             contract.setStaff(staff);
             contractRepository.save(contract);
+            continueContract(contract);
         } catch (Exception e) {
             throw new DataNotFoundException("The contract has been confirmed or something is wrong");
         }
@@ -180,6 +197,9 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public void completePayContract(Integer contractId, Double deposit) throws Exception {
+        if (deposit <= 0) {
+            throw new InvalidParamException("Deposit must be positive");
+        }
         try {
             Contract contract = contractRepository.findByContractIdAndConfirmed(contractId);
             contract.setDeposit(deposit);

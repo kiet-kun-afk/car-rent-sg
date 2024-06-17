@@ -49,6 +49,14 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 
 	@Query("""
 			SELECT c FROM Contract c
+			WHERE c.contractId = :contractId
+			AND c.staff IS NOT NULL
+			AND c.deposit > 0
+			""")
+	Contract findByContractIdAndPayComplete(@Param("contractId") Integer contractId);
+
+	@Query("""
+			SELECT c FROM Contract c
 			JOIN c.customer cc
 			WHERE cc.phoneNumber = :phoneNumber
 			""")

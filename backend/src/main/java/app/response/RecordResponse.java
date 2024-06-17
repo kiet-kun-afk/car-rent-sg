@@ -26,11 +26,16 @@ public class RecordResponse {
 
     private Integer contractId;
 
+    private String notes;
+
+    private Double surcharges;
+
     public RecordResponse(DeliveryRecord deliveryRecord) {
         this.id = deliveryRecord.getDeliveryId();
-        this.dateTime = deliveryRecord.getDeliveryDate();
+        this.dateTime = deliveryRecord.getDate();
         this.kilometerNumber = deliveryRecord.getKilometerNumber();
         this.fuelNumber = deliveryRecord.getFuelNumber();
+        this.notes = deliveryRecord.getNotes();
         this.status = deliveryRecord.getStatus();
         this.staffId = deliveryRecord.getStaff().getStaffId();
         this.contractId = deliveryRecord.getContract().getContractId();
@@ -38,9 +43,11 @@ public class RecordResponse {
 
     public RecordResponse(ReturnRecord returnRecord) {
         this.id = returnRecord.getReturnId();
-        this.dateTime = returnRecord.getReturnDate();
+        this.dateTime = returnRecord.getDate();
         this.kilometerNumber = returnRecord.getKilometerNumber();
         this.fuelNumber = returnRecord.getFuelNumber();
+        this.notes = returnRecord.getNotes();
+        this.surcharges = returnRecord.getSurcharges();
         this.status = returnRecord.getStatus();
         this.staffId = returnRecord.getStaff().getStaffId();
         this.contractId = returnRecord.getDeliveryRecord().getContract().getContractId();

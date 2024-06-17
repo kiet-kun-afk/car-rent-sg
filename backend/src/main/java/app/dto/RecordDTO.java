@@ -15,5 +15,9 @@ public class RecordDTO {
     @NotNull(message = "Fuel number is required")
     private Integer fuelNumber;
 
+    private String notes;
+
+    private Double surcharges;
+
     private Boolean status;
 }
