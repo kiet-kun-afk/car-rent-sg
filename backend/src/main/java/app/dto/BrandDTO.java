@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BrandDTO {
-    // private Integer brandId;
 
     @NotNull(message = "Brand name cannot be null")
     private String brandName;

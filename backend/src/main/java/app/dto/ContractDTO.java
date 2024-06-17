@@ -1,7 +1,10 @@
 package app.dto;
 
+import java.time.LocalDateTime;
+
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -11,11 +14,11 @@ public class ContractDTO {
 
     private Integer contractId;
 
-    @NotBlank(message = "Start date is required")
-    private String startDate;
+    @Future(message = "Star date must be future date")
+    private LocalDateTime startDate;
 
-    @NotBlank(message = "End date is required")
-    private String endDate;
+    @Future(message = "End date must be future date")
+    private LocalDateTime endDate;
 
     private Double deposit = 0.0;
 
