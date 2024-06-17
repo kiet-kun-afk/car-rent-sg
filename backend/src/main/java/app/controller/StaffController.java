@@ -3,6 +3,7 @@ package app.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -104,6 +105,25 @@ public class StaffController {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Update staff failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @GetMapping("/current-staff")
+    public ResponseEntity<ResponseObject> getCurrentStaff() {
+        try {
+            StaffResponse staff = staffService.getCurrentStaff();
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get current staff successfully")
+                    .data(staff)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get current staff failed")
                     .data(e.getMessage())
                     .build());
         }

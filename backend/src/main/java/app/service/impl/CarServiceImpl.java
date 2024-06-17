@@ -1,10 +1,14 @@
 package app.service.impl;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import app.dto.CarDTO;
@@ -144,6 +148,15 @@ public class CarServiceImpl implements CarService, Serializable {
 		}
 		car.setStatus(false);
 		carres.save(car);
+	}
+
+	@Override
+	public Page<CarResponse> getCarsForIndex(Integer pageNumber, Integer pageSize)
+			throws Exception {
+		LocalDateTime today = LocalDateTime.now();
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<Car> page = carres.findCarsNotInContractToday(today, pageable);
+		return page.map(CarResponse::fromCarResponse);
 	}
 
 }

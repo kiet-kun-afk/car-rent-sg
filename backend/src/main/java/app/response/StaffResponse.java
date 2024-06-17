@@ -51,8 +51,8 @@ public class StaffResponse {
         this.roles = staff.getRoles().stream().map(Role::getName).toList();
         this.status = staff.getStatus();
         this.avatarImage = staff.getAvatarImage();
-        this.address = staff.getAddress().getAddressId();
-        this.citizenCard = staff.getCitizenCard().getCitizenId();
+        this.address = staff.getAddress() == null ? null : staff.getAddress().getAddressId();
+        this.citizenCard = staff.getCitizenCard() == null ? null : staff.getCitizenCard().getCitizenId();
         this.createdAt = staff.getCreatedAt();
         this.updatedAt = staff.getUpdatedAt();
     }

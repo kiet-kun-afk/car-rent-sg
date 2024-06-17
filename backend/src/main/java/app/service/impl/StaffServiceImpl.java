@@ -2,13 +2,14 @@ package app.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
-// import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +62,14 @@ public class StaffServiceImpl implements StaffService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new LoginResponse("Login successfully", jwtTokenProvider.generateToken(authentication));
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        // Get roles from Authentication
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        return new LoginResponse("Login successfully", token, roles);
     }
 
     @Override
@@ -199,10 +207,18 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public Staff getAuth() {
+    public Staff getAuth() throws Exception {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Staff staff = staffRepository.findByEmailAndStatusTrue(email);
+        if (staff == null) {
+            throw new DataNotFoundException("Staff not found");
+        }
         return staff;
+    }
+
+    @Override
+    public StaffResponse getCurrentStaff() throws Exception {
+        return StaffResponse.fromStaff(getAuth());
     }
 
 }

@@ -3,6 +3,7 @@ package app.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import app.model.Address;
 import app.model.Customer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,16 +34,7 @@ public class CustomerResponse {
 
     private String avatarImage;
 
-    // private LocalDateTime registerDate;
-
-    // @JsonIgnore
-    // private String password;
-
-    private Integer addressId;
-
-    private String addressStreet;
-    private String addressProvince;
-    private String addressdistrict;
+    private Address address;
 
     private Integer citizenCardId;
 
@@ -66,12 +58,7 @@ public class CustomerResponse {
         this.status = customer.getStatus();
         this.avatarImage = customer.getAvatarImage();
 
-        this.addressId = customer.getAddress() == null ? null
-                : customer.getAddress().getAddressId();
-
-        this.addressStreet = customer.getAddress() == null ? null : customer.getAddress().getStreet();
-        this.addressProvince = customer.getAddress() == null ? null : customer.getAddress().getProvince();
-        this.addressdistrict = customer.getAddress() == null ? null : customer.getAddress().getDistrict();
+        this.address = customer.getAddress() == null ? null : customer.getAddress();
 
         this.citizenCardId = customer.getCitizenCard() == null ? null
                 : customer.getCitizenCard().getCitizenId();

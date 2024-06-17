@@ -22,10 +22,10 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtTokenProvider {
 
-    @Value("KlUEhjFreR7jse27J2L5PBeKMHqZRwi2tBLkDKs7FpoEOGxG10KG3YIs3ChKVRLm")
+    @Value("${jwt.secret.token}")
     private String jwtSecret;
 
-    @Value("3600000")
+    @Value("${jwt.expiration.date.milliseconds}")
     private long jwtExpirationDate;
 
     // generate JWT token
