@@ -1,6 +1,5 @@
 package app.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import app.model.records.DeliveryRecord;
@@ -27,10 +26,10 @@ public class Contract {
     private LocalDateTime createDate;
 
     @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
     @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @Column(name = "rent_cost", nullable = false)
     private Double rentCost;

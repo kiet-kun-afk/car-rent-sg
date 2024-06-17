@@ -1,6 +1,6 @@
 package app.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,10 +15,10 @@ public class ContractDTO {
     private Integer contractId;
 
     @Future(message = "Star date must be future date")
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
     @Future(message = "End date must be future date")
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     private Double deposit = 0.0;
 

@@ -1,6 +1,5 @@
 package app.service.impl;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -43,14 +42,18 @@ public class ContractServiceImpl implements ContractService {
             throw new DataNotFoundException("Car not found");
         }
 
-        LocalDate startDate = validDate(contractDTO.getStartDate());
-        LocalDate endDate = validDate(contractDTO.getEndDate());
+        LocalDateTime startDate = contractDTO.getStartDate();
+        LocalDateTime endDate = contractDTO.getEndDate();
+
+        if (!formatterService.isFuture(startDate) || !formatterService.isFuture(endDate)) {
+            throw new InvalidParamException("Start/End date must be future");
+        }
 
         if (!formatterService.isBefore(startDate, endDate)) {
             throw new InvalidParamException("Start date must be before end date");
         }
 
-        if (!isContractValidForCar(registrationPlate, startDate, endDate)) {
+        if (!isContractValidForCar(car, startDate, endDate)) {
             throw new InvalidParamException("Contract is not valid for car: is overlapping date");
         }
 
@@ -77,16 +80,8 @@ public class ContractServiceImpl implements ContractService {
         return ContractResponse.fromContract(contract);
     }
 
-    // private long daysBetween(LocalDateTime startDate, LocalDateTime endDate)
-    // throws Exception {
-    // try {
-    // return ChronoUnit.DAYS.between(startDate, endDate);
-    // } catch (Exception e) {
-    // throw new InvalidParamException("Date type is invalid");
-    // }
-    // }
-
-    private long daysBetween(LocalDate startDate, LocalDate endDate) throws Exception {
+    private long daysBetween(LocalDateTime startDate, LocalDateTime endDate)
+            throws Exception {
         try {
             return ChronoUnit.DAYS.between(startDate, endDate);
         } catch (Exception e) {
@@ -94,17 +89,8 @@ public class ContractServiceImpl implements ContractService {
         }
     }
 
-    private LocalDate validDate(LocalDate dateStr) throws Exception {
-        // LocalDate date = formatterService.stringToDate(dateStr);
-        LocalDate date = dateStr;
-        if (!formatterService.isFuture(date)) {
-            throw new InvalidParamException("Start/End date must be future");
-        }
-        return date;
-    }
-
-    public boolean isContractValidForCar(String registrationPlate, LocalDate startDate, LocalDate endDate) {
-        List<Contract> contractList = contractRepository.findByRegistrationPlate(registrationPlate);
+    public boolean isContractValidForCar(Car car, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Contract> contractList = contractRepository.findByRegistrationPlate(car.getRegistrationPlate());
 
         for (Contract contract : contractList) {
             if (isDateOverlap(contract.getStartDate(), contract.getEndDate(), startDate, endDate)) {
@@ -114,9 +100,10 @@ public class ContractServiceImpl implements ContractService {
         return true; // is not overlapping
     }
 
-    public boolean isContractValidForCarExcludingCurrent(String registrationPlate, LocalDate startDate,
-            LocalDate endDate, Integer currentContractId) {
-        List<Contract> contractList = contractRepository.findByRegistrationPlateExcludingContractId(registrationPlate,
+    public boolean isContractValidForCarExcludingCurrent(Car car, LocalDateTime startDate,
+            LocalDateTime endDate, Integer currentContractId) {
+        List<Contract> contractList = contractRepository.findByRegistrationPlateExcludingContractId(
+                car.getRegistrationPlate(),
                 currentContractId);
 
         for (Contract contract : contractList) {
@@ -127,8 +114,8 @@ public class ContractServiceImpl implements ContractService {
         return true; // is not overlapping
     }
 
-    private boolean isDateOverlap(LocalDate existingStart, LocalDate existingEnd, LocalDate newStart,
-            LocalDate newEnd) {
+    private boolean isDateOverlap(LocalDateTime existingStart, LocalDateTime existingEnd, LocalDateTime newStart,
+            LocalDateTime newEnd) {
         return !newStart.isAfter(existingEnd) && !newEnd.isBefore(existingStart);
     }
 
@@ -139,14 +126,19 @@ public class ContractServiceImpl implements ContractService {
         if (contract == null) {
             throw new DataNotFoundException("Contract not found or not belong to customer");
         }
-        LocalDate startDate = validDate(contractDTO.getStartDate());
-        LocalDate endDate = validDate(contractDTO.getEndDate());
+
+        LocalDateTime startDate = contractDTO.getStartDate();
+        LocalDateTime endDate = contractDTO.getEndDate();
+
+        if (!formatterService.isFuture(startDate) || !formatterService.isFuture(endDate)) {
+            throw new InvalidParamException("Start/End date must be future");
+        }
 
         if (!formatterService.isBefore(startDate, endDate)) {
             throw new InvalidParamException("Start date must be before end date");
         }
 
-        if (!isContractValidForCarExcludingCurrent(contract.getCar().getRegistrationPlate(), startDate, endDate,
+        if (!isContractValidForCarExcludingCurrent(contract.getCar(), startDate, endDate,
                 contractId)) {
             throw new InvalidParamException("Contract is not valid for car: is overlapping date");
         }

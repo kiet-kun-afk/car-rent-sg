@@ -1,6 +1,5 @@
 package app.response;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import app.model.Contract;
@@ -14,9 +13,9 @@ public class ContractResponse {
 
     private LocalDateTime createDate;
 
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     private Double rentCost;
 

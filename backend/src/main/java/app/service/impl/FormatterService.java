@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -14,18 +15,35 @@ public class FormatterService {
 
     DateTimeFormatter dateFormatterType1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DateTimeFormatter dateFormatterType2 = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-    DateTimeFormatter dateFormatterType3 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    DateTimeFormatter dateFormatterType3 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    DateTimeFormatter dateFormatterType4 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DateTimeFormatter dateTimeFormatterType1 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     DateTimeFormatter dateTimeFormatterType2 = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-    DateTimeFormatter dateTimeFormatterType3 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    DateTimeFormatter dateTimeFormatterType3 = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    DateTimeFormatter dateTimeFormatterType4 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+    private List<DateTimeFormatter> dateTimeFormatters = List.of(
+            dateTimeFormatterType1,
+            dateTimeFormatterType2,
+            dateTimeFormatterType3,
+            dateTimeFormatterType4);
+
+    private List<DateTimeFormatter> dateFormatters = List.of(
+            dateFormatterType1,
+            dateFormatterType2,
+            dateFormatterType3,
+            dateFormatterType4);
 
     public LocalDate stringToDate(String dateStr) throws Exception {
-        try {
-            return LocalDate.parse(dateStr, dateFormatterType1);
-        } catch (Exception e) {
-            throw new InvalidParamException("Could not parse, format must be dd/MM/yyyy");
+        for (DateTimeFormatter dateTimeFormatter : dateFormatters) {
+            try {
+                return LocalDate.parse(dateStr, dateTimeFormatter);
+            } catch (Exception e) {
+
+            }
         }
+        throw new InvalidParamException("Could not parse, format must be yyyy-MM-dd");
     }
 
     public String dateToString(LocalDate date) throws Exception {
@@ -53,11 +71,14 @@ public class FormatterService {
     }
 
     public LocalDateTime stringToDateTime(String dateTimeStr) throws Exception {
-        try {
-            return LocalDateTime.parse(dateTimeStr, dateTimeFormatterType1);
-        } catch (Exception e) {
-            throw new InvalidParamException("Could not parse, format must be yyyy-MM-dd");
+        for (DateTimeFormatter dateTimeFormatter : dateTimeFormatters) {
+            try {
+                return LocalDateTime.parse(dateTimeStr, dateTimeFormatter);
+            } catch (Exception e) {
+
+            }
         }
+        throw new InvalidParamException("Could not parse, format must be yyyy-MM-dd HH:mm");
     }
 
     public String dateTimeToString(LocalDateTime dateTimeStr) throws Exception {
