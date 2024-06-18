@@ -14,6 +14,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import app.jwt.JwtAuthenticationEntryPoint;
 import app.jwt.JwtAuthenticationFilter;
+import app.oauth2.CustomOAuth2UserService;
+import app.oauth2.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -23,6 +25,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter authenticationFilter;
+    private final CustomOAuth2UserService customOAuth2;
+    private final OAuth2LoginSuccessHandler successOAuth2;
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -40,6 +44,11 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().permitAll())
+                .oauth2Login(ou -> ou.authorizationEndpoint(e -> e
+                        .baseUri("/oauth2/authorization"))
+                        .successHandler(successOAuth2).redirectionEndpoint(e -> e.baseUri("/login/oauth2/code/*"))
+                        .userInfoEndpoint(e -> e
+                                .userService(customOAuth2)))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint));
 
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

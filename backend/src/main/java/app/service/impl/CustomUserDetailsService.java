@@ -28,10 +28,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Staff staff = staffRepository.findByEmailAndStatusTrue(username);
         if (staff == null) {
-            Customer customer = customerRepository.findByPhoneNumberAndStatusTrue(username);
-            if (customer == null) {
-                throw new UsernameNotFoundException("Could not find");
-            }
+            Customer customer = customerRepository
+                    .findByUsernameOrPhoneNumberOrEmailAndStatusTrue(username, username, username)
+                    .orElseThrow(() -> new UsernameNotFoundException("Customer not found"));
             Set<GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(customer.getEmail()));
 
             return new org.springframework.security.core.userdetails.User(customer.getPhoneNumber(),
