@@ -40,6 +40,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public LoginResponse loginCustomer(LoginDTO customer) throws Exception {
+        String username = customer.getEmailOrPhoneNumber();
+        if (username.contains(" ")) {
+            throw new InvalidParamException("Invalid email or phone number");
+        }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(customer.getEmailOrPhoneNumber(), customer.getPassword()));
 
