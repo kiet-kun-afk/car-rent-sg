@@ -34,6 +34,8 @@ public class Customer extends BaseEntity {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    private String username;
+
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
