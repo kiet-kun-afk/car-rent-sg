@@ -6,14 +6,16 @@ import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class GoogleOAuth2UserInfo implements OAuth2User {
+public class CustomOAuth2User implements OAuth2User {
 
     private OAuth2User oauth2User;
     private String clientName;
+    private String email;
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -31,22 +33,19 @@ public class GoogleOAuth2UserInfo implements OAuth2User {
     }
 
     public String getEmail() {
-        return oauth2User.getAttribute("email");
+        return email != null ? email : oauth2User.getAttribute("email");
     }
 
-    public String getImageUrl() {
-        return oauth2User.getAttribute("picture");
+    public String getPhoto() {
+        return oauth2User.getAttribute("picture") == null ? (String) oauth2User.getAttribute("avatar_url")
+                : oauth2User.getAttribute("picture");
     }
 
     public String getClientName() {
-        return this.clientName;
+        return clientName;
     }
 
     public String getFullname() {
         return oauth2User.getAttribute("name");
-    }
-
-    public boolean getRoles() {
-        return false;
     }
 }

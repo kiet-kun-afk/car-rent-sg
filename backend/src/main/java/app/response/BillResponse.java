@@ -13,31 +13,31 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BillResponse {
-    private Integer BillId;
+    private Integer billId;
 
     private LocalDateTime payDate;
 
     private Double payCost;
 
-    private Double incurredCost;
+    private String paymentMethod;
 
     private String describe;
 
-    private Boolean BillStatus;
+    private Boolean billStatus;
 
     private Integer contractId;
 
-    private Integer StaffId;
+    private Integer staffId;
 
     public BillResponse(Bill bill) {
-        this.BillId = bill.getBillId();
+        this.billId = bill.getBillId();
         this.payCost = bill.getPayCost();
-        this.incurredCost = bill.getIncurredCost();
+        this.paymentMethod = bill.getPaymentMethod();
         this.describe = bill.getDescribe();
         this.payDate = bill.getPayDate();
         this.contractId = bill.getContract().getContractId();
-        this.BillStatus = bill.getContract().getStatusPayment();
-        this.StaffId = bill.getStaff().getStaffId();
+        this.billStatus = bill.getContract().getStatusPayment();
+        // this.staffId = bill.getStaff().getStaffId();
     }
 
     public static BillResponse fromBill(Bill bill) {

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import app.dto.ContractDTO;
 import app.exception.DataNotFoundException;
 import app.exception.InvalidParamException;
+import app.model.Bill;
 import app.model.Car;
 import app.model.Contract;
 import app.model.Customer;
@@ -17,6 +18,7 @@ import app.model.Staff;
 import app.repository.CarRepository;
 import app.repository.ContractRepository;
 import app.response.ContractResponse;
+import app.service.BillService;
 import app.service.ContractService;
 import app.service.CustomerService;
 import app.service.StaffService;
@@ -33,6 +35,7 @@ public class ContractServiceImpl implements ContractService {
     private final ContractRepository contractRepository;
     private final CarRepository carRepository;
     private final EmailService emailService;
+    private final BillService billService;
 
     @Override
     public ContractResponse createContract(String registrationPlate, ContractDTO contractDTO) throws Exception {
@@ -75,9 +78,9 @@ public class ContractServiceImpl implements ContractService {
         contract.setNumberDay(numberDay);
         contract.setTotalRentCost(totalRentCost);
         contract.setDeposit(contractDTO.getDeposit());
-        contract.setStatusPayment(true);
+        contract.setStatusPayment(false);
         contract.setWayToPay(contractDTO.getWayToPay());
-        contract.setAttachment(fileService.upload(contractDTO.getFile()));
+        // contract.setAttachment(fileService.upload(contractDTO.getFile()));
         contractRepository.save(contract);
         return ContractResponse.fromContract(contract);
     }
@@ -169,16 +172,16 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Transactional
-    private void continueContract(Contract contract) throws Exception {
-        emailService.sendMail(contract.getCustomer().getEmail(), "Gửi yêu cầu thuê xe",
+    private void continueContract(Bill bill) throws Exception {
+        emailService.sendMail(bill.getContract().getCustomer().getEmail(), "Gửi yêu cầu thuê xe",
                 "Bạn vừa gửi yêu cầu thuê xe "
-                        + contract.getCar().getCarName()
+                        + bill.getContract().getCar().getCarName()
                         + ", vui lòng tiến hành đặt cọc ngay tại đây "
                         + "{đường dẫn} "
                         + " để hoàn tất việc đặt xe, tổng cộng: "
-                        + contract.getTotalRentCost()
+                        + bill.getContract().getTotalRentCost()
                         + " tiền cọc: "
-                        + contract.getTotalRentCost() * 0.2
+                        + bill.getPayCost()
                         + "(20%) tổng tiền");
     }
 
@@ -188,8 +191,7 @@ public class ContractServiceImpl implements ContractService {
             Staff staff = staffService.getAuth();
             Contract contract = contractRepository.findByContractIdAndNoStaff(contractId);
             contract.setStaff(staff);
-            contractRepository.save(contract);
-            continueContract(contract);
+            continueContract(billService.createDepositBill(contractRepository.save(contract)));
         } catch (Exception e) {
             throw new DataNotFoundException("The contract has been confirmed or something is wrong");
         }
