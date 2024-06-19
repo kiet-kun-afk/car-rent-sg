@@ -172,17 +172,151 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Transactional
-    private void continueContract(Bill bill) throws Exception {
+    private void emailPaymentRequest(Bill bill) throws Exception {
         emailService.sendMail(bill.getContract().getCustomer().getEmail(), "Gửi yêu cầu thuê xe",
-                "Bạn vừa gửi yêu cầu thuê xe "
-                        + bill.getContract().getCar().getCarName()
-                        + ", vui lòng tiến hành đặt cọc ngay tại đây "
-                        + "{đường dẫn} "
-                        + " để hoàn tất việc đặt xe, tổng cộng: "
-                        + bill.getContract().getTotalRentCost()
-                        + " tiền cọc: "
-                        + bill.getPayCost()
-                        + "(20%) tổng tiền");
+                """
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                margin: 0;
+                                padding: 0;
+                            }
+
+                            .car-info,
+                            .rental-info,
+                            .branch-info,
+                            .payment-info,
+                            .deposit-info,
+                            .remaining-payment-info {
+                                margin-bottom: 10px;
+                            }
+
+                            .car-info p,
+                            .rental-info p,
+                            .branch-info p,
+                            .payment-info p,
+                            .deposit-info p,
+                            .remaining-payment-info p {
+                                display: inline-block;
+                                width: 100px;
+                                text-align: right;
+                            }
+
+                            .car-info span,
+                            .rental-info span,
+                            .branch-info span,
+                            .payment-info span,
+                            .deposit-info span,
+                            .remaining-payment-info span {
+                                display: inline-block;
+                                font-weight: bold;
+                            }
+
+                            .btn-payment {
+                                background-color: #007bff;
+                                color: #fff;
+                                padding: 10px 20px;
+                                border: none;
+                                cursor: pointer;
+                            }
+                        </style>
+
+                        <p>Bạn vừa gửi yêu cầu thuê xe
+                                    """
+                        + bill.getContract().getCar().getCarName() +
+                        """
+                                . Bạn vui lòng chờ xác nhận, sau đó tiến hành đặt cọc ngay để hoàn tất việc đặt xe.</p>
+                                <div class="car-info">
+                                    <p>Tên xe:</p>
+                                    <span id="name">
+                                    """
+                        + bill.getContract().getCar().getCarName() +
+                        """
+                                    </span>
+                                </div>
+                                <div class="rental-info">
+                                    <p>Thời gian:</p>
+                                    <span id="start">
+                                    """
+                        + bill.getContract().getStartDate() +
+                        """
+                                </span> đến <span id="end">
+                                """
+                        + bill.getContract().getEndDate() +
+                        """
+                                    </span>
+                                </div>
+                                <div class="branch-info">
+                                    <p>Chi Nhánh:</p>
+                                    <span id="branch">
+                                    """
+                        + bill.getContract().getCar().getBranch().getBranchName() +
+                        """
+                                    </span>
+                                </div>
+                                <div class="payment-info">
+                                    <p>Tổng cộng:</p>
+                                    <span id="money">
+                                    """
+                        + bill.getContract().getTotalRentCost() +
+                        """
+                                    </span>
+                                </div>
+                                <div class="deposit-info">
+                                    <p>Tiền cọc:</p>
+                                    <span id="money">
+                                    """
+                        + bill.getPayCost() +
+                        """
+                                    </span>
+                                </div>
+                                <div class="remaining-payment-info">
+                                    <p>Thanh toán sau:</p>
+                                    <span id="money">
+                                    """
+                        + (bill.getContract().getTotalRentCost() - bill.getPayCost()) +
+                        """
+                                    </span>
+                                </div>
+                                <button class="btn-payment">Thanh Toán</button>
+
+                                <script>
+                                    var startSpan = document.getElementById('start');
+                                    var endSpan = document.getElementById('end');
+
+                                    if (startSpan && endSpan) {
+                                        var startTime = new Date(startSpan.textContent).toLocaleString('en-GB', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        }).replace(',', '');
+
+                                        var endTime = new Date(endSpan.textContent).toLocaleString('en-GB', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        }).replace(',', '');
+
+                                        startSpan.textContent = startTime;
+                                        endSpan.textContent = endTime;
+                                    }
+
+                                    var moneySpans = document.querySelectorAll('#money');
+
+                                    moneySpans.forEach(function (span) {
+                                        var amount = parseInt(span.textContent).toLocaleString('en-US', {
+                                            style: 'currency',
+                                            currency: 'VND'
+                                        }).replace('₫', '').replace(',', '');
+                                        span.textContent = amount + ' ₫';
+                                    });
+
+                                </script>
+                                """);
     }
 
     @Override
@@ -191,7 +325,7 @@ public class ContractServiceImpl implements ContractService {
             Staff staff = staffService.getAuth();
             Contract contract = contractRepository.findByContractIdAndNoStaff(contractId);
             contract.setStaff(staff);
-            continueContract(billService.createDepositBill(contractRepository.save(contract)));
+            emailPaymentRequest(billService.createDepositBill(contractRepository.save(contract)));
         } catch (Exception e) {
             throw new DataNotFoundException("The contract has been confirmed or something is wrong");
         }

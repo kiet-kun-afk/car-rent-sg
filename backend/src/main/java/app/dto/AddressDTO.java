@@ -37,4 +37,6 @@ public class AddressDTO {
     @NotBlank(message = "Street is not blank")
     @Size(min = 2, max = 40, message = "Street must be between 2 to 40 characters")
     private String street;
+
+    private String rememberName;
 }

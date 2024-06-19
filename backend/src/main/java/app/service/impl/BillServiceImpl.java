@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.dto.BillDTO;
+import app.exception.DataNotFoundException;
 import app.exception.InvalidParamException;
 import app.model.Bill;
 import app.model.Contract;
 import app.repository.BillRepository;
+import app.repository.ContractRepository;
 import app.response.BillResponse;
 import app.service.BillService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,8 @@ public class BillServiceImpl implements BillService {
 
     @Autowired
     BillRepository billRepository;
+
+    private final ContractRepository contractRepository;
 
     @Override
     public List<BillResponse> getAll() {
@@ -45,7 +49,6 @@ public class BillServiceImpl implements BillService {
         }
         Bill bill = new Bill();
         bill.setContract(contract);
-        bill.setPayDate(LocalDateTime.now());
         bill.setPayCost(contract.getTotalRentCost() * 0.2);
         bill.setPaymentMethod(contract.getWayToPay());
         bill.setDescribe("Thanh toán tiền cọc cho dịch vụ thuê xe " + contract.getCar().getCarName());
@@ -57,8 +60,22 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public BillResponse completeDepositBill(Integer id) throws Exception {
-        throw new UnsupportedOperationException("Unimplemented method 'completeDepositBill'");
+    public BillResponse completeDepositBill(Integer id, Double deposit) throws Exception {
+        Bill bill = billRepository.findByBillIdAndPaymentStatusFalse(id);
+        if (bill == null) {
+            throw new DataNotFoundException("Bill not found or already completed");
+        }
+        Contract contract = bill.getContract();
+        contract.setDeposit(deposit);
+        bill.setPaymentStatus(true);
+        bill.setPayDate(LocalDateTime.now());
+        try {
+            billRepository.save(bill);
+            contractRepository.save(contract);
+            return BillResponse.fromBill(bill);
+        } catch (Exception e) {
+            throw new InvalidParamException("Cannot save!");
+        }
     }
 
 }

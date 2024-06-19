@@ -22,15 +22,18 @@ public class AddressResponse {
 
     private String street;
 
+    private String rememberName;
+
     public AddressResponse(Address address) {
         this.addressId = address.getAddressId();
         this.district = address.getDistrict();
         this.province = address.getProvince();
         this.ward = address.getWard();
         this.street = address.getStreet();
+        this.rememberName = address.getRememberName();
     }
 
-    public static AddressResponse fromCarResponse(Address address) {
+    public static AddressResponse fromResponse(Address address) {
         return new AddressResponse(address);
     }
 

@@ -10,16 +10,21 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import app.dto.CustomerDTO;
+import app.dto.AddressDTO;
+import app.dto.CustomerInformationRequest;
 import app.dto.login.ChangePasswordDTO;
 import app.dto.login.LoginDTO;
 import app.dto.login.RegisterCustomerDTO;
 import app.exception.DataNotFoundException;
 import app.exception.InvalidParamException;
 import app.jwt.JwtTokenProvider;
+import app.model.Address;
 import app.model.Customer;
+import app.repository.AddressRepository;
 import app.repository.CustomerRepository;
+import app.response.AddressResponse;
 import app.response.CustomerResponse;
 import app.response.LoginResponse;
 import app.service.CustomerService;
@@ -34,9 +39,9 @@ public class CustomerServiceImpl implements CustomerService {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomerRepository customerRepository;
     private final ValidService validService;
-    private final FormatterService formatterService;
     private final FileService fileService;
     private final EmailService emailService;
+    private final AddressRepository addressRepository;
 
     @Override
     public LoginResponse loginCustomer(LoginDTO customer) throws Exception {
@@ -412,38 +417,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse updateCustomer(CustomerDTO customerDTO) throws Exception {
+    public CustomerResponse updateCustomerInfo(CustomerInformationRequest customerDTO) throws Exception {
         Customer customer = getAuth();
-        String phoneNumber = customerDTO.getPhoneNumber();
-        if (!validService.validatePhoneNumber(phoneNumber)) {
-            throw new InvalidParamException("Phone number is invalid");
-        }
-        if (customerRepository.existsByPhoneNumberAndCustomerIdNot(phoneNumber,
-                customer.getCustomerId())) {
-            throw new InvalidParamException("Phone number is already in use");
-        }
-        String email = customerDTO.getEmail();
-        if (customerRepository.existsByEmailAndCustomerIdNot(email, customer.getCustomerId())) {
-            throw new InvalidParamException("Email is already in use");
-        }
-        customer.setEmail(email == null ? customer.getEmail()
-                : email);
-        customer.setPhoneNumber(phoneNumber == null ? customer.getPhoneNumber()
-                : phoneNumber);
-        // customer.setFirstName(customerDTO.getFirstName() == null ?
-        // customer.getFirstName() : customerDTO.getFirstName());
-        // customer.setLastName(customerDTO.getLastName() == null ?
-        // customer.getLastName() : customerDTO.getLastName());
         customer.setFullName(customerDTO.getFullName() == null ? customer.getFullName()
                 : customerDTO.getFullName());
         customer.setGender(customerDTO.getGender() == null ? customer.getGender()
                 : customerDTO.getGender());
-        customer.setBirthDate(customerDTO.getBirthDateStr() == null ? customer.getBirthDate()
-                : formatterService.stringToDate(customerDTO.getBirthDateStr()));
-        customer.setStatus(customerDTO.getStatus() == null ? customer.getStatus()
-                : customerDTO.getStatus());
-        customer.setAvatarImage(customerDTO.getAvatarImageFile() == null ? customer.getAvatarImage()
-                : fileService.upload(customerDTO.getAvatarImageFile()));
+        customer.setBirthDate(customerDTO.getBirthDate());
         return CustomerResponse.fromCustomer(customerRepository.save(customer));
     }
 
@@ -495,6 +475,63 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse getCurrentCustomer() throws Exception {
         return CustomerResponse.fromCustomer(getAuth());
+    }
+
+    @Override
+    public CustomerResponse updateCustomerPhoneNumber(String phoneNumber) throws Exception {
+        Customer customer = getAuth();
+        if (!validService.validatePhoneNumber(phoneNumber)) {
+            throw new InvalidParamException("Phone number is invalid");
+        }
+        if (customerRepository.existsByPhoneNumberAndCustomerIdNot(phoneNumber, customer.getCustomerId())) {
+            throw new InvalidParamException("Phone number is already in use");
+        }
+        customer.setPhoneNumber(phoneNumber == null ? customer.getPhoneNumber()
+                : phoneNumber);
+        return CustomerResponse.fromCustomer(customerRepository.save(customer));
+    }
+
+    @Override
+    public CustomerResponse updateCustomerEmail(String email) throws Exception {
+        Customer customer = getAuth();
+        if (customerRepository.existsByEmailAndCustomerIdNot(email, customer.getCustomerId())) {
+            throw new InvalidParamException("Email is already in use");
+        }
+        customer.setEmail(email == null ? customer.getEmail()
+                : email);
+        return CustomerResponse.fromCustomer(customerRepository.save(customer));
+    }
+
+    @Override
+    public CustomerResponse updateCustomerAvatar(MultipartFile avatar) throws Exception {
+        Customer customer = getAuth();
+        customer.setAvatarImage(fileService.upload(avatar) == null ? customer.getAvatarImage()
+                : fileService.upload(avatar));
+        return CustomerResponse.fromCustomer(customerRepository.save(customer));
+    }
+
+    @Override
+    public AddressResponse updateCustomerAddress(AddressDTO addressDTO) throws Exception {
+        Customer customer = getAuth();
+        String province = addressDTO.getProvince();
+        String district = addressDTO.getDistrict();
+        String ward = addressDTO.getWard();
+        String street = addressDTO.getStreet();
+        String rememberName = addressDTO.getRememberName();
+        Address address = addressRepository.findByProvinceAndDistrictAndWardAndStreetAndRememberName(
+                province, district,
+                ward, street,
+                rememberName);
+        if (address == null) {
+            address = new Address(province, district, ward, street, rememberName);
+        }
+        try {
+            customer.setAddress(addressRepository.save(address));
+            customerRepository.save(customer);
+        } catch (Exception e) {
+            throw new InvalidParamException("Could not save!");
+        }
+        return AddressResponse.fromResponse(address);
     }
 
 }
