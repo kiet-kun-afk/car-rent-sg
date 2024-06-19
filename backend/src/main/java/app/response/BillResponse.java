@@ -29,6 +29,10 @@ public class BillResponse {
 
     private Integer staffId;
 
+    private String registrationPlate;
+
+    private String carName;
+
     public BillResponse(Bill bill) {
         this.billId = bill.getBillId();
         this.payCost = bill.getPayCost();
@@ -36,8 +40,10 @@ public class BillResponse {
         this.describe = bill.getDescribe();
         this.payDate = bill.getPayDate();
         this.contractId = bill.getContract().getContractId();
-        this.billStatus = bill.getContract().getStatusPayment();
-        // this.staffId = bill.getStaff().getStaffId();
+        this.billStatus = bill.getPaymentStatus();
+        this.staffId = bill.getStaff().getStaffId();
+        this.registrationPlate = bill.getContract().getCar().getRegistrationPlate();
+        this.carName = bill.getContract().getCar().getCarName();
     }
 
     public static BillResponse fromBill(Bill bill) {

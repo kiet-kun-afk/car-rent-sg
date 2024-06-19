@@ -66,4 +66,22 @@ public class BillsController {
                     .build());
         }
     }
+
+    @PostMapping("/complete-deposit/{billId}")
+    public ResponseEntity<ResponseObject> completeDepositBill(@PathVariable Integer billId, @RequestParam Double cost) {
+        try {
+            BillResponse billResponse = billService.completeDepositBill(billId, cost);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Complete deposit bill successfully")
+                    .data(billResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Complete deposit bill failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
 }
