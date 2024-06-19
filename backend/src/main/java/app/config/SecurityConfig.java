@@ -25,8 +25,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter authenticationFilter;
-    private final CustomOAuth2UserService customOAuth2;
-    private final OAuth2LoginSuccessHandler successOAuth2;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -44,11 +44,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().permitAll())
-                .oauth2Login(ou -> ou.authorizationEndpoint(e -> e
-                        .baseUri("/oauth2/authorization"))
-                        .successHandler(successOAuth2).redirectionEndpoint(e -> e.baseUri("/login/oauth2/code/*"))
-                        .userInfoEndpoint(e -> e
-                                .userService(customOAuth2)))
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint));
 
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

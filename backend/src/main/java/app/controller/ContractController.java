@@ -114,25 +114,6 @@ public class ContractController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
-    @PutMapping("/complete/{contractId}")
-    public ResponseEntity<ResponseObject> completeContract(@PathVariable("contractId") Integer contractId,
-            @RequestParam("deposit") Double deposit) {
-        try {
-            contractService.completePayContract(contractId, deposit);
-            return ResponseEntity.ok(ResponseObject.builder()
-                    .status(200)
-                    .message("Complete contract successfully")
-                    .build());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(ResponseObject.builder()
-                    .status(400)
-                    .message("Complete contract failed")
-                    .data(e.getMessage())
-                    .build());
-        }
-    }
-
     @PreAuthorize("hasAnyAuthority('ADMIN_ROLE')")
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllContract() {

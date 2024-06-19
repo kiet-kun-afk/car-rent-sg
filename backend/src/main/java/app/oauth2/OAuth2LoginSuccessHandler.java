@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -32,28 +31,26 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws ServletException, IOException {
 
-        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-        String clientName = "Google";
-        GoogleOAuth2UserInfo user = new GoogleOAuth2UserInfo(oauth2User, clientName);
+        CustomOAuth2User oauth2User = (CustomOAuth2User) authentication.getPrincipal();
 
         String name = oauth2User.getName();
-        String email = user.getEmail();
-        String fullname = user.getFullname();
-        String photo = user.getImageUrl();
+        String email = oauth2User.getEmail();
+        String fullname = oauth2User.getFullname();
+        String photo = oauth2User.getPhoto();
 
         Customer customer = customerRepository.findByEmail(email);
         if (customer != null) {
             customer.setUsername(name);
-            customer.setFullName(fullname);
+            customer.setFullName(customer.getFullName() == null ? fullname : customer.getFullName());
             customer.setStatus(true);
-            customer.setAvatarImage(photo);
+            customer.setAvatarImage(customer.getAvatarImage() == null ? photo : customer.getAvatarImage());
             customerRepository.save(customer);
         } else {
             customer = new Customer();
             String rawPassword = UUID.randomUUID().toString();
             customer.setUsername(name);
             customer.setEmail(email);
-            customer.setPhoneNumber("Not updated");
+            customer.setPhoneNumber("NoT uPdAtEd ! ! !");
             customer.setPassword(passwordEncoder.encode(rawPassword));
             customer.setStatus(true);
             customer.setFullName(fullname);
