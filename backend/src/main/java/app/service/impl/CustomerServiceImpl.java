@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -391,10 +392,9 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer getAuth() throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        Customer customer = customerRepository.findByPhoneNumberAndStatusTrue(username);
-        if (customer == null) {
-            throw new DataNotFoundException("Customer not found");
-        }
+        Customer customer = customerRepository
+                .findByUsernameOrPhoneNumberOrEmailAndStatusTrue(username, username, username)
+                .orElseThrow(() -> new UsernameNotFoundException("Customer not found"));
         return customer;
     }
 
