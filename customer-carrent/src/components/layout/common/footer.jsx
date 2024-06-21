@@ -1,5 +1,12 @@
 import React from 'react';
 
+import iconCarrent from '../../images/logoCarrent.png';
+import iconFB from '../../images/fb_icon.png';
+import iconTiktok from '../../images/tiktok_icon.png';
+import iconZalo from '../../images/zalo_icon.png';
+import iconBCT from '../../images/bocongthuong.png';
+import iconMM from '../../images/momo.png';
+import iconVNP from '../../images/vnpay.png';
 
 function Footer() {
     return (
@@ -9,7 +16,7 @@ function Footer() {
                     <div className="c-footer-about">
                         <div className="about-col-1">
                             <div className="about-info">
-                                <a className="about-logo" href=""> <img alt="carR" src="../img/logoCarrent.png" />
+                                <a className="about-logo" href=""> <img alt="carR" src={iconCarrent} />
                                 </a>
                                 <div className="item-sub">
                                     <a className="sub-phone" href="">
@@ -22,8 +29,8 @@ function Footer() {
                                 </div>
                                 <div className="about-item">
                                     <div className="payment">
-                                        <img alt="" src="../img/fb_icon.png" /> <img alt="" src="../img/tiktok_icon.png" />
-                                        <img alt="" src="../img/zalo_icon.png" />
+                                        <img alt="" src={iconFB} /> <img alt="" src={iconTiktok}/>
+                                        <img alt="" src={iconZalo} />
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +134,7 @@ function Footer() {
                     <div className="c-footer-about">
                         <div className="about-col-1">
                             <div className="about-info">
-                                <a className="logo-goverment" href="#"> <img alt="" src="../img/bocongthuong.png" />
+                                <a className="logo-goverment" href="#"> <img alt="" src={iconBCT} />
                                 </a>
                             </div>
                         </div>
@@ -139,8 +146,8 @@ function Footer() {
                             </div>
                             <div className="about-item">
                                 <div className="payment">
-                                    <img alt="" src="../img/momo.png" />
-                                    <img alt="" src="../img/vnpay.png" /> 
+                                    <img alt="" src={iconMM} />
+                                    <img alt="" src={iconVNP} /> 
                                     {/* <img alt="" src="../img/visa.png" /> 
                                     <img alt="" src="../img/zalopay.png" />                               */}
                                 </div>

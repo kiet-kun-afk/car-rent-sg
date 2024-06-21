@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import axiosConfig from "../config/axiosConfig";
 
 import { Link, Outlet } from 'react-router-dom';
 
-import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Header from './header';
@@ -12,56 +14,37 @@ import '../styles/styleKH.css';
 
 import '../adminJS/dashboard';
 
-function mainboard() {
-    const sNotify = () =>
-        toast.success('Success !', {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-        });
-    const wNotify = () =>
-        toast.warn('Something not right !', {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-        });
-    const errNotify = () =>
-        toast.error('Error !', {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-        });;
-    const iNotify = () =>
-        toast.info('Hello !', {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-        });;
+function Mainboard() {
 
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+
+    const fetchUser = async () => {
+        try {
+            const response = await axiosConfig.get(
+                "http://localhost:8080/api/v1/staffs/current-staff"
+            );
+            setUser(response.data.data);
+        } catch (error) {
+            console.error("Failed to fetch user", error);
+        }
+    }
+
+    const handleLogout = () => {
+        setUser(null);
+        navigate("/admin/login");
+        localStorage.removeItem('token');
+    };
+
+    const userAccount = localStorage.getItem('token');
+    const userRoles = localStorage.getItem('roles');
+
+    useEffect(() => {
+        if (userAccount) {
+            fetchUser();
+        }
+
+    }, []);
 
     return (
         <div id="mainboard" className="mainboard">
@@ -81,7 +64,7 @@ function mainboard() {
                     </li>
                     <li>
                         <Link to='/admin/xe'>
-                            <i class='bx bx-car'></i>
+                            <i className='bx bx-car'></i>
                             <span className="text">Danh Sách Xe</span>
                         </Link>
                     </li>
@@ -109,34 +92,44 @@ function mainboard() {
                             <span className="text">Thống kê</span>
                         </Link>
                     </li>
-                    <li>
+                    {/* <li>
                         <Link to='/admin/bieudo'>
                             <i className='bx bx-line-chart'></i>
                             <span className="text">Biểu Đồ</span>
                         </Link>
-                    </li>
-                    <li>
-                        <Link to='/admin/nhanvien'>
-                            <i className='bx bxs-user-circle' ></i>
-                            <span className="text">Nhân Sự</span>
-                        </Link>
-                    </li>
+                    </li> */}
+                    {
+                        userRoles === 'ADMIN_ROLE' ? (
+                            <>
+                                 <li>
+                                    <Link to='/admin/nhanvien'>
+                                        <i className='bx bxs-user-circle' ></i>
+                                        <span className="text">Nhân Sự</span>
+                                    </Link>
+                                </li>
+                            </>
+                        ) : (
+                            <>                               
+                            </>
+                        )
+                    }
+
                 </ul>
                 <ul className="side-menu">
                     <li>
                         <p id="line" className="line"></p>
                     </li>
                     <li>
-                        <a href="#" onClick={errNotify}>
+                        <a href="#">
                             <i className='bx bxs-cog' ></i>
                             <span className="text">Cài Đặt</span>
                         </a>
                     </li>
                     <li>
-                        <Link className="logout" to='/'>
+                        <a className="logout" onClick={handleLogout} >
                             <i className='bx bx-log-out'></i>
                             <span className="text">Đăng Xuất</span>
-                        </Link>
+                        </a>
                     </li>
                 </ul>
             </section>
@@ -155,19 +148,9 @@ function mainboard() {
                 {/* */}
             </section>
             {/* <!-- CONTENT --> */}
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover                             
-            />
+            <ToastContainer />
         </div>
     )
 }
 
-export default mainboard;
+export default Mainboard;

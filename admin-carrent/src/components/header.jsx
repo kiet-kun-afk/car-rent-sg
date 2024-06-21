@@ -1,6 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import axiosConfig from "../config/axiosConfig";
+
+import avatarIMG from "../images/avatar-4.png";
 
 function Header() {
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+
+    const fetchUser = async () => {
+        try {
+            const response = await axiosConfig.get(
+                "http://localhost:8080/api/v1/staffs/current-staff"
+            );
+            setUser(response.data.data);
+        } catch (error) {
+            console.error("Failed to fetch user", error);
+        }
+    }
+
+    const handleLogout = () => {
+        setUser(null);
+        navigate("/admin/login");
+        localStorage.removeItem('token');
+    };
+
+    const userAccount = localStorage.getItem('token');
+    //console.log(userAccount);
+
+    useEffect(() => {
+        if (userAccount) {
+            fetchUser();
+        }
+
+    }, []);
+
     return (
         <nav>
             <i className='bx bx-menu' id='btn-menu'></i>
@@ -19,13 +53,22 @@ function Header() {
                 <input type="checkbox" id="switch-mode" hidden />
                 <label htmlFor="switch-mode" className="switch-mode"></label>
             </div>
-            <a href="#" className="notification">
-                <i className='bx bxs-bell' ></i>
-                <span className="num">99</span>
-            </a>
-            <a href="#" className="profile">
-                <img src="../img/avatar_dattran.png" alt="icon" />
-            </a>
+            {
+                user !== null ? (
+                    <>
+                        <a href="#" className="notification">
+                            <i className='bx bxs-bell' ></i>
+                            <span className="num">99</span>
+                        </a>
+                        <a href="#" className="profile">
+                            <img src={user.avatarImage == null ? avatarIMG : avatarIMG } alt="icon" />
+                        </a>
+                    </>
+                ) : (
+                    <></>
+                )
+            }
+
         </nav>
     );
 }

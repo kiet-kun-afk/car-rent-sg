@@ -5,42 +5,58 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 
 
-function ChitietKH(props) {
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Chi Tiết Khách Hàng
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="name@example.com" />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Example textarea</Form.Label>
-                        <Form.Control as="textarea" rows={3} />
-                    </Form.Group>
-                </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
+// function ChitietKH(props) {
+//     return (
+//         <Modal
+//             {...props}
+//             size="lg"
+//             aria-labelledby="contained-modal-title-vcenter"
+//             centered
+//         >
+//             <Modal.Header closeButton>
+//                 <Modal.Title id="contained-modal-title-vcenter">
+//                     Chi Tiết Khách Hàng
+//                 </Modal.Title>
+//             </Modal.Header>
+//             <Modal.Body>
+//                 <Form>
+//                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+//                         <Form.Label>Email address</Form.Label>
+//                         <Form.Control type="email" placeholder="name@example.com" />
+//                     </Form.Group>
+//                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+//                         <Form.Label>Example textarea</Form.Label>
+//                         <Form.Control as="textarea" rows={3} />
+//                     </Form.Group>
+//                 </Form>
+//             </Modal.Body>
+//             <Modal.Footer>
+//                 <Button onClick={props.onHide}>Close</Button>
+//             </Modal.Footer>
+//         </Modal>
+//     );
+// }
 
 function KhachHang() {
     const [modalShow, setModalShow] = React.useState(false);
     const handleOpen = () => setModalShow(true);
     const handleClose = () => setModalShow(false);
+
+    const formatDate = (localdatetime) => {
+        // Tạo một đối tượng Date từ localdatetime
+        const date = new Date(localdatetime);
+
+        // Lấy ra ngày, tháng và năm
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // Lưu ý: Tháng bắt đầu từ 0
+        const year = date.getFullYear();
+
+        // Định dạng lại thành dd/MM/yyyy
+        const formattedDate = `${day < 10 ? "0" + day : day}/${month < 10 ? "0" + month : month
+            }/${year}`;
+
+        return formattedDate;
+    };
     return (
         <>
             <main>
@@ -142,96 +158,6 @@ function KhachHang() {
                             </table>
                         </div>
 
-                        {/* <table>
-                            <thead>
-                                <tr>
-                                    <th>Mã khách hàng</th>
-                                    <th>Họ và tên</th>
-                                    <th>Email</th>
-                                    <th>Điện thoại</th>
-                                    <th>Ngày sinh</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Trạng thái tài khoản</th>
-                                    <th><i className="bx bxs-cog"></i></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>KH001</td>
-                                    <td>Lê Phúc Duy</td>
-                                    <td>duylpps36206@fpt.edu.vn </td>
-                                    <td>0988323232</td>
-                                    <td>01-06-2024</td>
-                                    <td>121 Nguyễn Ảnh Thủ</td>
-                                    <td>20-05-2024</td>
-                                    <td>Hoạt động</td>
-                                    <td><span className="status completed">Xem chi tiết</span></td>
-                                </tr>
-                                <tr>
-                                    <td>KH001</td>
-                                    <td>
-
-                                        Lê Phúc Duy
-                                    </td>
-                                    <td>duylpps36206@fpt.edu.vn </td>
-                                    <td>0988323232</td>
-
-                                    <td>01-06-2024</td>
-                                    <td>121 Nguyễn Ảnh Thủ</td>
-                                    <td>20-05-2024</td>
-                                    <td>Hoạt động</td>
-                                    <td><span className="status completed">Xem chi tiết</span></td>
-                                </tr>
-                                <tr>
-                                    <td>KH001</td>
-                                    <td>
-
-                                        Lê Phúc Duy
-                                    </td>
-                                    <td>duylpps36206@fpt.edu.vn </td>
-                                    <td>0988323232</td>
-
-                                    <td>01-06-2024</td>
-                                    <td>121 Nguyễn Ảnh Thủ</td>
-                                    <td>20-05-2024</td>
-                                    <td>Hoạt động</td>
-                                    <td><span className="status completed">Xem chi tiết</span></td>
-                                </tr>
-                                <tr>
-                                    <td>KH001</td>
-                                    <td>
-
-                                        Lê Phúc Duy
-                                    </td>
-                                    <td>duylpps36206@fpt.edu.vn </td>
-                                    <td>0988323232</td>
-
-                                    <td>01-06-2024</td>
-                                    <td>121 Nguyễn Ảnh Thủ</td>
-                                    <td>20-05-2024</td>
-                                    <td>Hoạt động</td>
-                                    <td><span className="status completed">Xem chi tiết</span></td>
-                                </tr>
-                                <tr>
-                                    <td>KH001</td>
-                                    <td>
-
-                                        Lê Phúc Duy
-                                    </td>
-                                    <td>duylpps36206@fpt.edu.vn </td>
-                                    <td>0988323232</td>
-
-                                    <td>01-06-2024</td>
-                                    <td>121 Nguyễn Ảnh Thủ</td>
-                                    <td>20-05-2024</td>
-                                    <td>Hoạt động</td>
-                                    <td><span className="status completed">Xem chi tiết</span></td>
-                                </tr>
-
-
-                            </tbody>
-                        </table> */}
                     </div>
                 </div>
                 {/* <!-- Modal --> */}
@@ -251,7 +177,14 @@ function KhachHang() {
                                             </div>
                                             <div class="profile-details">
                                                 <h3>Người dùng</h3>
-                                                <p>Tham gia: dd/MM/yyyy</p>
+                                                <div class="row m-0">
+                                                    <div class="col-sm-9">
+                                                        <p>Tham gia: dd/MM/yyyy</p>
+                                                    </div>
+                                                    <div class="col-sm-3 p-0 d-flex align-items-center justify-content-center">
+                                                        <span class="badge text-bg-success">Hoạt động</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6 contact-info">
@@ -274,9 +207,13 @@ function KhachHang() {
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label for="dob">Ngày sinh</label>
-                                                            <input type="text" id="dob" value="dd/MM/yyyy" class="form-control" readonly />
+                                                            <input type="date" id="dob" value="dd/MM/yyyy" class="form-control" readonly />
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <label for="gplx">Địa chỉ</label>
+                                                    <input type="text" id="address" value="Quận 1, TP.HCM" class="form-control" readonly />
                                                 </div>
                                             </div>
                                         </div>
@@ -291,11 +228,11 @@ function KhachHang() {
                                         Lưu ý: để tránh phát sinh vấn đề trong quá trình thuê xe, người đặt xe trên Mioto (đã xác
                                         thực GPLX) đồng thời phải là người nhận xe.
                                     </div> --> */}
-                                    <div class="row license-content">
+                                    <div class="row m-0 license-content">
                                         <div class="col-md-4 left">
                                             <img class="img-fluid rounded mx-auto" src="../img/avatar-4.png" alt="Upload Icon" />
                                         </div>
-                                        <div class="col-md-8 right">
+                                        <div class="col-md-8 ps-4 right">
                                             <div class="form-group">
                                                 <label for="gplx">Số GPLX</label>
                                                 <input type="text" id="gplx" value="Nhập số GPLX đã cấp" class="form-control" disabled />

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
 
 import Header from './layout/common/header';
 import Footer from './layout/common/footer';
+
 import Login from './layout/Login/login';
 import Register from './layout/Login/register';
+
 
 import '../style/styleCar.css';
 
@@ -13,11 +16,11 @@ function Customerindex() {
     const [cars, setCars] = useState([]);
 
     const loadListCar = async () => {
-        const result = await axios.get('http://localhost:8080/api/v1/cars');
-        console.log(result.data.data);
+        const result = await axios.get('http://localhost:8080/api/v1/cars/index');
+        //console.log(result.data.data.content);
 
-        setCars(result.data.data);
-        console.log(cars);
+        setCars(result.data.data.content);
+        //console.log(cars);
     };
 
     useEffect(() => {
@@ -42,9 +45,7 @@ function Customerindex() {
     return (
         <div className="carrent-layout">
             {/* <!-- Header --> */}
-            <div>
-                <Header />
-            </div>
+            <Header />
 
             {/* <!-- ---------------------------------------------------------------------------------------------------- -->
         <!-- Body --> */}
@@ -154,7 +155,7 @@ function Customerindex() {
                         <div className="row">
                             {
                                 cars.map((car) => (
-                                    <div className="col-lg-3" style={{ padding: "12px 12px" }}>
+                                    <div className="col-md-3" key={car.carId} style={{ padding: "12px 12px" }}>
                                         <a className="car-item" href="">
                                             <div className="car-item-box">
                                                 <div className="car-item-img">
@@ -536,14 +537,10 @@ function Customerindex() {
                     </div>
                 </div>
             </div>
-
-            {/* <!-- Footer --> */}
-            <div>
-                <Footer />
-            </div>
-
             <Login />
             <Register />
+            {/* <!-- Footer --> */}
+            <Footer />
         </div>
     );
 

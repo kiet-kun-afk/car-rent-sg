@@ -1,27 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import Header from './common/header';
 import Footer from './common/footer';
+
+import Login from './Login/login';
+import Register from './Login/register';
 
 import '../../style/styleIndex.css';
 
 function CustomerCar() {
 
     const [cars, setCars] = useState([]);
-    
+    const navigate = useNavigate();
 
     const loadListCar = async () => {
         const result = await axios.get('http://localhost:8080/api/v1/cars');
         console.log(result.data.data);
 
         setCars(result.data.data);
-        console.log(cars);
     };
 
     useEffect(() => {
         loadListCar();
     }, []);
+
+    const handleCarID = (e) => {
+        const carID = e.currentTarget.getAttribute('data-id');
+        console.log(carID);
+        if (carID) {
+            navigate(`/carrentsg/car/${carID}`);
+        } else {
+            alert('Please enter a user ID');
+        }
+    }
 
     function formatVND(value) {
         // Check if value is a number
@@ -34,16 +47,14 @@ function CustomerCar() {
 
         // Add thousands separators
         const parts = formattedValue.split('.');
-        const formattedPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        const formattedPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         return `${formattedPart}`;
     }
 
     return (
         <div class="carrent-layout">
             {/* <!-- Header --> */}
-            <div>
-                <Header />
-            </div>
+            <Header />
 
             {/* <!-- ---------------------------------------------------------------------------------------------------- -->
              <!-- Body --> */}
@@ -147,8 +158,8 @@ function CustomerCar() {
                 <div class="row">
                     {
                         cars.map((car) => (
-                            <div class="col-lg-3" style={{ padding: "12px 12px" }}>
-                                <a className="car-item" href="">
+                            <div class="col-sm-3 col-md-3 col-lg-3" style={{ padding: "12px 12px" }}>
+                                <a className="car-item" href='#' data-id={car.registrationPlate} onClick={handleCarID}>
                                     <div className="car-item-box">
                                         <div className="car-item-img">
                                             <div className="car-img">
@@ -199,12 +210,10 @@ function CustomerCar() {
 
                 </div>
             </div>
-
+            <Login />
+            <Register />
             {/* <!-- Footer --> */}
-            <div>
-                <Footer />
-            </div>
-
+            <Footer />
         </div>
     );
 }

@@ -14,8 +14,12 @@ import CusForgot from './components/layout/Login/forgot';
 import CusConfirmOTP from './components/layout/Login/sendOTP';
 import CusResetpassword from './components/layout/Login/resetpass';
 import CusIndex from './components/trangchu';
-import CusProduct from './components/layout/sanpham';
-import CusDetailProduct from './components/layout/chitietsanpham';
+import CusProduct from './components/layout/danhsachxe';
+import CusDetailProduct from './components/layout/chitietxe';
+import CusDetailCustomer from './components/layout/chitietkhachhang';
+import CusDetailCustomerInfor from './components/layout/common/inforCustomer';
+import CusDetailCustomerTrip from './components/layout/common/trip';
+import CusDetailCustomerChangePass from './components/layout/common/changepass';
 
 
 const router = createBrowserRouter([
@@ -52,8 +56,26 @@ const router = createBrowserRouter([
     element: <CusProduct/>,
   },
   {
-    path: "/carrentsg/car/detail",
+    path: "/carrentsg/car/:id",
     element: <CusDetailProduct/>,
+  },
+  {
+    path: "/carrentsg/customer",
+    element: <CusDetailCustomer/>,
+    children:[
+      {
+        path: "/carrentsg/customer/infor",
+        element: <CusDetailCustomerInfor/>,
+      },
+      {
+        path: "/carrentsg/customer/trip",
+        element: <CusDetailCustomerTrip/>,
+      },
+      {
+        path: "/carrentsg/customer/changepass",
+        element: <CusDetailCustomerChangePass/>,
+      },
+    ]
   },
   // {
   //   path: "/abc",

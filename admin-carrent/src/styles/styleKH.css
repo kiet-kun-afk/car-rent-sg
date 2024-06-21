@@ -1,3 +1,4 @@
+
 .modal-body {
     font-family: Arial, sans-serif;
 }
@@ -5,12 +6,10 @@
 .container-custom {
     background-color: white;
     border-radius: 10px;
-    padding: 20px;
+    padding: 10px;
 }
 
 .header-custom {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #e0e0e0;
     padding-bottom: 10px;
@@ -34,11 +33,13 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    padding-top: 20px;
+
 }
 
 .profile-info img {
     border-radius: 50%;
-    width: 150px;
+    width: 200px;
     height: auto;
 }
 
@@ -48,21 +49,20 @@
 
 .profile-details h3 {
     margin: 0;
-    font-size: 24px;
+    font-size: 20px;
+    padding: 0;
 }
 
 .profile-details p {
     color: gray;
     margin: 5px 0;
+    font-size: 14px;
 }
 
 .profile-details span {
     display: inline-block;
-    background-color: #ffeb3b;
-    color: black;
-    padding: 5px 10px;
     border-radius: 5px;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .contact-info {
@@ -97,7 +97,7 @@
 .license-content .left {
     text-align: center;
     border: 1px dashed #cccccc;
-    padding: 20px;
+    padding: 26px 0px 20px 0;
     border-radius: 10px;
 }
 
