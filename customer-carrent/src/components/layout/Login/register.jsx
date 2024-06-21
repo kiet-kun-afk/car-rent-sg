@@ -1,8 +1,11 @@
-import React, { useEffect, useState} from 'react';
-import axios from 'axios';
-
-import '../../../style/styleLogin.css';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
+
+import ToastComponent from '../../../assets/toasty';
+import '../../../style/styleLogin.css';
+
 
 function registerClick() {
 
@@ -16,36 +19,47 @@ function registerClick() {
 }
 
 function Register() {
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
-	const [customer, setCustomer]=useState({
+	const [customer, setCustomer] = useState({
 		email: "",
 		phoneNumber: "",
+		fullName: "",
 		password: "",
 		rePassword: "",
 	})
 
-	const{email,phoneNumber, password, rePassword}=customer
-
+	const { email, phoneNumber, fullName, password, rePassword } = customer
 	const onInputChange = (e) => {
-		setCustomer({...customer, [e.target.name]: e.target.value})
-		// console.log(customer);
+		setCustomer({ ...customer, [e.target.name]: e.target.value })
 	}
 
-	const onLogin= async (e)=>{
+	const handleRegister = async (e) => {
 		e.preventDefault();
-		const formData = new FormData();
-		formData.append('email', email);
-		formData.append('phoneNumber', phoneNumber);
-		formData.append('password', password);
-		formData.append('rePassword', rePassword);
-		await axios.post("http://localhost:8080/api/v1/customer/signup", formData,{
-			headers: {
-                'Content-Type':'multipart/form-data'
-            }
-		}).then(response => console.log(response.data));
-		navigate("/carrentsg");
+		try {
+			const formData = new FormData();
+			formData.append('email', email);
+			formData.append('phoneNumber', phoneNumber);
+			formData.append('fullName', fullName);
+			formData.append('password', password);
+			formData.append('rePassword', rePassword);
+
+			const res = await axios.post("http://localhost:8080/api/v1/customer/register", formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+			console.log(res.data)
+		
+			ToastComponent('success', 'Đăng ký thành công !');
+			window.location.reload();
+
+		} catch (error) {			
+			ToastComponent('err', 'Đăng ký thất bại !');
+			console.log(error);
+		}
 	}
+
 	return (
 		<div className="modal fade" id="regisWindow" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div className="modal-dialog">
@@ -57,16 +71,16 @@ function Register() {
 						<div className="form-item">
 							<div className="input-box">
 								<h5 className="item-title">Đăng ký</h5>
-								<form onSubmit={onLogin}>
+								<form onSubmit={handleRegister}>
 									<div className="item-form">
 										<div>
 											<div className="input-field">
-												<input type="text-login" className="input-form" id="sdt" name='phoneNumber' value={phoneNumber} onChange={(e)=>onInputChange(e)} required autoComplete="off" />
-												<label htmlFor="sdt">Số điện thoại</label>
+												<input type="text-login" className="input-form" id="sdt" name='phoneNumber' value={phoneNumber} onChange={(e) => onInputChange(e)} required autoComplete="off" />
+												<label htmlFor="sdt"><i className="fa-solid fa-phone"></i> Số điện thoại</label>
 											</div>
 											{/* <errors className="text-danger" path="username" /> */}
 											<div className="form-error ${errorMessageU==null?'d-lg-none':'' }">
-														{/* <span className="error-item1">
+												{/* <span className="error-item1">
 												<p>${errorMessageU}</p>
 											</span>*/}
 											</div>
@@ -87,39 +101,39 @@ function Register() {
 										</div> */}
 										<div >
 											<div className="input-field">
-												<input type="text-login" className="input-form" id="email" name='email' value={email} onChange={(e)=>onInputChange(e)} required />
-												<label htmlFor="email">Email</label>
+												<input type="text-login" className="input-form" id="email" name='email' value={email} onChange={(e) => onInputChange(e)} required autoComplete="off"/>
+												<label htmlFor="email"><i className="fa-solid fa-envelope"></i> Email</label>
 											</div>
 											{/* <errors className="text-danger" path="email" /> */}
 											<div className="form-error ${errorMessageE==null?'d-lg-none':'' }">
-											{/* <span className="error-item1">
+												{/* <span className="error-item1">
 												<p>${errorMessageE}</p>
-											</span>*/}								
+											</span>*/}
 											</div>
 										</div>
 										<div>
 											<div className="input-field">
-												<input type="text-login" className="input-form" name='fullName' id="username" required />
-												<label htmlFor="username">Họ và tên</label>
+												<input type="text-login" className="input-form" id="fullName" name='fullName' value={fullName} onChange={(e) => onInputChange(e)}  required />
+												<label htmlFor="fullName"><i className="fa-solid fa-user"></i> Họ và tên</label>
 											</div>
 											{/* <errors className="text-danger" path="phonenumber" /> */}
 											<div className="form-error ${errorMessageS==null?'d-lg-none':'' }">
-											{/* <span className="error-item1">
+												{/* <span className="error-item1">
 												<p>${errorMessageS}</p>
 											</span>*/}
 											</div>
 										</div>
 										<div>
 											<div className="input-field">
-												<input type="password" className="input-form" name='password' value={password} onChange={(e)=>onInputChange(e)} id="password" required />
-												<label htmlFor="password">Mật Khẩu</label>
+												<input type="password" className="input-form" name='password' id="password" value={password} onChange={(e) => onInputChange(e)}  required />
+												<label htmlFor="password"><i className="fa-solid fa-lock"></i> Mật Khẩu</label>
 											</div>
 											{/* <errors className="text-danger" path="password" /> */}
 										</div>
 										<div>
 											<div className="input-field">
-												<input type="password" className="input-form" name='rePassword' value={rePassword} onChange={(e)=>onInputChange(e)} id="confpassword" required />
-												<label htmlFor="confpassword">Xác nhận mật Khẩu</label>
+												<input type="password" className="input-form" id="rePassword" name='rePassword'  value={rePassword} onChange={(e) => onInputChange(e)}  required />
+												<label htmlFor="rePassword"><i className="fa-solid fa-unlock"></i> Xác nhận mật Khẩu</label>
 											</div>
 											<div className="form-error ${errorMessageP==null?'d-lg-none':'' }">
 												{/* <span className="error-item1">
@@ -160,6 +174,7 @@ function Register() {
 					</div>
 				</div>
 			</div >
+			<ToastContainer/>
 		</div >
 	);
 }
