@@ -44,5 +44,4 @@ public class CustomUserDetailsService implements UserDetailsService {
                     staff.getPassword(), authorities);
         }
     }
-
 }

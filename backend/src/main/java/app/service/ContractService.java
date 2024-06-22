@@ -33,6 +33,8 @@ public interface ContractService {
 
     public List<ContractResponse> listContractStatusPaymentTrue();
 
+    public List<ContractResponse> listCustomerTrip() throws Exception;
+
     // đếm số lượng contract status true
     public long countContractsByStatusPaymentTrue();
 

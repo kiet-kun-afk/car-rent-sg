@@ -19,6 +19,7 @@ import app.model.Staff;
 import app.repository.CarRepository;
 import app.repository.ContractRepository;
 import app.response.ContractResponse;
+import app.response.CustomerResponse;
 import app.service.BillService;
 import app.service.ContractService;
 import app.service.CustomerService;
@@ -384,26 +385,30 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public List<ContractResponse> listContractStatusPaymentTrue() {
-        // TODO Auto-generated method stub
         List<Contract> contract = contractRepository.findAllByStatusPaymentTrue();
         return contract.stream().map(ContractResponse::fromContract).toList();
     }
 
     @Override
     public long countContractsByStatusPaymentTrue() {
-        // TODO Auto-generated method stub
         return contractRepository.countContractsByStatusPaymentTrue();
     }
 
     @Override
     public CarDTO getMostRentedCar() {
-        // TODO Auto-generated method stub
         List<CarDTO> cars = contractRepository.findMostRentedCars();
         if (!cars.isEmpty()) {
             return cars.get(0); // Lấy xe đầu tiên từ danh sách
         }
         return null;
 
+    }
+
+    @Override
+    public List<ContractResponse> listCustomerTrip() throws Exception {
+        CustomerResponse customer = customerService.getCurrentCustomer();
+        List<Contract> contracts = contractRepository.findByCustomerPhoneNumber(customer.getPhoneNumber());
+        return contracts.stream().map(ContractResponse::fromContract).toList();
     }
 
 }

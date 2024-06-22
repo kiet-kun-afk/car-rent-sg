@@ -286,4 +286,22 @@ public class ContractController {
         }
     }
 
+    @PreAuthorize("isAuthenticated")
+    @GetMapping("/customer-trip")
+    public ResponseEntity<ResponseObject> getCustomerTrip() {
+        try {
+            List<ContractResponse> contractResponses = contractService.listCustomerTrip();
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get all contract successfully")
+                    .data(contractResponses)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get all contract failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
 }

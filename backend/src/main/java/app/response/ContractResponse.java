@@ -41,6 +41,8 @@ public class ContractResponse {
     private String carName;
     private String carRegistrationPlate;
 
+    private String carImage;
+
     private Integer staffId;
 
     private String attachment;
@@ -50,7 +52,7 @@ public class ContractResponse {
         this.createDate = contract.getCreateDate();
         this.startDate = contract.getStartDate();
         this.endDate = contract.getEndDate();
-        this.rentCost = contract.getCar().getRentCost();
+        this.rentCost = contract.getRentCost();
         this.numberDay = contract.getNumberDay();
         this.totalRentCost = contract.getTotalRentCost();
         this.deposit = contract.getDeposit();
@@ -62,6 +64,7 @@ public class ContractResponse {
 
         this.carName = contract.getCar().getCarName();
         this.carRegistrationPlate = contract.getCar().getRegistrationPlate();
+        this.carImage = contract.getCar().getFrontImage();
 
         this.staffId = contract.getStaff() == null ? null : contract.getStaff().getStaffId();
         this.attachment = contract.getAttachment();
