@@ -493,4 +493,10 @@ public class CustomerServiceImpl implements CustomerService {
         return CustomerResponse.fromCustomer(getAuth());
     }
 
+    @Override
+    public long countCustomer() {
+        // TODO Auto-generated method stub
+        return customerRepository.countCustomerTrue();
+    }
+
 }

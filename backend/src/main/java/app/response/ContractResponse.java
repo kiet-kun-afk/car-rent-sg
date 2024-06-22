@@ -17,23 +17,29 @@ public class ContractResponse {
 
     private LocalDateTime endDate;
 
+    // giá thuê
     private Double rentCost;
 
     private long numberDay;
 
+    // tổng cộng
     private Double totalRentCost;
 
+    // tiến cọc
     private Double deposit = 0.0;
 
+    // giấ tiền còn lại
     private Double amount;
 
     private Boolean statusPayment;
 
     private String wayToPay;
 
-    private Integer customerId;
+    private String customerName;
+    private String customerPhone;
 
-    private Integer carId;
+    private String carName;
+    private String carRegistrationPlate;
 
     private Integer staffId;
 
@@ -44,16 +50,22 @@ public class ContractResponse {
         this.createDate = contract.getCreateDate();
         this.startDate = contract.getStartDate();
         this.endDate = contract.getEndDate();
-        this.rentCost = contract.getRentCost();
+        this.rentCost = contract.getCar().getRentCost();
         this.numberDay = contract.getNumberDay();
         this.totalRentCost = contract.getTotalRentCost();
         this.deposit = contract.getDeposit();
         this.statusPayment = contract.getStatusPayment();
         this.wayToPay = contract.getWayToPay();
-        this.customerId = contract.getCustomer().getCustomerId();
-        this.carId = contract.getCar().getCarId();
+
+        this.customerName = contract.getCustomer().getFullName();
+        this.customerPhone = contract.getCustomer().getPhoneNumber();
+
+        this.carName = contract.getCar().getCarName();
+        this.carRegistrationPlate = contract.getCar().getRegistrationPlate();
+
         this.staffId = contract.getStaff() == null ? null : contract.getStaff().getStaffId();
         this.attachment = contract.getAttachment();
+        // tiền còn lại
         this.amount = contract.getTotalRentCost() - contract.getDeposit();
     }
 

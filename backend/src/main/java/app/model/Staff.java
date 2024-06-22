@@ -23,6 +23,7 @@ import lombok.Setter;
 @Table(name = "staffs", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "phone_number" }),
         @UniqueConstraint(columnNames = { "email" }) })
+
 public class Staff extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

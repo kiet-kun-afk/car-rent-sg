@@ -35,4 +35,6 @@ public interface CustomerService {
     public void changePassword(ChangePasswordDTO changePasswordDTO) throws Exception;
 
     public CustomerResponse getCurrentCustomer() throws Exception;
+
+    public long countCustomer();
 }

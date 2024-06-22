@@ -74,4 +74,12 @@ public class CarDTO {
     @NotNull(message = "Category id seats is not null")
     @Positive(message = "Category id seats is positive")
     private Integer categoryId;
+
+    // new
+    private Long numContracts;
+
+    public CarDTO(String carName, Long numContracts) {
+        this.carName = carName;
+        this.numContracts = numContracts;
+    }
 }
