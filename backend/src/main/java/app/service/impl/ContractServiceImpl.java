@@ -270,4 +270,24 @@ public class ContractServiceImpl implements ContractService {
 
     }
 
+    @Override
+    public ContractResponse findContractById(Integer contractId) {
+        // TODO Auto-generated method stub
+        Contract contract = contractRepository.findById(contractId).orElse(null);
+        return ContractResponse.fromContract(contract);
+    }
+
+    @Override
+    public void UpdateStatusPayment(Integer contractId) throws Exception {
+        Contract contract = contractRepository.findByContractIdAndStatusPaymentTrue(contractId);
+
+        if (contract == null) {
+            throw new DataNotFoundException("Contract not found or not belong to customer");
+        } else {
+            contract.setStatusPayment(true);
+            contractRepository.save(contract);
+        }
+
+    }
+
 }

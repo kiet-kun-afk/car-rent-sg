@@ -4,7 +4,7 @@ import java.util.List;
 
 import app.dto.CarDTO;
 import app.dto.ContractDTO;
-
+import app.model.Contract;
 import app.response.ContractResponse;
 
 public interface ContractService {
@@ -38,4 +38,10 @@ public interface ContractService {
 
     // xe được thuê nhiều nhất
     public CarDTO getMostRentedCar();
+
+    // new 22/6
+
+    public ContractResponse findContractById(Integer contractId);
+
+    public void UpdateStatusPayment(Integer contractId) throws Exception;
 }

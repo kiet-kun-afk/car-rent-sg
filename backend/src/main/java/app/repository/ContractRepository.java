@@ -100,4 +100,8 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 			"GROUP BY c.car.carName " +
 			"ORDER BY COUNT(c.contractId) DESC")
 	List<CarDTO> findMostRentedCars();
+
+	// new 22/6
+	Contract findByContractIdAndStatusPaymentTrue(Integer contractId);
+
 }

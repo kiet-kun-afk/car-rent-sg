@@ -80,7 +80,7 @@ public class ContractController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE')")
     @DeleteMapping("/delete/{contractId}")
     public ResponseEntity<ResponseObject> deleteContract(@PathVariable("contractId") Integer contractId) {
         try {
@@ -154,9 +154,9 @@ public class ContractController {
         }
     }
 
-    @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()")
     @GetMapping("/all-by-customer/{phoneNumber}")
-    public ResponseEntity<ResponseObject> getAllContractByCustomer(@PathVariable String phoneNumber) {
+    public ResponseEntity<ResponseObject> getAllContractByCustomer(@PathVariable("phoneNumber") String phoneNumber) {
         try {
             List<ContractResponse> contractResponses = contractService.getAllContractByCustomer(phoneNumber);
             return ResponseEntity.ok(ResponseObject.builder()
@@ -283,6 +283,43 @@ public class ContractController {
             return ResponseEntity.ok(mostRentedCar);
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    // get contract by id
+    @GetMapping("{contractId}")
+    public ResponseEntity<ResponseObject> findContractById(@PathVariable("contractId") Integer contractId) {
+
+        try {
+            ContractResponse contractResponses = contractService.findContractById(contractId);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get all contract successfully")
+                    .data(contractResponses)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get all contract failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @DeleteMapping("/updateStatus/{contractId}")
+    public ResponseEntity<ResponseObject> UpdateStatusPayment(@PathVariable("contractId") Integer contractId) {
+        try {
+            contractService.UpdateStatusPayment(contractId);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get all contract successfully")
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get all contract failed")
+                    .data(e.getMessage())
+                    .build());
         }
     }
 

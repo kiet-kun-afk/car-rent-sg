@@ -40,6 +40,7 @@ public class ContractResponse {
 
     private String carName;
     private String carRegistrationPlate;
+    private String imgCar;
 
     private Integer staffId;
 
@@ -62,6 +63,7 @@ public class ContractResponse {
 
         this.carName = contract.getCar().getCarName();
         this.carRegistrationPlate = contract.getCar().getRegistrationPlate();
+        this.imgCar = contract.getCar().getFrontImage();
 
         this.staffId = contract.getStaff() == null ? null : contract.getStaff().getStaffId();
         this.attachment = contract.getAttachment();
