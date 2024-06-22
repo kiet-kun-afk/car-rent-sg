@@ -21,14 +21,17 @@ public class Bill {
     @Column(name = "bill_id")
     private Integer billId;
 
-    @Column(name = "pay_date", nullable = false)
+    @Column(name = "pay_date")
     private LocalDateTime payDate;
 
     @Column(name = "pay_cost", nullable = false)
     private Double payCost;
 
-    @Column(name = "incurred_cost", nullable = false)
-    private Double incurredCost;
+    @Column(name = "payment_method", nullable = false)
+    private String paymentMethod;
+
+    @Column(name = "payment_status", nullable = false)
+    private Boolean paymentStatus;
 
     private String describe;
 

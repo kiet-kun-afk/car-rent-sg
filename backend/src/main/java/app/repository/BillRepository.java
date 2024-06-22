@@ -6,4 +6,5 @@ import app.model.Bill;
 
 public interface BillRepository extends JpaRepository<Bill, Integer> {
 
+    public Bill findByBillIdAndPaymentStatusFalse(Integer billId);
 }

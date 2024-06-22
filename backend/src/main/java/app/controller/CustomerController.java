@@ -7,9 +7,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import app.dto.CustomerDTO;
+import app.dto.AddressDTO;
+import app.dto.CustomerInformationRequest;
 import app.dto.login.ChangePasswordDTO;
+import app.response.AddressResponse;
 import app.response.CustomerResponse;
 import app.response.ResponseObject;
 import app.service.CustomerService;
@@ -140,9 +143,9 @@ public class CustomerController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/update")
+    @PutMapping("/update-information")
     public ResponseEntity<ResponseObject> updateCustomer(
-            @Valid @ModelAttribute CustomerDTO customerDTO,
+            @Valid @ModelAttribute CustomerInformationRequest customer,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
@@ -153,11 +156,92 @@ public class CustomerController {
                     .build());
         }
         try {
-            CustomerResponse customerResponse = customerService.updateCustomer(customerDTO);
+            CustomerResponse customerResponse = customerService.updateCustomerInfo(customer);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Update customer successfully")
                     .data(customerResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/update-phone-number")
+    public ResponseEntity<ResponseObject> updatePhoneNumber(@RequestParam("phoneNumber") String phoneNumber) {
+        try {
+            CustomerResponse customerResponse = customerService.updateCustomerPhoneNumber(phoneNumber);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Update phone number successfully")
+                    .data(customerResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/update-email")
+    public ResponseEntity<ResponseObject> updateEmail(@RequestParam("email") String email) {
+        try {
+            CustomerResponse customerResponse = customerService.updateCustomerEmail(email);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Update email successfully")
+                    .data(customerResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/update-avatar")
+    public ResponseEntity<ResponseObject> updateAvatar(@ModelAttribute("avatar") MultipartFile avatar) {
+        try {
+            CustomerResponse customerResponse = customerService.updateCustomerAvatar(avatar);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Update avatar successfully")
+                    .data(customerResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/update-address")
+    public ResponseEntity<ResponseObject> updateAddress(@ModelAttribute AddressDTO addressDTO,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Update address failed, validation")
+                    .data(errors)
+                    .build());
+        }
+        try {
+            AddressResponse addressResponse = customerService.updateCustomerAddress(addressDTO);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Update address successfully")
+                    .data(addressResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()

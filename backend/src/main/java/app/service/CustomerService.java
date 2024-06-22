@@ -2,11 +2,15 @@ package app.service;
 
 import java.util.List;
 
-import app.dto.CustomerDTO;
+import org.springframework.web.multipart.MultipartFile;
+
+import app.dto.AddressDTO;
+import app.dto.CustomerInformationRequest;
 import app.dto.login.ChangePasswordDTO;
 import app.dto.login.LoginDTO;
 import app.dto.login.RegisterCustomerDTO;
 import app.model.Customer;
+import app.response.AddressResponse;
 import app.response.CustomerResponse;
 import app.response.LoginResponse;
 
@@ -26,7 +30,15 @@ public interface CustomerService {
 
     public List<CustomerResponse> getAllAndStatusTrue();
 
-    public CustomerResponse updateCustomer(CustomerDTO customerDTO) throws Exception;
+    public CustomerResponse updateCustomerInfo(CustomerInformationRequest customerInformationRequest) throws Exception;
+
+    public CustomerResponse updateCustomerPhoneNumber(String phoneNumber) throws Exception;
+
+    public CustomerResponse updateCustomerEmail(String Email) throws Exception;
+
+    public CustomerResponse updateCustomerAvatar(MultipartFile avatar) throws Exception;
+
+    public AddressResponse updateCustomerAddress(AddressDTO addressDTO) throws Exception;
 
     public void deleteCustomer(String phoneNumber) throws Exception;
 

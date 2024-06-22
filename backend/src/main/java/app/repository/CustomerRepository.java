@@ -20,7 +20,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     Customer findByEmailAndStatusTrue(String email);
 
-    Optional<Customer> findByEmailOrPhoneNumberAndStatusTrue(String email, String phoneNumber);
+    Optional<Customer> findByUsernameOrPhoneNumberOrEmailAndStatusTrue(
+            String username,
+            String phoneNumber,
+            String email);
 
     boolean existsByEmail(String email);
 

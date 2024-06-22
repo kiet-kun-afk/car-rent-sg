@@ -24,14 +24,14 @@ public class AddressServiceImpl implements AddressService, Serializable {
 
     @Override
     public List<AddressResponse> getALL() {
-        return addressRes.findAll().stream().map(AddressResponse::fromCarResponse).toList();
+        return addressRes.findAll().stream().map(AddressResponse::fromResponse).toList();
     }
 
     @Override
     public AddressResponse getOne(Integer id) {
         Address address = addressRes.findById(id).orElse(null);
 
-        return AddressResponse.fromCarResponse(address);
+        return AddressResponse.fromResponse(address);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class AddressServiceImpl implements AddressService, Serializable {
 
         addressRes.save(address);
 
-        return AddressResponse.fromCarResponse(address);
+        return AddressResponse.fromResponse(address);
 
     }
 
@@ -64,7 +64,7 @@ public class AddressServiceImpl implements AddressService, Serializable {
 
             addressRes.save(address);
 
-            return AddressResponse.fromCarResponse(address);
+            return AddressResponse.fromResponse(address);
 
         } else {
             throw new RuntimeException("Car not found with id " + id);
