@@ -57,7 +57,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             customer.setAvatarImage(photo);
             customerRepository.save(customer);
             try {
-                emailService.sendMail(email, fullname, rawPassword);
+                emailService.sendMail(email, fullname == null ? name : fullname, rawPassword);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
