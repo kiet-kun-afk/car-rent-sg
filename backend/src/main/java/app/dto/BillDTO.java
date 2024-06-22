@@ -1,7 +1,7 @@
 package app.dto;
 
-import java.time.LocalDate;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,16 +12,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BillDTO {
-    private LocalDate payDate;
 
+    @Positive(message = "Cost must is positive")
     private Double payCost;
 
-    private Double incurredCost;
+    @NotBlank(message = "Method is required")
+    private String paymentMethod;
 
+    @NotBlank(message = "Content is required")
     private String describe;
-
-    private Integer contractId;
-
-    private Integer staffId;
 
 }

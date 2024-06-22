@@ -26,4 +26,14 @@ public class Address {
     private String ward;
 
     private String street;
+
+    private String rememberName;
+
+    public Address(String province, String district, String ward, String street, String rememberName) {
+        this.province = province;
+        this.district = district;
+        this.ward = ward;
+        this.street = street;
+        this.rememberName = rememberName;
+    }
 }
