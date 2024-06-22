@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import app.dto.CarDTO;
+
 import app.model.Contract;
 
 public interface ContractRepository extends JpaRepository<Contract, Integer> {
@@ -83,4 +85,19 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 			AND c.staff IS NOT NULL
 			""")
 	List<Contract> findContractsWithoutDeliveryRecords();
+
+	//
+	List<Contract> findAllByStatusPaymentTrue();
+
+	// đếm số lượng contract status true
+	@Query("SELECT COUNT(c) FROM Contract c WHERE c.statusPayment = true")
+	long countContractsByStatusPaymentTrue();
+
+	// api xe được thuê nhiều nhất
+	@Query("SELECT NEW app.dto.CarDTO(c.car.carName, COUNT(c.contractId)) " +
+			"FROM Contract c " +
+			"WHERE c.statusPayment = true " + // Điều kiện lấy các hợp đồng có statusPayment là true
+			"GROUP BY c.car.carName " +
+			"ORDER BY COUNT(c.contractId) DESC")
+	List<CarDTO> findMostRentedCars();
 }

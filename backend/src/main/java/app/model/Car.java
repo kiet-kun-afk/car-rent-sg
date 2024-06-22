@@ -15,6 +15,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "cars", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "registration_plate" }) })
+
 public class Car extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,4 +76,5 @@ public class Car extends BaseEntity {
 
     @ManyToOne
     private Category category;
+
 }

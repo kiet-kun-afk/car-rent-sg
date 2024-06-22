@@ -15,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "contracts")
+
 public class Contract {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
