@@ -102,6 +102,6 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 	List<CarDTO> findMostRentedCars();
 
 	// new 22/6
-	Contract findByContractIdAndStatusPaymentTrue(Integer contractId);
+	Contract findByContractIdAndStatusPaymentFalse(Integer contractId);
 
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import app.dto.CarDTO;
 import app.dto.ContractDTO;
-import app.model.Contract;
+
 import app.response.ContractResponse;
 
 public interface ContractService {

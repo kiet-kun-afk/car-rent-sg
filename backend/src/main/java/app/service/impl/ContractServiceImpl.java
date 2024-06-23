@@ -415,7 +415,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public void UpdateStatusPayment(Integer contractId) throws Exception {
-        Contract contract = contractRepository.findByContractIdAndStatusPaymentTrue(contractId);
+        Contract contract = contractRepository.findByContractIdAndStatusPaymentFalse(contractId);
 
         if (contract == null) {
             throw new DataNotFoundException("Contract not found or not belong to customer");
