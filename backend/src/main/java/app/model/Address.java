@@ -1,10 +1,7 @@
 package app.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
@@ -28,6 +25,9 @@ public class Address {
     private String street;
 
     private String rememberName;
+
+    @OneToOne(mappedBy = "address")
+    private Customer customer;
 
     public Address(String province, String district, String ward, String street, String rememberName) {
         this.province = province;

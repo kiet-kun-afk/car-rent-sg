@@ -43,4 +43,11 @@ public interface AddressRepository extends JpaRepository<Address, Integer> {
 				street.orElse(null),
 				rememberName.orElse(null));
 	}
+
+	@Query("""
+			SELECT a FROM Address a
+			JOIN a.customer c
+			WHERE c.phoneNumber = :phoneNumber
+			""")
+	Address findByCustomerPhoneNumber(@Param("phoneNumber") String phoneNumber);
 }

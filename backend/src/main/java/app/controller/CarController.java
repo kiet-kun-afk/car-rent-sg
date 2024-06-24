@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -127,7 +126,7 @@ public class CarController {
             @RequestParam Optional<Integer> pageNumber,
             @RequestParam Optional<Integer> pageSize) {
         try {
-            Page<CarResponse> cars = carService.getCarsForIndex(pageNumber.orElse(0), pageSize.orElse(8));
+            List<CarResponse> cars = carService.getCarsForIndex(pageNumber.orElse(0), pageSize.orElse(8));
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Get page car successfully")

@@ -17,4 +17,7 @@ public interface AddressService {
 
     public void Delete(Integer id) throws Exception;
 
+    public AddressResponse updateCustomerAddress(AddressDTO addressDTO) throws Exception;
+
+    public AddressResponse getCustomerAddress() throws Exception;
 }

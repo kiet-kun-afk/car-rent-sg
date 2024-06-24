@@ -3,9 +3,13 @@ package app.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import app.dto.AddressDTO;
 import app.response.AddressResponse;
 import app.response.ResponseObject;
-import app.service.impl.AddressServiceImpl;
+import app.service.AddressService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -25,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin
 public class AddressController {
 
-    public final AddressServiceImpl addressService;
+    public final AddressService addressService;
 
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
@@ -112,6 +117,53 @@ public class AddressController {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Get all car failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("isAuthenticated")
+    @PutMapping("/update-customer-address")
+    public ResponseEntity<ResponseObject> updateCustomerAddress(@Valid @ModelAttribute AddressDTO addressDTO,
+            BindingResult result) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Update address failed, validation")
+                    .data(errors)
+                    .build());
+        }
+        try {
+            AddressResponse addressResponse = addressService.updateCustomerAddress(addressDTO);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Update address successfully")
+                    .data(addressResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Update address failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("isAuthenticated")
+    @GetMapping("/get-customer-address")
+    public ResponseEntity<ResponseObject> getCustomerAddress() {
+        try {
+            AddressResponse addressResponse = addressService.getCustomerAddress();
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get address successfully")
+                    .data(addressResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get address failed")
                     .data(e.getMessage())
                     .build());
         }
