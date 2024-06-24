@@ -138,6 +138,7 @@ function Changepassword() {
 									onChange={(e) =>
 										setNewPassword(e.target.value)
 									}
+									style={{border: "none"}}
 								/>
 							</div>
 							<div

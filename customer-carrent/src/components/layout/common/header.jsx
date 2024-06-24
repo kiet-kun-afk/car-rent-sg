@@ -77,7 +77,7 @@ function Header() {
                                                         <div className="notification">
                                                             <i className="fa-regular fa-bell" style={{ fontSize: "1.3rem" }}></i>
                                                         </div>
-                                                        <a href="/">
+                                                        <a href="/carrentsg/customer/infor">
                                                             <div className="profile-avatar">
                                                                 <img loading="lazy"  src={customer.avatarImage == null ? iconUser : customer.avatarImage} alt="" />
                                                             </div>
