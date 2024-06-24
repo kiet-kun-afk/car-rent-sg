@@ -303,7 +303,7 @@ function InforCustomer() {
 									<div className="">
 										<div className="wrap-text">
 											<input
-											    defaultValue=""
+												defaultValue=""
 												className="form-control"
 												type="date"
 												placeholder="Nhập ngày sinh"

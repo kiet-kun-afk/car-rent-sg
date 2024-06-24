@@ -22,7 +22,7 @@ p {
 	width: 100%;
 	background: #fff;
 	position: relative;
-    z-index: 999;
+	z-index: 999;
 	padding: 10px 0;
 }
 
@@ -61,7 +61,7 @@ p {
 
 .header-menu a {
 	font-size: .875rem;
-	font-weight: 600;	
+	font-weight: 600;
 	padding: 0px 16px;
 }
 
@@ -796,20 +796,22 @@ footer {
 }
 
 @media only screen and (max-width: 900px) {
-	.c-header .c-container{
+	.c-header .c-container {
 		width: 100%;
 		height: 100%;
 	}
-	.navbar-nav{
+
+	.navbar-nav {
 		align-items: flex-start !important;
 	}
-	.navbar-nav .nav-item{
+
+	.navbar-nav .nav-item {
 		margin: 20px 10px 0px 10px;
 	}
 
-	.navbar-nav .nav-item .vertical-line{
+	.navbar-nav .nav-item .vertical-line {
 		height: 0px;
 		margin: 0;
 		display: none;
-    }
+	}
 }

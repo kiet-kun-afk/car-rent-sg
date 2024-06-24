@@ -39,7 +39,7 @@ function DetailCar() {
 		const formData = new FormData();
 		formData.append("startDate", startDate);
 		formData.append("endDate", endDate);
-		formData.append("wayToPay", "Cash");
+		formData.append("wayToPay", "Tiền mặt");
 
 		try {
 			const response = await axios.post(

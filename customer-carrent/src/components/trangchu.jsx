@@ -17,7 +17,7 @@ function CustomerIndex() {
 		const result = await axios.get(
 			"http://localhost:8080/api/v1/cars/index"
 		);
-		setCars(result.data.data.content);
+		setCars(result.data.data);
 	};
 
 	useEffect(() => {

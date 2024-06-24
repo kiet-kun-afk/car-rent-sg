@@ -205,12 +205,116 @@ function DetailCustomer() {
 		//ToastComponent('info', 'Hẹn gặp lại bạn !');
 	};
 
+	const [cities, setCities] = useState([]);
+	const [districts, setDistricts] = useState([]);
+	const [wards, setWards] = useState([]);
+	const [selectedProvince, setSelectedProvince] = useState("");
+	const [selectedDistrict, setSelectedDistrict] = useState("");
+	const [selectedWard, setSelectedWard] = useState("");
+	const [street, setStreet] = useState("");
+	const [rememberName, setRememberName] = useState("");
+	const [customerAddress, setCustomerAddress] = useState({});
+	const [errorMessage, setErrorMessage] = useState("");
+
 	useEffect(() => {
-		//AddressAPI();
+		fetch("/data.json")
+			.then((response) => response.json())
+			.then((data) => {
+				setCities(data);
+			})
+			.catch((error) => {
+				console.error("Error fetching data:", error);
+			});
 		if (customerAccount) {
 			findCustomer();
+			// findCustomerAddress();
 		}
 	}, []);
+
+	const findCustomerAddress = async () => {
+		try {
+			const response = await axiosConfig.get(
+				`http://localhost:8080/api/v1/address/get-customer-address`
+			);
+			const address = response.data.data;
+			handleRememberName(address.rememberName);
+			handleStreet(address.street);
+		} catch (error) {
+			console.error("Error fetching customer address:", error);
+		}
+	};
+
+	const handleProvinceChange = (event) => {
+		const provinceId = event.target.value;
+		setSelectedProvince(provinceId);
+		setSelectedDistrict("");
+		setSelectedWard("");
+		setWards([]);
+
+		const selectedProvince = cities.find(
+			(province) => province.Id === provinceId
+		);
+		setDistricts(selectedProvince ? selectedProvince.Districts : []);
+	};
+
+	const handleDistrictChange = (event) => {
+		const districtId = event.target.value;
+		setSelectedDistrict(districtId);
+		setSelectedWard("");
+
+		const selectedDistrict = districts.find(
+			(district) => district.Id === districtId
+		);
+		setWards(selectedDistrict ? selectedDistrict.Wards : []);
+	};
+
+	const handleWardChange = (value) => {
+		setSelectedWard(value);
+	};
+
+	const handleStreet = (value) => {
+		setStreet(value);
+	};
+
+	const handleRememberName = (value) => {
+		setRememberName(value);
+	};
+
+	const handleChangeAddress = async (event) => {
+		event.preventDefault();
+		const addressData = {
+			province: selectedProvince,
+			district: selectedDistrict,
+			ward: selectedWard,
+			street: street,
+			rememberName: rememberName,
+		};
+		try {
+			await axiosConfig.put(
+				`http://localhost:8080/api/v1/address/update-customer-address`,
+				addressData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
+			);
+			alert("Cập nhật địa chỉ thành công!");
+			navigate("/carrentsg/customer/infor");
+		} catch (error) {
+			if (
+				error.response &&
+				error.response.data &&
+				error.response.data.data
+			) {
+				setErrorMessage(error.response.data.data);
+			} else {
+				setErrorMessage("Không thể cập nhật địa chỉ");
+			}
+			alert("Cập nhật địa chỉ thất bại!");
+			console.error("Không thể cập nhật địa chỉ", error);
+		}
+	};
 
 	const formatDate = (localdatetime) => {
 		// Tạo một đối tượng Date từ localdatetime
@@ -649,97 +753,211 @@ function DetailCustomer() {
 										</div>
 										<div className="content-item address-list">
 											<div className="content">
-												<div className="address-type m-3">
-													<div className="mb-3">
-														<label className="form-label">
-															Tên gợi nhớ
-														</label>
-														<input
-															defaultValue="abc"
-															type="text"
-															className="form-control"
-															placeholder="Nhập tên cho địa chỉ của bạn"
-														/>
-													</div>
-												</div>
-												<div className="row m-3">
-													<div className="address-type col-sm-4 ps-0">
-														<div className="type-title mb-2">
-															<p>Thành phố</p>
-														</div>
-														<div className="custom-select">
-															<select
-																className="form-select"
-																id="city"
-															>
-																<option value="">
-																	Chọn Tỉnh /
-																	Thành phố
-																</option>
-															</select>
+												<form
+													onSubmit={
+														handleChangeAddress
+													}
+												>
+													<div className="address-type m-3">
+														<div className="mb-3">
+															<label className="form-label">
+																Tên gợi nhớ
+															</label>
+															<input
+																defaultValue=""
+																value={
+																	rememberName
+																}
+																onChange={(e) =>
+																	handleRememberName(
+																		e.target
+																			.value
+																	)
+																}
+																type="text"
+																className="form-control"
+																placeholder="Nhập tên cho địa chỉ của bạn"
+															/>
 														</div>
 													</div>
-													<div className="address-type col-sm-4">
-														<div className="type-title mb-2">
-															<p>
-																Quận&nbsp;/&nbsp;Huyện
-															</p>
+													<div className="row m-3">
+														<div className="address-type col-sm-4 ps-0">
+															<div className="type-title mb-2">
+																<p>Thành phố</p>
+															</div>
+															<div className="custom-select">
+																<select
+																	className="form-select"
+																	id="province"
+																	value={
+																		selectedProvince
+																	}
+																	onChange={
+																		handleProvinceChange
+																	}
+																>
+																	<option
+																		value=""
+																		selected
+																	>
+																		Chọn
+																		tỉnh
+																		thành
+																		phố
+																	</option>
+																	{cities.map(
+																		(
+																			province
+																		) => (
+																			<option
+																				key={
+																					province.Id
+																				}
+																				value={
+																					province.Id
+																				}
+																			>
+																				{
+																					province.Name
+																				}
+																			</option>
+																		)
+																	)}
+																</select>
+															</div>
 														</div>
-														<div className="custom-select">
-															<select
-																className="form-select"
-																id="districts"
-															>
-																<option value="">
-																	Chọn
+														<div className="address-type col-sm-4">
+															<div className="type-title mb-2">
+																<p>
 																	Quận&nbsp;/&nbsp;Huyện
-																</option>
-															</select>
+																</p>
+															</div>
+															<div className="custom-select">
+																<select
+																	className="form-select"
+																	id="district"
+																	value={
+																		selectedDistrict
+																	}
+																	onChange={
+																		handleDistrictChange
+																	}
+																	disabled={
+																		!selectedProvince
+																	}
+																>
+																	<option
+																		value=""
+																		selected
+																	>
+																		Chọn
+																		quận
+																		huyện
+																	</option>
+																	{districts.map(
+																		(
+																			district
+																		) => (
+																			<option
+																				key={
+																					district.Id
+																				}
+																				value={
+																					district.Id
+																				}
+																			>
+																				{
+																					district.Name
+																				}
+																			</option>
+																		)
+																	)}
+																</select>
+															</div>
 														</div>
-													</div>
-													<div className="address-type col-sm-4 pe-0">
-														<div className="type-title mb-2">
-															<p>
-																Phường&nbsp;/&nbsp;Xã
-															</p>
-														</div>
-														<div className="custom-select">
-															<select
-																className="form-select"
-																id="wards"
-															>
-																<option value="">
-																	Chọn
+														<div className="address-type col-sm-4 pe-0">
+															<div className="type-title mb-2">
+																<p>
 																	Phường&nbsp;/&nbsp;Xã
-																</option>
-															</select>
+																</p>
+															</div>
+															<div className="custom-select">
+																<select
+																	className="form-select"
+																	id="ward"
+																	value={
+																		selectedWard
+																	}
+																	onChange={
+																		handleWardChange
+																	}
+																	disabled={
+																		!selectedDistrict
+																	}
+																>
+																	<option
+																		value=""
+																		selected
+																	>
+																		Chọn
+																		phường
+																		xã
+																	</option>
+																	{wards.map(
+																		(
+																			ward
+																		) => (
+																			<option
+																				key={
+																					ward.Id
+																				}
+																				value={
+																					ward.Id
+																				}
+																			>
+																				{
+																					ward.Name
+																				}
+																			</option>
+																		)
+																	)}
+																</select>
+															</div>
 														</div>
 													</div>
-												</div>
-												<div className="address-type m-3">
-													<div className="mb-3">
-														<label className="form-label">
-															Địa chỉ
-														</label>
-														<input
-															defaultValue="abc"
-															type="text"
-															className="form-control"
-															placeholder="Nhập tên đường/nhà"
-														/>
+													<div className="address-type m-3">
+														<div className="mb-3">
+															<label className="form-label">
+																Địa chỉ
+															</label>
+															<input
+																value={street}
+																onChange={(e) =>
+																	handleStreet(
+																		e.target
+																			.value
+																	)
+																}
+																defaultValue=""
+																type="text"
+																className="form-control"
+																placeholder="Nhập tên đường/nhà"
+															/>
+														</div>
 													</div>
-												</div>
-												<div className="apply-button d-flex justify-content-end m-3">
-													<a className="btn btn-danger btn--m m-2">
-														Hủy
-													</a>
-													<a
-														className="btn btn-success btn--m m-2"
-														disabled=""
-													>
-														Xác nhận
-													</a>
-												</div>
+													<div className="apply-button d-flex justify-content-end m-3">
+														<a className="btn btn-danger btn--m m-2">
+															Hủy
+														</a>
+														<button
+															type="submit"
+															className="btn btn-success btn--m m-2"
+															disabled=""
+														>
+															Xác nhận
+														</button>
+													</div>
+												</form>
 											</div>
 										</div>
 									</div>
