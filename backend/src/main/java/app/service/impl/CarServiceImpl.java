@@ -1,6 +1,5 @@
 package app.service.impl;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +35,7 @@ import app.service.CarService;
  * 5/24/2024 kiet-kun-afk Create
  */
 @Service
-public class CarServiceImpl implements CarService, Serializable {
+public class CarServiceImpl implements CarService {
 	@Autowired
 	CarRepository carres;
 
@@ -151,12 +150,14 @@ public class CarServiceImpl implements CarService, Serializable {
 	}
 
 	@Override
-	public Page<CarResponse> getCarsForIndex(Integer pageNumber, Integer pageSize)
+	public List<CarResponse> getCarsForIndex(Integer pageNumber, Integer pageSize)
 			throws Exception {
 		LocalDateTime today = LocalDateTime.now();
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		Page<Car> page = carres.findCarsNotInContractToday(today, pageable);
-		return page.map(CarResponse::fromCarResponse);
+		List<Car> cars = page.getContent();
+		List<CarResponse> carResponses = cars.stream().map(CarResponse::fromCarResponse).toList();
+		return carResponses;
 	}
 
 }
