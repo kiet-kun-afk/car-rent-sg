@@ -265,6 +265,7 @@ function InforCustomer() {
 									<div className="">
 										<div className="wrap-text">
 											<input
+												defaultValue=""
 												className="form-control"
 												type="text"
 												name="licenseNumber"
@@ -283,6 +284,7 @@ function InforCustomer() {
 									<div className="">
 										<div className="wrap-text">
 											<input
+												defaultValue=""
 												className="form-control"
 												type="text"
 												name="licenseName"
@@ -301,6 +303,7 @@ function InforCustomer() {
 									<div className="">
 										<div className="wrap-text">
 											<input
+											    defaultValue=""
 												className="form-control"
 												type="date"
 												placeholder="Nhập ngày sinh"
