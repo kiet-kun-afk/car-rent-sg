@@ -96,25 +96,25 @@ function Changepassword() {
 									<path
 										d="M14.52 18.6297C13.71 18.8397 12.87 18.9397 12 18.9397C8.73 18.9397 5.8 17.4097 3.8 14.9897C2.4 13.2997 2.4 10.6897 3.8 9.00969C3.96 8.80969 4.14 8.61969 4.32 8.42969"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 									<path
 										d="M20.2 14.9896C19.4 15.9496 18.45 16.7696 17.4 17.4096L6.58997 6.58957C8.17997 5.60957 10.02 5.05957 12 5.05957C15.27 5.05957 18.2 6.58957 20.2 9.00957C21.6 10.6896 21.6 13.3096 20.2 14.9896Z"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 									<path
 										d="M15.0799 11.9999C15.0799 12.8499 14.7299 13.6199 14.1799 14.1799L9.81995 9.81992C10.3699 9.25992 11.1499 8.91992 11.9999 8.91992C13.7099 8.91992 15.0799 10.2899 15.0799 11.9999Z"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 									<path
 										d="M2.75 2.75L6.59 6.59L9.82 9.82L14.18 14.18L17.41 17.41L21.25 21.25"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 								</svg>
@@ -154,25 +154,25 @@ function Changepassword() {
 									<path
 										d="M14.52 18.6297C13.71 18.8397 12.87 18.9397 12 18.9397C8.73 18.9397 5.8 17.4097 3.8 14.9897C2.4 13.2997 2.4 10.6897 3.8 9.00969C3.96 8.80969 4.14 8.61969 4.32 8.42969"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 									<path
 										d="M20.2 14.9896C19.4 15.9496 18.45 16.7696 17.4 17.4096L6.58997 6.58957C8.17997 5.60957 10.02 5.05957 12 5.05957C15.27 5.05957 18.2 6.58957 20.2 9.00957C21.6 10.6896 21.6 13.3096 20.2 14.9896Z"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 									<path
 										d="M15.0799 11.9999C15.0799 12.8499 14.7299 13.6199 14.1799 14.1799L9.81995 9.81992C10.3699 9.25992 11.1499 8.91992 11.9999 8.91992C13.7099 8.91992 15.0799 10.2899 15.0799 11.9999Z"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 									<path
 										d="M2.75 2.75L6.59 6.59L9.82 9.82L14.18 14.18L17.41 17.41L21.25 21.25"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 								</svg>
@@ -212,25 +212,25 @@ function Changepassword() {
 									<path
 										d="M14.52 18.6297C13.71 18.8397 12.87 18.9397 12 18.9397C8.73 18.9397 5.8 17.4097 3.8 14.9897C2.4 13.2997 2.4 10.6897 3.8 9.00969C3.96 8.80969 4.14 8.61969 4.32 8.42969"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 									<path
 										d="M20.2 14.9896C19.4 15.9496 18.45 16.7696 17.4 17.4096L6.58997 6.58957C8.17997 5.60957 10.02 5.05957 12 5.05957C15.27 5.05957 18.2 6.58957 20.2 9.00957C21.6 10.6896 21.6 13.3096 20.2 14.9896Z"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 									<path
 										d="M15.0799 11.9999C15.0799 12.8499 14.7299 13.6199 14.1799 14.1799L9.81995 9.81992C10.3699 9.25992 11.1499 8.91992 11.9999 8.91992C13.7099 8.91992 15.0799 10.2899 15.0799 11.9999Z"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 									<path
 										d="M2.75 2.75L6.59 6.59L9.82 9.82L14.18 14.18L17.41 17.41L21.25 21.25"
 										stroke="black"
-										stroke-width="1.5"
+										strokeWidth="1.5"
 										strokeLinecap="round"
 									></path>
 								</svg>

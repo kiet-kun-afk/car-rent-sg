@@ -11,7 +11,7 @@ import "../../style/styleDetailCustomer.css";
 import zIndex from "@mui/material/styles/zIndex";
 import { positions } from "@mui/system";
 
-function DeitalCustomer() {
+function DetailCustomer() {
 	const navigate = useNavigate();
 	const errRef = useRef(null);
 	const [customer, setCustomer] = useState(null);
@@ -25,7 +25,7 @@ function DeitalCustomer() {
 	const [gender, setGender] = useState(true);
 	const [profilePicture, setProfilePicture] = useState(null);
 
-	const onFullnameChange = (e) => {
+	const onFullNameChange = (e) => {
 		setFullName(e.target.value);
 	};
 
@@ -36,7 +36,7 @@ function DeitalCustomer() {
 	};
 
 	const onGenderChange = (e) => {
-		setGender(e.target.value === "true"); // Convert string to boolean
+		setGender(e.target.value === "true"); // Chuyển đổi giá trị string thành boolean
 	};
 
 	const onPhoneChange = (e) => {
@@ -527,8 +527,8 @@ function DeitalCustomer() {
 											<input
 												type="text"
 												className="form-control"
-												value={fullName}
-												onChange={onFullnameChange}
+												value={fullName || ""}
+												onChange={onFullNameChange}
 											/>
 										</div>
 										<div className="mb-3">
@@ -538,7 +538,7 @@ function DeitalCustomer() {
 											<input
 												type="date"
 												className="form-control"
-												value={dob}
+												value={dob || "1900-01-01"}
 												onChange={onDobChange}
 											/>
 										</div>
@@ -980,4 +980,4 @@ function DeitalCustomer() {
 	);
 }
 
-export default DeitalCustomer;
+export default DetailCustomer;

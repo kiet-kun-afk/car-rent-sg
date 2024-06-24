@@ -86,7 +86,6 @@ function DetailCar() {
 				`http://localhost:8080/api/v1/cars/${id}`
 			);
 			setCar(res.data.data);
-			// console.log(res.data.data);
 		} catch (error) {
 			console.log(error);
 		}
@@ -97,7 +96,6 @@ function DetailCar() {
 	}, []);
 
 	function formatVND(value) {
-		// Check if value is a number
 		if (typeof value !== "number") {
 			return "";
 		}
@@ -135,12 +133,6 @@ function DetailCar() {
 										alt="Car Image"
 										className="img-fluid"
 									/>
-									{/* <div>
-                                        <span className="badge badge-warning badge-custom">2 chuyến</span>
-                                        <span className="badge badge-secondary badge-custom">Quận 1, TP. Hồ Chí Minh</span>
-                                        <span className="badge badge-success badge-custom">Số tự động</span>
-                                    </div>
-                                    <div className="line-page mt-3 mb-3"></div> */}
 								</div>
 								<div className="col-md-4 right-img">
 									<img
@@ -187,27 +179,27 @@ function DetailCar() {
 														<path
 															d="M10.914 23.3289C10.9148 23.3284 10.9156 23.3279 10.9163 23.3274C10.9155 23.3279 10.9148 23.3284 10.914 23.3289ZM10.914 23.3289C10.914 23.3289 10.914 23.3289 10.914 23.3289L11.3128 23.9114M10.914 23.3289L11.3128 23.9114M11.3128 23.9114L10.9807 23.2882L20.6697 23.9458C20.6682 23.9484 20.6656 23.9496 20.6631 23.9479C20.655 23.9424 20.6343 23.9284 20.6014 23.9074C20.6014 23.9073 20.6014 23.9073 20.6013 23.9073C20.5141 23.8516 20.3413 23.7468 20.0921 23.6208C20.0919 23.6207 20.0918 23.6206 20.0917 23.6206C19.3397 23.2404 17.8926 22.6674 16.0003 22.6674C14.1715 22.6674 12.7584 23.2026 11.9869 23.5817L11.9929 23.5929M11.3128 23.9114L11.331 23.9456C11.3324 23.9483 11.3352 23.9495 11.3377 23.9478C11.3444 23.9432 11.3592 23.9332 11.3821 23.9184L11.9929 23.5929L11.9929 23.5929M11.9929 23.5929C11.9909 23.5892 11.9889 23.5855 11.9868 23.5818C11.6767 23.7342 11.4702 23.8614 11.3821 23.9184L11.9929 23.5929ZM10.6691 24.2983L10.6691 24.2983C10.7406 24.4324 10.8728 24.5792 11.0793 24.6538C11.3072 24.7361 11.5609 24.7039 11.7614 24.5667L11.7614 24.5667C11.7978 24.5418 13.4597 23.4174 16.0003 23.4174C18.5426 23.4174 20.205 24.5432 20.2393 24.5667L20.2393 24.5667C20.4389 24.7034 20.6938 24.7372 20.9245 24.6528C21.1293 24.5779 21.2557 24.4338 21.3233 24.3136L22.4886 22.2427L24.3242 23.0447L21.6934 28.584H9.99882L7.65051 23.0635L9.57427 22.2435L10.6691 24.2983ZM24.4348 22.8117L24.4345 22.8124L24.4348 22.8117Z"
 															stroke="#5FCF86"
-															stroke-width="1.5"
+															strokeWidth="1.5"
 														></path>
 														<path
 															d="M12.75 4.66675C12.75 3.97639 13.3096 3.41675 14 3.41675H18C18.6904 3.41675 19.25 3.97639 19.25 4.66675V7.00008C19.25 7.13815 19.1381 7.25008 19 7.25008H13C12.8619 7.25008 12.75 7.13815 12.75 7.00008V4.66675Z"
 															stroke="#5FCF86"
-															stroke-width="1.5"
+															strokeWidth="1.5"
 														></path>
 														<path
 															d="M9.33398 22.6668L9.90564 11.2336C9.95887 10.1692 10.8374 9.3335 11.9031 9.3335H20.0982C21.1639 9.3335 22.0424 10.1692 22.0957 11.2336L22.6673 22.6668"
 															stroke="#5FCF86"
-															stroke-width="1.5"
+															strokeWidth="1.5"
 														></path>
 														<path
 															d="M14.667 7.35815V9.8901"
 															stroke="#5FCF86"
-															stroke-width="1.5"
+															strokeWidth="1.5"
 														></path>
 														<path
 															d="M17.334 7.35815V9.8901"
 															stroke="#5FCF86"
-															stroke-width="1.5"
+															strokeWidth="1.5"
 														></path>
 													</svg>
 												</div>
@@ -237,31 +229,31 @@ function DetailCar() {
 															<path
 																d="M25.9163 7.99992C25.9163 9.05846 25.0582 9.91659 23.9997 9.91659C22.9411 9.91659 22.083 9.05846 22.083 7.99992C22.083 6.94137 22.9411 6.08325 23.9997 6.08325C25.0582 6.08325 25.9163 6.94137 25.9163 7.99992Z"
 																stroke="#5FCF86"
-																stroke-width="1.5"
+																strokeWidth="1.5"
 															></path>
 															<circle
 																cx="23.9997"
 																cy="23.9999"
 																r="1.91667"
 																stroke="#5FCF86"
-																stroke-width="1.5"
+																strokeWidth="1.5"
 															></circle>
 															<path
 																d="M17.9163 7.99992C17.9163 9.05846 17.0582 9.91659 15.9997 9.91659C14.9411 9.91659 14.083 9.05846 14.083 7.99992C14.083 6.94137 14.9411 6.08325 15.9997 6.08325C17.0582 6.08325 17.9163 6.94137 17.9163 7.99992Z"
 																stroke="#5FCF86"
-																stroke-width="1.5"
+																strokeWidth="1.5"
 															></path>
 															<path
 																d="M17.9163 23.9999C17.9163 25.0585 17.0582 25.9166 15.9997 25.9166C14.9411 25.9166 14.083 25.0585 14.083 23.9999C14.083 22.9414 14.9411 22.0833 15.9997 22.0833C17.0582 22.0833 17.9163 22.9414 17.9163 23.9999Z"
 																stroke="#5FCF86"
-																stroke-width="1.5"
+																strokeWidth="1.5"
 															></path>
 															<circle
 																cx="7.99967"
 																cy="7.99992"
 																r="1.91667"
 																stroke="#5FCF86"
-																stroke-width="1.5"
+																strokeWidth="1.5"
 															></circle>
 															<path
 																d="M10.1025 26.6666V21.3333H7.99837C7.59559 21.3333 7.25184 21.4053 6.96712 21.5494C6.68066 21.6918 6.46278 21.894 6.31348 22.1562C6.16244 22.4166 6.08691 22.723 6.08691 23.0754C6.08691 23.4296 6.1633 23.7343 6.31608 23.9895C6.46886 24.243 6.69021 24.4374 6.98014 24.5728C7.26834 24.7083 7.6173 24.776 8.02702 24.776H9.43587V23.8697H8.20931C7.99403 23.8697 7.81521 23.8402 7.67285 23.7812C7.53049 23.7221 7.42459 23.6336 7.35514 23.5155C7.28396 23.3975 7.24837 23.2508 7.24837 23.0754C7.24837 22.8984 7.28396 22.7491 7.35514 22.6275C7.42459 22.506 7.53136 22.414 7.67546 22.3515C7.81782 22.2872 7.9975 22.2551 8.21452 22.2551H8.97493V26.6666H10.1025ZM7.22233 24.2395L5.89681 26.6666H7.1416L8.43848 24.2395H7.22233Z"
@@ -270,8 +262,8 @@ function DetailCar() {
 															<path
 																d="M24 10.6665V15.9998M24 21.3332V15.9998M16 10.6665V21.3332M8 10.6665V15.4998C8 15.776 8.22386 15.9998 8.5 15.9998H24"
 																stroke="#5FCF86"
-																stroke-width="1.5"
-																stroke-linecap="round"
+																strokeWidth="1.5"
+																strokeLinecap="round"
 															></path>
 														</svg>
 													</div>
@@ -302,26 +294,26 @@ function DetailCar() {
 															<path
 																d="M24.3337 27.2499H7.66699C7.52892 27.2499 7.41699 27.138 7.41699 26.9999V12.4599C7.41699 12.3869 7.44888 12.3175 7.5043 12.27L14.652 6.14344L14.1639 5.574L14.652 6.14344C14.6973 6.1046 14.755 6.08325 14.8147 6.08325H24.3337C24.4717 6.08325 24.5837 6.19518 24.5837 6.33325V26.9999C24.5837 27.138 24.4717 27.2499 24.3337 27.2499Z"
 																stroke="#5FCF86"
-																stroke-width="1.5"
-																stroke-linecap="round"
+																strokeWidth="1.5"
+																strokeLinecap="round"
 															></path>
 															<path
 																d="M12.0001 5.33325L7.42285 9.46712"
 																stroke="#5FCF86"
-																stroke-width="1.5"
-																stroke-linecap="round"
+																strokeWidth="1.5"
+																strokeLinecap="round"
 															></path>
 															<path
 																d="M17.888 19.5212L16.7708 15.93C16.5378 15.1812 15.4785 15.1798 15.2436 15.928L14.1172 19.5164C13.7178 20.7889 14.6682 22.0833 16.0019 22.0833C17.3335 22.0833 18.2836 20.7927 17.888 19.5212Z"
 																stroke="#5FCF86"
-																stroke-width="1.5"
-																stroke-linecap="round"
+																strokeWidth="1.5"
+																strokeLinecap="round"
 															></path>
 															<path
 																d="M23.2503 3.66675V5.66675C23.2503 5.80482 23.1384 5.91675 23.0003 5.91675H14.667C14.5827 5.91675 14.5365 5.8916 14.5072 5.86702C14.4721 5.83755 14.44 5.78953 14.4245 5.72738C14.4089 5.66524 14.4147 5.60775 14.4318 5.56523C14.4461 5.52975 14.4749 5.48584 14.5493 5.44616L18.2993 3.44616C18.3356 3.42685 18.376 3.41675 18.417 3.41675H23.0003C23.1384 3.41675 23.2503 3.52868 23.2503 3.66675Z"
 																stroke="#5FCF86"
-																stroke-width="1.5"
-																stroke-linecap="round"
+																strokeWidth="1.5"
+																strokeLinecap="round"
 															></path>
 														</svg>
 													</div>
@@ -352,40 +344,40 @@ function DetailCar() {
 															<path
 																d="M7.41667 24V23.25H6.66667H4.75V18.0833H6.66667H7.41667V17.3333V15.4167H9.33333H9.64399L9.86366 15.197L12.3107 12.75H24.5833V23.25H22.6667H22.356L22.1363 23.4697L19.6893 25.9167H7.41667V24Z"
 																stroke="#5FCF86"
-																stroke-width="1.5"
-																stroke-linecap="round"
+																strokeWidth="1.5"
+																strokeLinecap="round"
 															></path>
 															<path
 																d="M24 21.3333H28"
 																stroke="#5FCF86"
-																stroke-width="1.5"
+																strokeWidth="1.5"
 															></path>
 															<path
 																d="M24 18.6665H28"
 																stroke="#5FCF86"
-																stroke-width="1.5"
+																strokeWidth="1.5"
 															></path>
 															<path
 																d="M15.417 7.33325C15.417 6.6429 15.9766 6.08325 16.667 6.08325H20.667C21.3573 6.08325 21.917 6.6429 21.917 7.33325V8.58325H15.417V7.33325Z"
 																stroke="#5FCF86"
-																stroke-width="1.5"
+																strokeWidth="1.5"
 															></path>
 															<path
 																d="M17.333 9.33325V11.9999M19.9997 9.33325V11.9999"
 																stroke="#5FCF86"
-																stroke-width="1.5"
+																strokeWidth="1.5"
 															></path>
 															<path
 																d="M4.66699 26.01L4.66699 15.3308"
 																stroke="#5FCF86"
-																stroke-width="1.5"
-																stroke-linecap="round"
+																strokeWidth="1.5"
+																strokeLinecap="round"
 															></path>
 															<path
 																d="M27.3291 23.3384L27.3291 16.6704"
 																stroke="#5FCF86"
-																stroke-width="1.5"
-																stroke-linecap="round"
+																strokeWidth="1.5"
+																strokeLinecap="round"
 															></path>
 														</svg>
 													</div>
@@ -807,54 +799,10 @@ function DetailCar() {
 													sẽ không được hoàn tiền giữ
 													chỗ
 												</p>
-												{/* <p className="df-align-center">
-                                                    * Tiền giữ chỗ bồi thường cho chủ xe hủy chuyến (nếu có) sẽ
-                                                    được Carrentsg hoàn trả đến bạn bằng chuyển khoản ngân hàng
-                                                    trong vòng 1-3 ngày làm việc.
-                                                    <span className="tooltip tooltip--m ">
-                                                        <span className="wrap-svg">
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                                                    stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                                                    stroke-linejoin="round">
-                                                                </path>
-                                                                <path
-                                                                    d="M9.08984 9.00008C9.32495 8.33175 9.789 7.76819 10.3998 7.40921C11.0106 7.05024 11.7287 6.91902 12.427 7.03879C13.1253 7.15857 13.7587 7.52161 14.2149 8.06361C14.6712 8.60561 14.9209 9.2916 14.9198 10.0001C14.9198 12.0001 11.9198 13.0001 11.9198 13.0001"
-                                                                    stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                                                    stroke-linejoin="round">
-                                                                </path>
-                                                                <path d="M12 17H12.01" stroke="black" stroke-width="1.5"
-                                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                                </path>
-                                                            </svg>
-                                                        </span>
-                                                        <span className="tooltip-text">
-                                                            <b>Thủ tục hoàn tiền đền cọc</b>
-                                                            Carrentsg sẽ hoàn lại tiền cọc qua tài
-                                                            khoản ngân hàng của khách thuê trong vòng 1-3 ngày làm
-                                                            việc kể từ thời điểm hủy chuyến.
-                                                            <i> *Nhân viên Carrentsg sẽ liên hệ khách thuê (qua số điện thoại đã đăng ký
-                                                                trên Carrentsg) để xin thông tin tài khoản ngân hàng, hoặc Khách thuê có
-                                                                thể chủ động gửi thông tin cho Carrentsg qua email Contact@Carrentsg.vn hoặc
-                                                                nhắn tin tại Carrentsg Fanpage </i>
-                                                        </span>
-                                                    </span>
-                                                </p> */}
 											</div>
 										</div>
 									</div>
 									<div className="line-page mt-3 mb-3"></div>
-									{/* <div className="info-car-desc" id="carmap">
-                                    <h6>Vị trí xe</h6>
-                                    <div className="car-address">
-                                        <div className="address">
-                                            <i className="fa-solid fa-location-dot"></i>
-                                            <p>Quận 5, Hồ Chí Minh</p>
-                                        </div>
-                                    </div>
-                                </div> */}
 								</div>
 								<div className="col-md-4">
 									<div
@@ -1033,8 +981,8 @@ function DetailCar() {
 														<path
 															d="M8 7.33398V10.4407"
 															stroke="#666666"
-															stroke-linecap="round"
-															stroke-linejoin="round"
+															strokeLinecap="round"
+															strokeLinejoin="round"
 														></path>
 														<path
 															d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z"
@@ -1043,8 +991,8 @@ function DetailCar() {
 														<path
 															d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z"
 															stroke="#666666"
-															stroke-linecap="round"
-															stroke-linejoin="round"
+															strokeLinecap="round"
+															strokeLinejoin="round"
 														></path>
 													</svg>
 												</div>
@@ -1083,8 +1031,8 @@ function DetailCar() {
 														<path
 															d="M8 7.33398V10.4407"
 															stroke="#666666"
-															stroke-linecap="round"
-															stroke-linejoin="round"
+															strokeLinecap="round"
+															strokeLinejoin="round"
 														></path>
 														<path
 															d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z"
@@ -1093,8 +1041,8 @@ function DetailCar() {
 														<path
 															d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z"
 															stroke="#666666"
-															stroke-linecap="round"
-															stroke-linejoin="round"
+															strokeLinecap="round"
+															strokeLinejoin="round"
 														></path>
 													</svg>
 												</div>
@@ -1138,8 +1086,8 @@ function DetailCar() {
 														<path
 															d="M8 7.33398V10.4407"
 															stroke="#666666"
-															stroke-linecap="round"
-															stroke-linejoin="round"
+															strokeLinecap="round"
+															strokeLinejoin="round"
 														></path>
 														<path
 															d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z"
@@ -1148,8 +1096,8 @@ function DetailCar() {
 														<path
 															d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z"
 															stroke="#666666"
-															stroke-linecap="round"
-															stroke-linejoin="round"
+															strokeLinecap="round"
+															strokeLinejoin="round"
 														></path>
 													</svg>
 												</div>
@@ -1186,8 +1134,8 @@ function DetailCar() {
 														<path
 															d="M8 7.33398V10.4407"
 															stroke="#666666"
-															stroke-linecap="round"
-															stroke-linejoin="round"
+															strokeLinecap="round"
+															strokeLinejoin="round"
 														></path>
 														<path
 															d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z"
@@ -1196,8 +1144,8 @@ function DetailCar() {
 														<path
 															d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z"
 															stroke="#666666"
-															stroke-linecap="round"
-															stroke-linejoin="round"
+															strokeLinecap="round"
+															strokeLinejoin="round"
 														></path>
 													</svg>
 												</div>
@@ -1235,77 +1183,9 @@ function DetailCar() {
 			</div>
 			<Login />
 			<Register />
-			{/* <!-- Footer --> */}
 			<div>
 				<Footer />
 			</div>
-			{/* <section className="footer">
-                        <div className="m-container">
-                            <div className="footer-about">
-                                <div className="footer-info empty">
-                                    <div className="phone-mail">
-                                        <a className="logo-government" target="_blank" href="http://online.gov.vn/"> <img
-                                            loading="lazy" src="/images/bocongthuong.png" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <div className="footer-path d-flex-align-center two-item">
-                                    <div className="item">
-                                        <div className="item-sub">
-                                            <p>Phương thức thanh toán</p>
-                                        </div>
-                                    </div>
-                                    <div className="item">
-                                        <div className="payment">
-                                            <img loading="lazy" src="/images/zalopay.png" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <Calen /> */}
-
-			{/* <div className="clear"></div>
-                <div className="related-car space sec">
-                    <div className="m-container">
-                        <h6>Xe tương tự</h6>
-                    </div>
-                    <div className="m-container">
-                        <div
-                            className="swiper swiper-related-car swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                            <div className="swiper-wrapper" style={{ transform: "translate3d(0px, 0px, 0px)" }}>
-                                 <!-- item in items --> 
-                                <div>
-                                    <div className="swiper-slide swiper-slide-active" style={{ width: "305px", marginRight: "20px" }}>
-                                        <a href="" className=" item-car">
-                                            <div className="item-box">
-                                                <div className="img-car">
-                                                    <div className="fix-img">
-                                                        <img src="/images/" />
-                                                    </div>
-                                                </div>
-                                                <div className="desc-car">
-                                                    <div className="desc-name">
-                                                        <p>NAME OF CAR</p>
-                                                    </div>
-                                                    <div className="line-page"></div>
-                                                    <div className="desc-info-price">
-                                                        <div className="wrap-price">
-                                                            <div className="price">
-                                                                <span className="price-special" text="">989K</span>/ngày
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
 		</div>
 	);
 }
