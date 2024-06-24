@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, Outlet, Link } from "react-router-dom";
+
 import axiosConfig from "../../config/axiosConfig";
 import { ToastContainer } from "react-toastify";
 import ToastComponent from "../../assets/toasty";
+import { AddressAPI } from "../../assets/addressAPI";
 
 import Header from "./common/header";
 import Footer from "./common/footer";
 
 import "../../style/styleDetailCustomer.css";
-import zIndex from "@mui/material/styles/zIndex";
-import { positions } from "@mui/system";
 
 function DetailCustomer() {
 	const navigate = useNavigate();
@@ -21,9 +21,9 @@ function DetailCustomer() {
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [email, setEmail] = useState("");
 	const [avatar, setAvatar] = useState("");
-	const [dob, setDob] = useState(null);
-	const [gender, setGender] = useState(true);
-	const [profilePicture, setProfilePicture] = useState(null);
+	const [dob, setDob] = useState("");
+	const [gender, setGender] = useState("");
+	const [profilePicture, setProfilePicture] = useState("");
 
 	const onFullNameChange = (e) => {
 		setFullName(e.target.value);
@@ -36,7 +36,7 @@ function DetailCustomer() {
 	};
 
 	const onGenderChange = (e) => {
-		setGender(e.target.value === "true"); // Chuyển đổi giá trị string thành boolean
+		setGender(e.target.value === "true"); // Convert string to boolean
 	};
 
 	const onPhoneChange = (e) => {
@@ -206,6 +206,7 @@ function DetailCustomer() {
 	};
 
 	useEffect(() => {
+		//AddressAPI();
 		if (customerAccount) {
 			findCustomer();
 		}
@@ -228,46 +229,6 @@ function DetailCustomer() {
 		return formattedDate;
 	};
 
-	// var citis = document.getElementById("city");
-	// var districts = document.getElementById("district");
-	// var wards = document.getElementById("ward");
-	// var Parameter = {
-	//     url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
-	//     method: "GET",
-	//     responseType: "application/json",
-	// };
-	// var promise = axios(Parameter);
-	// promise.then(function (result) {
-	//     renderCity(result.data);
-	// });
-
-	// function renderCity(data) {
-	//     for (const x of data) {
-	//         citis.options[citis.options.length] = new Option(x.Name, x.Id);
-	//     }
-	//     citis.onchange = function () {
-	//         districts.length = 1;
-	//         wards.length = 1;
-	//         if (this.value != "") {
-	//             const result = data.filter(n => n.Id === this.value);
-
-	//             for (const k of result[0].Districts) {
-	//                 districts.options[districts.options.length] = new Option(k.Name, k.Id);
-	//             }
-	//         }
-	//     };
-	//     districts.onchange = function () {
-	//         wards.length = 1;
-	//         const dataCity = data.filter((n) => n.Id === citis.value);
-	//         if (this.value != "") {
-	//             const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
-
-	//             for (const w of dataWards) {
-	//                 wards.options[wards.options.length] = new Option(w.Name, w.Id);
-	//             }
-	//         }
-	//     };
-	// }
 	return (
 		<>
 			<Header />
@@ -406,75 +367,48 @@ function DetailCustomer() {
 													<p>Đổi mật khẩu</p>
 												</div>
 											</Link>
-											{/* <!-- <a className="sidebar-item" href="">
-                                            <div className="wrap-svg">
-                                                <svg width="25" height="24" viewBox="0 0 25 24" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M18.6699 8.91992V18.1699C18.6699 19.8699 17.2898 21.2499 15.5898 21.2499H9.41985C7.71985 21.2499 6.33984 19.8699 6.33984 18.1699V8.91992"
-                                                        stroke="black" strokeWidth="1.5" strokeLinecap="round"
-                                                         >
-                                                    </path>
-                                                    <path d="M4.2793 5.83008H20.7193" stroke="black" strokeWidth="1.5"
-                                                        strokeLinecap="round"  >
-                                                    </path>
-                                                    <path
-                                                        d="M9.41992 5.83002C9.41992 4.13002 10.7999 2.75 12.4999 2.75C14.1999 2.75 15.5799 4.13002 15.5799 5.83002"
-                                                        stroke="black" strokeWidth="1.5" strokeLinecap="round"
-                                                         >
-                                                    </path>
-                                                    <path d="M10.4395 12L14.5594 16.11" stroke="black" strokeWidth="1.5"
-                                                        strokeLinecap="round"  >
-                                                    </path>
-                                                    <path d="M14.5594 12L10.4395 16.11" stroke="black" strokeWidth="1.5"
-                                                        strokeLinecap="round"  >
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                            <p>Yêu cầu xoá tài khoản</p>
-                                        </a> --> */}
-											<div className="sidebar-item">
-												<div className="wrap-svg">
-													<svg
-														width="24"
-														height="24"
-														viewBox="0 0 24 24"
-														fill="none"
-														xmlns="http://www.w3.org/2000/svg"
-													>
-														<path
-															d="M12 2.74907H18.12C18.9125 2.71374 19.6868 2.99377 20.2734 3.52788C20.86 4.06199 21.2111 4.8067 21.25 5.59907V18.3991C21.2111 19.1914 20.86 19.9362 20.2734 20.4703C19.6868 21.0044 18.9125 21.2844 18.12 21.2491H12"
-															stroke="black"
-															strokeWidth="1.5"
-															strokeLinecap="round"
-														></path>
-														<path
-															d="M14.9993 12H2.7793"
-															stroke="black"
-															strokeWidth="1.5"
-															strokeLinecap="round"
-														></path>
-														<path
-															d="M2.75 12L6.75 16"
-															stroke="black"
-															strokeWidth="1.5"
-															strokeLinecap="round"
-														></path>
-														<path
-															d="M2.75 12L6.75 8"
-															stroke="black"
-															strokeWidth="1.5"
-															strokeLinecap="round"
-														></path>
-													</svg>
+											<Link
+												data-bs-toggle="modal"
+												data-bs-target="#customerLogout"
+											>
+												<div className="sidebar-item">
+													<div className="wrap-svg">
+														<svg
+															width="24"
+															height="24"
+															viewBox="0 0 24 24"
+															fill="none"
+															xmlns="http://www.w3.org/2000/svg"
+														>
+															<path
+																d="M12 2.74907H18.12C18.9125 2.71374 19.6868 2.99377 20.2734 3.52788C20.86 4.06199 21.2111 4.8067 21.25 5.59907V18.3991C21.2111 19.1914 20.86 19.9362 20.2734 20.4703C19.6868 21.0044 18.9125 21.2844 18.12 21.2491H12"
+																stroke="black"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+															></path>
+															<path
+																d="M14.9993 12H2.7793"
+																stroke="black"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+															></path>
+															<path
+																d="M2.75 12L6.75 16"
+																stroke="black"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+															></path>
+															<path
+																d="M2.75 12L6.75 8"
+																stroke="black"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+															></path>
+														</svg>
+													</div>
+													<p>Đăng xuất</p>
 												</div>
-												<a
-													data-bs-toggle="modal"
-													data-bs-target="#customerLogout"
-												>
-													Đăng xuất
-												</a>
-											</div>
+											</Link>
 										</div>
 									</div>
 								</div>
@@ -721,6 +655,7 @@ function DetailCustomer() {
 															Tên gợi nhớ
 														</label>
 														<input
+															defaultValue="abc"
 															type="text"
 															className="form-control"
 															placeholder="Nhập tên cho địa chỉ của bạn"
@@ -735,24 +670,11 @@ function DetailCustomer() {
 														<div className="custom-select">
 															<select
 																className="form-select"
-																value=""
-																id="specificSizeSelect"
+																id="city"
 															>
-																<option
-																	selected
-																>
-																	Chọn
-																	tỉnh/thành
-																	phố
-																</option>
-																<option>
-																	One
-																</option>
-																<option>
-																	Two
-																</option>
-																<option>
-																	Three
+																<option value="">
+																	Chọn Tỉnh /
+																	Thành phố
 																</option>
 															</select>
 														</div>
@@ -766,23 +688,11 @@ function DetailCustomer() {
 														<div className="custom-select">
 															<select
 																className="form-select"
-																value=""
-																id="specificSizeSelect"
+																id="districts"
 															>
-																<option
-																	selected
-																>
+																<option value="">
 																	Chọn
-																	quận/huyện
-																</option>
-																<option>
-																	One
-																</option>
-																<option>
-																	Two
-																</option>
-																<option>
-																	Three
+																	Quận&nbsp;/&nbsp;Huyện
 																</option>
 															</select>
 														</div>
@@ -796,23 +706,11 @@ function DetailCustomer() {
 														<div className="custom-select">
 															<select
 																className="form-select"
-																value=""
-																id="specificSizeSelect"
+																id="wards"
 															>
-																<option
-																	selected
-																>
+																<option value="">
 																	Chọn
-																	phường/xã
-																</option>
-																<option>
-																	One
-																</option>
-																<option>
-																	Two
-																</option>
-																<option>
-																	Three
+																	Phường&nbsp;/&nbsp;Xã
 																</option>
 															</select>
 														</div>
@@ -824,6 +722,7 @@ function DetailCustomer() {
 															Địa chỉ
 														</label>
 														<input
+															defaultValue="abc"
 															type="text"
 															className="form-control"
 															placeholder="Nhập tên đường/nhà"
