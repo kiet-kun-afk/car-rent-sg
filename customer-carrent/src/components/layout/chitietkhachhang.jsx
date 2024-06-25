@@ -24,6 +24,9 @@ function DeitalCustomer() {
   const [gender, setGender] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
 
+  const [gplx, setGPLX] = useState("");
+  const [profileGPLX, setProfileGPLX] = useState("");
+
   const onFullnameChange = (e) => {
     setFullName(e.target.value);
   };
@@ -58,6 +61,20 @@ function DeitalCustomer() {
       reader.readAsDataURL(file);
     }
   };
+
+  const onPictureGPLXChange = (e) => {
+    const file = e.target.files[0];
+    setGPLX(file);
+    console.log(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileGPLX(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   const updateInfor = async (e) => {
     e.preventDefault();
@@ -754,6 +771,72 @@ function DeitalCustomer() {
                           <>
                             <img
                               src={profilePicture}
+                              className="img-fluid rounded mx-auto d-block"
+                            />
+                            <div className="input-field mt-3">
+                              <button
+                                type="submit"
+                                className="btn-submit"
+                                onClick={updateImage}
+                              >
+                                Cập nhật
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal Image GPLX */}
+      <div
+        className="modal fade"
+        id="updateGPLX"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content text-center">
+            <div className="modal-body p-0">
+              <div className="d-flex flex-row-reverse p-2">
+                <button
+                  type="button"
+                  className="btn"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <i className="fa-regular fa-circle-xmark fa-xl"></i>
+                </button>
+              </div>
+              <div className="form-item">
+                <div className="input-box">
+                  <div className="content-item">
+                    <div className="content-title">
+                      <h4>Cập nhật ảnh GPLX</h4>
+                    </div>
+                    <div className="content-item address-list">
+                      <div className="content">
+                        <div className="fileContainer">
+                          <button className="chooseFile">Chọn ảnh</button>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={onPictureGPLXChange}
+                          />
+                        </div>
+                        {profileGPLX ? (
+                          <>
+                            <img
+                              src={profileGPLX}
                               className="img-fluid rounded mx-auto d-block"
                             />
                             <div className="input-field mt-3">

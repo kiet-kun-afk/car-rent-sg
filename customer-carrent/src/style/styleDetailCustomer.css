@@ -391,6 +391,7 @@ img {
 .account-section .account-container .content-account .driver-license .content .info-license__img .fix-img {
     padding-bottom: 65%;
     border-radius: 16px;
+    cursor: pointer;
 }
 
 .account-section .account-container .content-account .driver-license .content .info-license {
