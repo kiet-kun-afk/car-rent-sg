@@ -65,7 +65,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
         // generate JWT token and add into response
         String token = jwtTokenProvider.generateToken(authentication);
-        String redirectUrl = "http://localhost:3000/oauth2/redirect?token=" + token;
+        String redirectUrl = "http://localhost:3000/carrentsg/info" ;
 
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }

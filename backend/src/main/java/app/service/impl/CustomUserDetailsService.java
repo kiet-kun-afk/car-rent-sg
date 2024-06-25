@@ -33,14 +33,14 @@ public class CustomUserDetailsService implements UserDetailsService {
                     .orElseThrow(() -> new UsernameNotFoundException("Customer not found"));
             Set<GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(customer.getEmail()));
 
-            return new org.springframework.security.core.userdetails.User(customer.getUsername(),
+            return new org.springframework.security.core.userdetails.User(username,
                     customer.getPassword(), authorities);
         } else {
             Set<GrantedAuthority> authorities = staff.getRoles().stream()
                     .map(role -> new SimpleGrantedAuthority(role.getName()))
                     .collect(Collectors.toSet());
 
-            return new org.springframework.security.core.userdetails.User(staff.getEmail(),
+            return new org.springframework.security.core.userdetails.User(username,
                     staff.getPassword(), authorities);
         }
     }
