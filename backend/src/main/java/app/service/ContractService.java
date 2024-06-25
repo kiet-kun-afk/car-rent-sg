@@ -2,7 +2,9 @@ package app.service;
 
 import java.util.List;
 
+import app.dto.CarDTO;
 import app.dto.ContractDTO;
+
 import app.response.ContractResponse;
 
 public interface ContractService {
@@ -28,4 +30,14 @@ public interface ContractService {
     public List<ContractResponse> listContractByPhoneNumberNotDeliveryYet(String phoneNumber);
 
     public List<ContractResponse> listContractNotDeliveryYet();
+
+    public List<ContractResponse> listContractStatusPaymentTrue();
+
+    public List<ContractResponse> listCustomerTrip() throws Exception;
+
+    // đếm số lượng contract status true
+    public long countContractsByStatusPaymentTrue();
+
+    // xe được thuê nhiều nhất
+    public CarDTO getMostRentedCar();
 }

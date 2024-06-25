@@ -2,8 +2,6 @@ package app.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-
 import app.dto.CarDTO;
 
 import app.response.CarResponse;
@@ -22,7 +20,7 @@ public interface CarService {
 
 	// public CarResponse DeletePut(Integer id, CarDTO carDTO);
 
-	public Page<CarResponse> getCarsForIndex(Integer pageNumber, Integer pageSize)
+	public List<CarResponse> getCarsForIndex(Integer pageNumber, Integer pageSize)
 			throws Exception;
 
 }

@@ -50,14 +50,14 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             String rawPassword = UUID.randomUUID().toString();
             customer.setUsername(name);
             customer.setEmail(email);
-            customer.setPhoneNumber("NoT uPdAtEd ! ! !");
+            customer.setPhoneNumber(name);
             customer.setPassword(passwordEncoder.encode(rawPassword));
             customer.setStatus(true);
             customer.setFullName(fullname);
             customer.setAvatarImage(photo);
             customerRepository.save(customer);
             try {
-                emailService.sendMail(email, fullname, rawPassword);
+                emailService.sendMail(email, fullname == null ? name : fullname, rawPassword);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }

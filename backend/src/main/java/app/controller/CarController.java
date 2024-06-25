@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,13 +55,13 @@ public class CarController {
             CarResponse carResponse = carService.getOne(registrationPlate);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
+                    .message("Get one car successfully")
                     .data(carResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Get one car failed")
                     .data(e.getMessage())
                     .build());
         }
@@ -75,13 +74,13 @@ public class CarController {
             CarResponse carResponse = carService.Post(carDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
+                    .message("Create car successfully")
                     .data(carResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Create car failed")
                     .data(e.getMessage())
                     .build());
         }
@@ -93,13 +92,13 @@ public class CarController {
             CarResponse carResponse = carService.Put(id, carDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
+                    .message("Update car successfully")
                     .data(carResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Update car failed")
                     .data(e.getMessage())
                     .build());
         }
@@ -115,7 +114,7 @@ public class CarController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Delete car failed")
                     .data(e.getMessage())
                     .build());
         }
@@ -126,18 +125,17 @@ public class CarController {
             @RequestParam(required = false) @Nullable Integer numberOfSeat,
             @RequestParam Optional<Integer> pageNumber,
             @RequestParam Optional<Integer> pageSize) {
-
         try {
-            Page<CarResponse> cars = carService.getCarsForIndex(pageNumber.orElse(0), pageSize.orElse(8));
+            List<CarResponse> cars = carService.getCarsForIndex(pageNumber.orElse(0), pageSize.orElse(8));
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all car successfully")
+                    .message("Get page car successfully")
                     .data(cars)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all car failed")
+                    .message("Get page car failed")
                     .data(e.getMessage())
                     .build());
         }

@@ -478,6 +478,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public long countCustomer() {
+        return customerRepository.countCustomerTrue();
+    }
+
+    @Override
     public CustomerResponse updateCustomerPhoneNumber(String phoneNumber) throws Exception {
         Customer customer = getAuth();
         if (!validService.validatePhoneNumber(phoneNumber)) {

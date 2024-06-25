@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import app.dto.CarDTO;
 import app.dto.ContractDTO;
 import app.exception.DataNotFoundException;
 import app.exception.InvalidParamException;
@@ -18,6 +19,7 @@ import app.model.Staff;
 import app.repository.CarRepository;
 import app.repository.ContractRepository;
 import app.response.ContractResponse;
+import app.response.CustomerResponse;
 import app.service.BillService;
 import app.service.ContractService;
 import app.service.CustomerService;
@@ -380,4 +382,33 @@ public class ContractServiceImpl implements ContractService {
         List<Contract> contracts = contractRepository.findContractsWithoutDeliveryRecords();
         return contracts.stream().map(ContractResponse::fromContract).toList();
     }
+
+    @Override
+    public List<ContractResponse> listContractStatusPaymentTrue() {
+        List<Contract> contract = contractRepository.findAllByStatusPaymentTrue();
+        return contract.stream().map(ContractResponse::fromContract).toList();
+    }
+
+    @Override
+    public long countContractsByStatusPaymentTrue() {
+        return contractRepository.countContractsByStatusPaymentTrue();
+    }
+
+    @Override
+    public CarDTO getMostRentedCar() {
+        List<CarDTO> cars = contractRepository.findMostRentedCars();
+        if (!cars.isEmpty()) {
+            return cars.get(0); // Lấy xe đầu tiên từ danh sách
+        }
+        return null;
+
+    }
+
+    @Override
+    public List<ContractResponse> listCustomerTrip() throws Exception {
+        CustomerResponse customer = customerService.getCurrentCustomer();
+        List<Contract> contracts = contractRepository.findByCustomerPhoneNumber(customer.getPhoneNumber());
+        return contracts.stream().map(ContractResponse::fromContract).toList();
+    }
+
 }

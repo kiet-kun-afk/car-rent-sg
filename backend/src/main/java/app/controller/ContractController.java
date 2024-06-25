@@ -8,7 +8,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import app.dto.CarDTO;
 import app.dto.ContractDTO;
+
 import app.response.ContractResponse;
 import app.response.ResponseObject;
 import app.service.ContractService;
@@ -114,7 +116,26 @@ public class ContractController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PutMapping("/complete/{contractId}")
+    public ResponseEntity<ResponseObject> completeContract(@PathVariable("contractId") Integer contractId,
+            @RequestParam("deposit") Double deposit) {
+        try {
+            contractService.completePayContract(contractId, deposit);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Complete contract successfully")
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Complete contract failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE')")
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllContract() {
         try {
@@ -215,6 +236,61 @@ public class ContractController {
         try {
             List<ContractResponse> contractResponses = contractService
                     .listContractByPhoneNumberNotDeliveryYet(phoneNumber);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get all contract successfully")
+                    .data(contractResponses)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get all contract failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @GetMapping("/all-statusPayments-true")
+    public ResponseEntity<ResponseObject> listContractStatusPaymentTrue() {
+        try {
+            List<ContractResponse> contractResponses = contractService.listContractStatusPaymentTrue();
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get all contract successfully")
+                    .data(contractResponses)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get all contract failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    // get count contract true
+    @GetMapping("/count")
+    public ResponseEntity<Long> countPaidContracts() {
+        long count = contractService.countContractsByStatusPaymentTrue();
+        return ResponseEntity.ok(count);
+    }
+
+    // get top 1 car
+    @GetMapping("/most-rented-car")
+    public ResponseEntity<CarDTO> getMostRentedCar() {
+        CarDTO mostRentedCar = contractService.getMostRentedCar();
+        if (mostRentedCar != null) {
+            return ResponseEntity.ok(mostRentedCar);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PreAuthorize("isAuthenticated")
+    @GetMapping("/customer-trip")
+    public ResponseEntity<ResponseObject> getCustomerTrip() {
+        try {
+            List<ContractResponse> contractResponses = contractService.listCustomerTrip();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Get all contract successfully")

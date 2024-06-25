@@ -75,4 +75,5 @@ public class Car extends BaseEntity {
 
     @ManyToOne
     private Category category;
+
 }
