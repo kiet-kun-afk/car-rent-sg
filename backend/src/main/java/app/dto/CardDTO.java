@@ -13,6 +13,4 @@ public class CardDTO {
     private String idCard;
 
     private MultipartFile frontImage;
-
-    private MultipartFile backImage;
 }

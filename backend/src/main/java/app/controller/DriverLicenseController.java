@@ -23,9 +23,9 @@ public class DriverLicenseController {
     private final DriverLicenseService driverLicenseService;
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/assign-license/{phoneNumber}")
+    @PostMapping("/assign-license")
     public ResponseEntity<ResponseObject> assignLicense(@Valid @ModelAttribute CardDTO cardDTO,
-            @PathVariable("phoneNumber") String phoneNumber, BindingResult result) {
+            BindingResult result) {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
             return ResponseEntity.badRequest().body(ResponseObject.builder()
@@ -35,7 +35,7 @@ public class DriverLicenseController {
                     .build());
         }
         try {
-            DriverLicense driverLicense = driverLicenseService.assignWithCustomer(phoneNumber, cardDTO);
+            DriverLicense driverLicense = driverLicenseService.assignWithCustomer(cardDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Assign license successfully")
@@ -45,6 +45,25 @@ public class DriverLicenseController {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Assign license failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/get-driver-license/{idCard}")
+    public ResponseEntity<ResponseObject> getDriverLicense(@PathVariable String idCard) {
+        try {
+            DriverLicense driverLicense = driverLicenseService.getDriverLicense(idCard);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get driver license successfully")
+                    .data(driverLicense)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get driver license failed")
                     .data(e.getMessage())
                     .build());
         }

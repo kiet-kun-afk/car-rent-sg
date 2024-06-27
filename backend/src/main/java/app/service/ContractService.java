@@ -40,4 +40,6 @@ public interface ContractService {
 
     // xe được thuê nhiều nhất
     public CarDTO getMostRentedCar();
+
+    public ContractResponse getContractById(Integer contractId) throws Exception;
 }
