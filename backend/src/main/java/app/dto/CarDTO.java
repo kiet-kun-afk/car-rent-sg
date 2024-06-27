@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Positive;
@@ -27,6 +30,7 @@ import jakarta.validation.constraints.Size;
 @NoArgsConstructor
 public class CarDTO {
 
+    @NotBlank(message = "Registration plate is required")
     private String registrationPlate;
 
     private String carName;
@@ -48,13 +52,13 @@ public class CarDTO {
 
     private String features;
 
-    private String frontImage;
+    private MultipartFile frontImage;
 
-    private String backImage;
+    private MultipartFile backImage;
 
-    private String rightImage;
+    private MultipartFile rightImage;
 
-    private String leftImage;
+    private MultipartFile leftImage;
 
     private String describe;
 

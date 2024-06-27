@@ -25,7 +25,6 @@ public class CardResponse {
     public CardResponse(DriverLicense driverLicense) {
         this.idCard = driverLicense.getIdCard();
         this.frontImage = driverLicense.getFrontImage();
-        this.backImage = driverLicense.getBackImage();
     }
 
     public static CardResponse fromCitizenCard(CitizenCard citizenCard) {

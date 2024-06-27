@@ -3,6 +3,7 @@ package app.service.impl;
 import org.springframework.stereotype.Service;
 
 import app.dto.CardDTO;
+import app.exception.DataNotFoundException;
 import app.exception.InvalidParamException;
 import app.model.Customer;
 import app.model.cards.DriverLicense;
@@ -18,26 +19,33 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
 
     private final DriverLicenseRepository driverLicenseRepository;
     private final FileService fileService;
-    private final CustomerRepository customerRepository;
     private final CustomerService customerService;
+    private final CustomerRepository customerRepository;
 
     @Override
-    public DriverLicense assignWithCustomer(String phoneNumber, CardDTO cardDTO) throws Exception {
-        Customer customerPhone = customerRepository.findByPhoneNumber(phoneNumber);
-        DriverLicense driverLicense = driverLicenseRepository.findByCustomer(phoneNumber);
+    public DriverLicense assignWithCustomer(CardDTO cardDTO) throws Exception {
+        Customer customer = customerService.getAuth();
+        DriverLicense driverLicense = driverLicenseRepository.findByCustomer(customer.getPhoneNumber());
+        String idCard = cardDTO.getIdCard();
         if (driverLicense == null) {
             driverLicense = new DriverLicense();
+            if (driverLicenseRepository.existsByIdCard(idCard)) {
+                throw new InvalidParamException("Id card already exists");
+            }
         }
-
-        Customer customerAuth = customerService.getAuth();
-        if (customerAuth != customerPhone) {
-            throw new InvalidParamException("This phone number does not belong to you");
-        }
-
-        driverLicense.setIdCard(cardDTO.getIdCard());
-        driverLicense.setBackImage(fileService.upload(cardDTO.getBackImage()));
+        driverLicense.setIdCard(idCard);
         driverLicense.setFrontImage(fileService.upload(cardDTO.getFrontImage()));
-        customerAuth.setDriverLicense(driverLicenseRepository.save(driverLicense));
+        customer.setDriverLicense(driverLicenseRepository.save(driverLicense));
+        customerRepository.save(customer);
+        return driverLicense;
+    }
+
+    @Override
+    public DriverLicense getDriverLicense(String idCard) throws Exception {
+        DriverLicense driverLicense = driverLicenseRepository.findByIdCard(idCard);
+        if (driverLicense == null) {
+            throw new DataNotFoundException("Driver license not found");
+        }
         return driverLicense;
     }
 

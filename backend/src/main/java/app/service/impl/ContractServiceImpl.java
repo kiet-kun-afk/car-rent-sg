@@ -161,7 +161,7 @@ public class ContractServiceImpl implements ContractService {
         contract.setNumberDay(numberDay);
         contract.setTotalRentCost(totalRentCost);
         contract.setWayToPay(contractDTO.getWayToPay());
-        contract.setAttachment(fileService.upload(contractDTO.getFile()));
+        // contract.setAttachment(fileService.upload(contractDTO.getFile()));
         contractRepository.save(contract);
         return ContractResponse.fromContract(contract);
     }
@@ -409,6 +409,19 @@ public class ContractServiceImpl implements ContractService {
         CustomerResponse customer = customerService.getCurrentCustomer();
         List<Contract> contracts = contractRepository.findByCustomerPhoneNumber(customer.getPhoneNumber());
         return contracts.stream().map(ContractResponse::fromContract).toList();
+    }
+
+    @Override
+    public ContractResponse getContractById(Integer contractId) throws Exception {
+        Contract contract = contractRepository.findByContractIdAndNoStaff(contractId);
+        if (contract == null) {
+            throw new DataNotFoundException("Contract not found");
+        }
+        Customer customer = customerService.getAuth();
+        if (customer != contract.getCustomer()) {
+            throw new InvalidParamException("This contract not belong to you");
+        }
+        return ContractResponse.fromContract(contract);
     }
 
 }

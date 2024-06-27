@@ -25,6 +25,4 @@ public class DriverLicense {
     @Column(name = "front_image", nullable = false)
     private String frontImage;
 
-    @Column(name = "back_image", nullable = false)
-    private String backImage;
 }
