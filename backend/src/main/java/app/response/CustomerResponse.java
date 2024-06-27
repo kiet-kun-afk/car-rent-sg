@@ -33,8 +33,6 @@ public class CustomerResponse {
 
     private String avatarImage;
 
-    private Integer driverLicenseId;
-
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -52,9 +50,6 @@ public class CustomerResponse {
         this.email = customer.getEmail();
         this.status = customer.getStatus();
         this.avatarImage = customer.getAvatarImage();
-
-        this.driverLicenseId = customer.getDriverLicense() == null ? null
-                : customer.getDriverLicense().getDriverLicenseId();
 
         this.idCard = customer.getDriverLicense() == null ? null : customer.getDriverLicense().getIdCard();
 
