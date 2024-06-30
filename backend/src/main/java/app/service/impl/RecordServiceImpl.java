@@ -56,6 +56,8 @@ public class RecordServiceImpl implements RecordService {
         if (recordDTO.getKilometerNumber() < deliveryRecord.getKilometerNumber()) {
             throw new InvalidParamException("Kilometer number must be greater than delivery record kilometer number");
         }
+        Contract contract = deliveryRecord.getContract();
+        contract.setStatusPayment(true);
         deliveryRecord.setStatus(false);
         Staff staff = staffService.getAuth();
         ReturnRecord returnRecord = new ReturnRecord();
@@ -69,6 +71,7 @@ public class RecordServiceImpl implements RecordService {
         returnRecord.setStatus(true);
         recordRepository.save(returnRecord);
         deliveryRecordRepository.save(deliveryRecord);
+        contractRepository.save(contract);
         return RecordResponse.fromReturnRecord(returnRecord);
     }
 
