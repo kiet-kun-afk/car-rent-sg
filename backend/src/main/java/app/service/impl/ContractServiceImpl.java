@@ -32,7 +32,6 @@ public class ContractServiceImpl implements ContractService {
 
     private final CustomerService customerService;
     private final StaffService staffService;
-    private final FileService fileService;
     private final FormatterService formatterService;
     private final ContractRepository contractRepository;
     private final CarRepository carRepository;

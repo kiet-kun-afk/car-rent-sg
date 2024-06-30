@@ -12,6 +12,7 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -238,4 +239,38 @@ public class CarController {
         }
     }
 
+    @GetMapping("/filter-car")
+    public ResponseEntity<ResponseObject> filterCar(
+            @RequestParam(required = false) LocalDateTime startDate,
+            @RequestParam(required = false) LocalDateTime endDate,
+            @RequestParam(required = false) String brandName,
+            @RequestParam(required = false) String countryOrigin,
+            @RequestParam(required = false) String transmission,
+            @RequestParam(required = false) String fuelType,
+            @RequestParam(required = false) List<String> categoryNames,
+            @RequestParam(required = false) @Nullable Double minCost,
+            @RequestParam(required = false) @Nullable Double maxCost,
+            @RequestParam(required = false) @Nullable Integer minSeat,
+            @RequestParam(required = false) @Nullable Integer maxSeat,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam Optional<Integer> pageNumber,
+            @RequestParam Optional<Integer> pageSize) {
+        try {
+            List<CarResponse> cars = carService
+                    .filterCar(startDate, endDate,
+                            brandName, countryOrigin, transmission, fuelType, categoryNames,
+                            minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Filter car successfully")
+                    .data(cars)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Filter car failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
 }

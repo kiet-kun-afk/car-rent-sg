@@ -1,5 +1,6 @@
 package app.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import app.dto.CarDTO;
@@ -30,4 +31,10 @@ public interface CarService {
 	public List<CarResponse> getCarsDeleted() throws Exception;
 
 	public void restoreCar(String registrationPlate) throws Exception;
+
+	public List<CarResponse> filterCar(LocalDateTime startDate, LocalDateTime endDate,
+			String brandName, String countryOrigin, String transmission, String fuelType,
+			List<String> categoryNames, Double minCost, Double maxCost, Integer minSeat, Integer maxSeat, String sortBy,
+			Integer pageNumber, Integer pageSize)
+			throws Exception;
 }
