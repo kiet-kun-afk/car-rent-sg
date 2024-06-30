@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public LoginResponse loginCustomer(LoginDTO customer) throws Exception {
         String username = customer.getEmailOrPhoneNumber();
-        if (username.contains(" ")) {
+        if (username.contains(" ") || username.contains("@")) {
             throw new InvalidParamException("Invalid email or phone number");
         }
         Authentication authentication = authenticationManager.authenticate(
@@ -393,7 +393,7 @@ public class CustomerServiceImpl implements CustomerService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Customer customer = customerRepository
-                .findByUsernameOrPhoneNumberOrEmailAndStatusTrue(username, username, username)
+                .findByUsernameOrPhoneNumberAndStatusTrue(username, username)
                 .orElseThrow(() -> new UsernameNotFoundException("Customer not found"));
         return customer;
     }

@@ -9,11 +9,11 @@ import java.time.LocalDate;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 
 /**
  * CarDTO
@@ -41,7 +41,7 @@ public class CarDTO {
 
     @NotNull(message = "Number of seats is not null")
     @Positive(message = "Number of seats is positive")
-    @Size(min = 1, max = 40, message = "Number of seats must be between 2 to 40 characters")
+    @Max(value = 16, message = "Number of seats is from 0 to 16")
     private Integer numberOfSeat;
 
     private String transmission;
