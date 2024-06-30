@@ -3,26 +3,28 @@ package app.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import app.dto.CarDTO;
 import app.exception.DataNotFoundException;
 import app.exception.InvalidParamException;
-// import app.exception.InvalidParamException;
 import app.model.Branch;
 import app.model.Brand;
-// import app.exception.InvalidParamException;
 import app.model.Car;
 import app.model.Category;
 import app.repository.BranchesRepository;
 import app.repository.BrandRepository;
 import app.repository.CarRepository;
 import app.repository.CategoryRepository;
+import app.repository.specification.CarSpecifications;
 import app.response.CarResponse;
 import app.service.CarService;
 
@@ -51,6 +53,9 @@ public class CarServiceImpl implements CarService {
 
 	@Autowired
 	FileService fileService;
+
+	@Autowired
+	ContractServiceImpl contractService;
 
 	@Override
 	public List<CarResponse> getAll() {
@@ -265,6 +270,32 @@ public class CarServiceImpl implements CarService {
 		}
 		car.setStatus(true);
 		carres.save(car);
+	}
+
+	@Override
+	public List<CarResponse> filterCar(LocalDateTime startDate, LocalDateTime endDate,
+			String brandName, String countryOrigin, String transmission, String fuelType,
+			List<String> categoryNames, Double minCost, Double maxCost, Integer minSeat, Integer maxSeat, String sortBy,
+			Integer pageNumber, Integer pageSize)
+			throws Exception {
+		Specification<Car> specification = Specification.where(CarSpecifications.hasStatus(true)
+				.and(CarSpecifications.hasCategory(categoryNames))
+				.and(CarSpecifications.hasCountry(countryOrigin))
+				.and(CarSpecifications.hasBrandName(brandName))
+				.and(CarSpecifications.hasTransmission(transmission))
+				.and(CarSpecifications.hasFuelType(fuelType))
+				.and(CarSpecifications.hasRentCost(minCost, maxCost))
+				.and(CarSpecifications.hasNumberOfSeat(minSeat, maxSeat)));
+		Sort sort = sortBy == null ? Sort.by("carName") : Sort.by(sortBy);
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+		Page<Car> page = carres.findAll(specification, pageable);
+		List<Car> cars = page.getContent();
+		List<Car> carsWithoutOverlappingContracts = cars.stream()
+				.filter(car -> contractService.isContractValidForCar(car,
+						startDate == null ? LocalDateTime.now() : startDate,
+						endDate == null ? LocalDateTime.now() : endDate))
+				.collect(Collectors.toList());
+		return carsWithoutOverlappingContracts.stream().map(CarResponse::fromCarResponse).toList();
 	}
 
 }

@@ -1,6 +1,7 @@
 package app.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -76,4 +77,6 @@ public class Car extends BaseEntity {
     @ManyToOne
     private Category category;
 
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Contract> contracts;
 }
