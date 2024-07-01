@@ -10,7 +10,7 @@ public class CarSpecifications {
 
     public static Specification<Car> hasBrandName(String brandName) {
         return (root, query, cb) -> {
-            if (brandName != null) {
+            if (brandName != null && !brandName.equals("")) {
                 return cb.equal(root.get("brand").get("brandName"), brandName);
             }
             return null;
@@ -19,7 +19,7 @@ public class CarSpecifications {
 
     public static Specification<Car> hasCountry(String countryOrigin) {
         return (root, query, cb) -> {
-            if (countryOrigin != null) {
+            if (countryOrigin != null && !countryOrigin.equals("")) {
                 return cb.equal(root.get("brand").get("countryOrigin"), countryOrigin);
             }
             return null;
@@ -28,7 +28,7 @@ public class CarSpecifications {
 
     public static Specification<Car> hasTransmission(String transmission) {
         return (root, query, cb) -> {
-            if (transmission != null) {
+            if (transmission != null && !transmission.equals("")) {
                 return cb.equal(root.get("transmission"), transmission);
             }
             return null;
@@ -37,7 +37,7 @@ public class CarSpecifications {
 
     public static Specification<Car> hasFuelType(String fuelType) {
         return (root, query, cb) -> {
-            if (fuelType != null) {
+            if (fuelType != null && !fuelType.equals("")) {
                 return cb.equal(root.get("fuelType"), fuelType);
             }
             return null;
@@ -46,7 +46,7 @@ public class CarSpecifications {
 
     public static Specification<Car> hasCategory(List<String> categoryNames) {
         return (root, query, cb) -> {
-            if (categoryNames != null) {
+            if (categoryNames != null && categoryNames.isEmpty()) {
                 return root.get("category").get("categoryName").in(categoryNames);
             }
             return null;

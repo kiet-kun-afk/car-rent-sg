@@ -286,7 +286,16 @@ public class CarServiceImpl implements CarService {
 				.and(CarSpecifications.hasFuelType(fuelType))
 				.and(CarSpecifications.hasRentCost(minCost, maxCost))
 				.and(CarSpecifications.hasNumberOfSeat(minSeat, maxSeat)));
-		Sort sort = sortBy == null ? Sort.by("carName") : Sort.by(sortBy);
+		Sort sort;
+		if (sortBy == null || sortBy.isEmpty()) {
+			sort = Sort.by("carName");
+		} else if (sortBy.equals("price_asc")) {
+			sort = Sort.by(Sort.Direction.ASC, "rentCost");
+		} else if (sortBy.equals("price_desc")) {
+			sort = Sort.by(Sort.Direction.DESC, "rentCost");
+		} else {
+			sort = Sort.by("carName"); // default
+		}
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 		Page<Car> page = carres.findAll(specification, pageable);
 		List<Car> cars = page.getContent();
