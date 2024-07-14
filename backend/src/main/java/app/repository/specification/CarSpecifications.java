@@ -1,32 +1,79 @@
 package app.repository.specification;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
 
 import app.model.Car;
-import app.model.Contract;
-import jakarta.persistence.criteria.*;
 
 public class CarSpecifications {
 
-    public static Specification<Car> notInContractToday(LocalDateTime today) {
-        return (root, query, criteriaBuilder) -> {
-            Subquery<Integer> subquery = query.subquery(Integer.class);
-            Root<Contract> subRoot = subquery.from(Contract.class);
-            subquery.select(criteriaBuilder.literal(1));
-            subquery.where(
-                    criteriaBuilder.equal(subRoot.get("car"), root),
-                    criteriaBuilder.between(criteriaBuilder.literal(today), subRoot.get("startDate"),
-                            subRoot.get("endDate")));
-            return criteriaBuilder.not(criteriaBuilder.exists(subquery));
+    public static Specification<Car> hasBrandName(String brandName) {
+        return (root, query, cb) -> {
+            if (brandName != null && !brandName.equals("")) {
+                return cb.equal(root.get("brand").get("brandName"), brandName);
+            }
+            return null;
         };
     }
 
-    public static Specification<Car> hasNumberOfSeat(Integer numberOfSeat) {
+    public static Specification<Car> hasCountry(String countryOrigin) {
+        return (root, query, cb) -> {
+            if (countryOrigin != null && !countryOrigin.equals("")) {
+                return cb.equal(root.get("brand").get("countryOrigin"), countryOrigin);
+            }
+            return null;
+        };
+    }
+
+    public static Specification<Car> hasTransmission(String transmission) {
+        return (root, query, cb) -> {
+            if (transmission != null && !transmission.equals("")) {
+                return cb.equal(root.get("transmission"), transmission);
+            }
+            return null;
+        };
+    }
+
+    public static Specification<Car> hasFuelType(String fuelType) {
+        return (root, query, cb) -> {
+            if (fuelType != null && !fuelType.equals("")) {
+                return cb.equal(root.get("fuelType"), fuelType);
+            }
+            return null;
+        };
+    }
+
+    public static Specification<Car> hasCategory(List<String> categoryNames) {
+        return (root, query, cb) -> {
+            if (categoryNames != null && categoryNames.isEmpty()) {
+                return root.get("category").get("categoryName").in(categoryNames);
+            }
+            return null;
+        };
+    }
+
+    public static Specification<Car> hasRentCost(Double minCost, Double maxCost) {
+        return (root, query, cb) -> {
+            if (minCost != null && maxCost != null) {
+                return cb.between(root.get("rentCost"), minCost, maxCost);
+            } else if (minCost != null) {
+                return cb.greaterThanOrEqualTo(root.get("rentCost"), minCost);
+            } else if (maxCost != null) {
+                return cb.lessThanOrEqualTo(root.get("rentCost"), maxCost);
+            }
+            return null;
+        };
+    }
+
+    public static Specification<Car> hasNumberOfSeat(Integer minSeat, Integer maxSeat) {
         return (root, query, criteriaBuilder) -> {
-            if (numberOfSeat != null) {
-                return criteriaBuilder.equal(root.get("numberOfSeat"), numberOfSeat);
+            if (minSeat != null && maxSeat != null) {
+                return criteriaBuilder.between(root.get("numberOfSeat"), minSeat, maxSeat);
+            } else if (maxSeat != null) {
+                return criteriaBuilder.lessThanOrEqualTo(root.get("numberOfSeat"), maxSeat);
+            } else if (minSeat != null) {
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("numberOfSeat"), minSeat);
             }
             return null;
         };

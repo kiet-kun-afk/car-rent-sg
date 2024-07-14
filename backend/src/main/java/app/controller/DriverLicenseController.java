@@ -53,7 +53,7 @@ public class DriverLicenseController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/get-driver-license/{idCard}")
-    public ResponseEntity<ResponseObject> getDriverLicense(@PathVariable("idCard") String idCard) {
+    public ResponseEntity<ResponseObject> getDriverLicense(@PathVariable String idCard) {
         try {
             DriverLicense driverLicense = driverLicenseService.getDriverLicense(idCard);
             return ResponseEntity.ok(ResponseObject.builder()

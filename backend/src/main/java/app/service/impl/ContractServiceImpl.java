@@ -32,7 +32,6 @@ public class ContractServiceImpl implements ContractService {
 
     private final CustomerService customerService;
     private final StaffService staffService;
-    private final FileService fileService;
     private final FormatterService formatterService;
     private final ContractRepository contractRepository;
     private final CarRepository carRepository;
@@ -415,7 +414,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public ContractResponse getContractById(Integer contractId) throws Exception {
-        Contract contract = contractRepository.findByContractId(contractId);
+        Contract contract = contractRepository.findByContractIdAndNoStaff(contractId);
         if (contract == null) {
             throw new DataNotFoundException("Contract not found");
         }

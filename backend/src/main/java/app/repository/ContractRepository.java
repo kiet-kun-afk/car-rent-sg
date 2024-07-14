@@ -32,7 +32,9 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 	@Query("""
 			SELECT c FROM Contract c
 			JOIN c.car cc
-			WHERE cc.registrationPlate = :registrationPlate AND c.contractId != :contractId
+			WHERE cc.registrationPlate = :registrationPlate
+			AND c.contractId != :contractId
+			AND c.staff IS NOT NULL
 			""")
 	List<Contract> findByRegistrationPlateExcludingContractId(
 			@Param("registrationPlate") String registrationPlate,

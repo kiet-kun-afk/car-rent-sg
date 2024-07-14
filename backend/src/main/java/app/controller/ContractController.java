@@ -116,7 +116,7 @@ public class ContractController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/complete/{contractId}")
     public ResponseEntity<ResponseObject> completeContract(@PathVariable("contractId") Integer contractId,
             @RequestParam("deposit") long deposit) {
@@ -250,7 +250,7 @@ public class ContractController {
         }
     }
 
-    @GetMapping("/all-statusPayments-true")
+    @GetMapping("/all-status-payments-true")
     public ResponseEntity<ResponseObject> listContractStatusPaymentTrue() {
         try {
             List<ContractResponse> contractResponses = contractService.listContractStatusPaymentTrue();
@@ -305,7 +305,7 @@ public class ContractController {
         }
     }
 
-    // @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/get-contract/{contractId}")
     public ResponseEntity<ResponseObject> getContractById(@PathVariable Integer contractId) {
         try {

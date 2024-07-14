@@ -3,7 +3,6 @@ package app.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import app.model.Address;
 import app.model.Customer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
