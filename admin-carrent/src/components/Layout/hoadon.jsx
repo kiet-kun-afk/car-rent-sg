@@ -133,6 +133,105 @@ function HoaDon() {
 								</tbody>
 							</table>
 						</div>
+						{/* <table>
+							<thead>
+								<tr>
+									<th>STT</th>
+									<th>Mã hóa đơn</th>
+									<th>Tên xe</th>
+									<th>Biển số</th>
+									<th>Đơn vị tính</th>
+									<th>Số ngày thuê</th>
+									<th>Đơn giá</th>
+									<th>Ngày thuê xe</th>
+									<th>Ngày trả xe</th>
+									<th>Thành tiền</th>
+									<th>Chi tiết</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>1</td>
+									<td>HD01</td>
+									<td>
+										Mercedes-AMG SL 63
+									</td>
+									<td>51A-999.99</td>
+									<td>Chiếc </td>
+									<td>2</td>
+
+									<td>5.000.000</td>
+									<td>22/5/2024</td>
+									<td>24/5/2024</td>
+									<td>10.000.000</td>
+									<td><span className="status completed">Xem hóa đơn</span></td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>HD01</td>
+									<td>
+										Mercedes-AMG SL 63
+									</td>
+									<td>51A-999.99</td>
+									<td>Chiếc </td>
+									<td>2</td>
+
+									<td>5.000.000</td>
+									<td>22/5/2024</td>
+									<td>24/5/2024</td>
+									<td>10.000.000</td>
+									<td><span className="status completed">Xem hóa đơn</span></td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>HD01</td>
+									<td>
+										Mercedes-AMG SL 63
+									</td>
+									<td>51A-999.99</td>
+									<td>Chiếc </td>
+									<td>2</td>
+
+									<td>5.000.000</td>
+									<td>22/5/2024</td>
+									<td>24/5/2024</td>
+									<td>10.000.000</td>
+									<td><span className="status completed">Xem hóa đơn</span></td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>HD01</td>
+									<td>
+										Mercedes-AMG SL 63
+									</td>
+									<td>51A-999.99</td>
+									<td>Chiếc </td>
+									<td>2</td>
+
+									<td>5.000.000</td>
+									<td>22/5/2024</td>
+									<td>24/5/2024</td>
+									<td>10.000.000</td>
+									<td><span className="status completed">Xem hóa đơn</span></td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>HD01</td>
+									<td>
+										Mercedes-AMG SL 63
+									</td>
+									<td>51A-999.99</td>
+									<td>Chiếc </td>
+									<td>2</td>
+
+									<td>5.000.000</td>
+									<td>22/5/2024</td>
+									<td>24/5/2024</td>
+									<td>10.000.000</td>
+									<td><span className="status completed">Xem hóa đơn</span></td>
+								</tr>
+							</tbody>
+						</table> */}
 					</div>
 				</div>
 				<ChitietHoaDon show={modalShow} onHide={() => setModalShow(false)} />

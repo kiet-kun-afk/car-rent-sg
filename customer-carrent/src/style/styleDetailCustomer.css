@@ -245,7 +245,7 @@ img {
     font-weight: 500;
 }
 
-.account-section .account-container .content-account .user-profile .content .info-user .info-box__item  .main{
+.account-section .account-container .content-account .user-profile .content .info-user .info-box__item .main {
     font-size: 1rem;
     font-weight: 600;
     color: #000;
@@ -319,7 +319,7 @@ img {
     padding: 12px 20px;
 }
 
-.fileContainer{
+.fileContainer {
     box-shadow: none;
     background: transparent;
     position: relative;
@@ -351,7 +351,7 @@ img {
     box-shadow: 0 8px 24px 12px rgba(0, 0, 0, .08), 0 20px 24px -4px rgba(0, 0, 0, .08);
 }
 
-.fileContainer input{
+.fileContainer input {
     opacity: 0;
     z-index: 0;
     position: absolute;
@@ -394,6 +394,13 @@ img {
     cursor: pointer;
 }
 
+.fix-img input {
+    opacity: 0;
+    z-index: 0;
+    position: absolute;
+    cursor: pointer;
+}
+
 .account-section .account-container .content-account .driver-license .content .info-license {
     width: calc(50% - 12px);
     display: flex;
@@ -406,7 +413,8 @@ img {
     font-weight: 600;
 }
 
-p, h1 {
+p,
+h1 {
     margin: 0;
 }
 
@@ -649,7 +657,7 @@ input {
     cursor: pointer;
 }
 
-.empty-container{
+.empty-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -658,13 +666,21 @@ input {
     gap: 16px;
 }
 
-.empty-container img{
+.empty-container img {
     width: 340px;
 }
 
-.empty-container p{
+.empty-container p {
     font-size: 1.25rem;
     font-weight: 600;
     color: #6f6f6f;
     text-align: center;
+}
+
+.editbtnDiss {
+    display: none !important;
+}
+
+.editbtnActive {
+    display: block !important;
 }

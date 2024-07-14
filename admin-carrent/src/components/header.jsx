@@ -44,7 +44,7 @@ function Header() {
                     <button type="submit" className="search-btn"><i className='bx bx-search' ></i></button>
                 </div>
             </form>
-            <div className="mode">
+            {/* <div className="mode">
                 <div className="moon-sun">
                     <i className='bx bx-moon moon'></i>
                     <i className='bx bx-sun sun'></i>
@@ -52,16 +52,17 @@ function Header() {
                 <span id="mode-text" className="mode-text">Dark Mode</span>
                 <input type="checkbox" id="switch-mode" hidden />
                 <label htmlFor="switch-mode" className="switch-mode"></label>
-            </div>
+            </div> */}
             {
                 user !== null ? (
                     <>
-                        <a href="#" className="notification">
+                        {/* <a href="#" className="notification">
                             <i className='bx bxs-bell' ></i>
                             <span className="num">99</span>
-                        </a>
+                        </a> */}
                         <a href="#" className="profile">
-                            <img src={user.avatarImage == null ? avatarIMG : avatarIMG } alt="icon" />
+                            <span>{user.fullName}</span>
+                            <img src={user.avatarImage == null ? avatarIMG : user.avatarImage } alt="icon" />                        
                         </a>
                     </>
                 ) : (
