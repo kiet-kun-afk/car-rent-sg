@@ -49,7 +49,9 @@ public class BillServiceImpl implements BillService {
         }
         Bill bill = new Bill();
         bill.setContract(contract);
-        bill.setPayCost(contract.getTotalRentCost() * 0.2);
+        bill.setPayCost(contract.getTotalRentCost() * 20 / 100);
+        bill.setPayDate(LocalDateTime.now());
+        bill.setIncurredCost("Thanh toán tiền cọc cho dịch vụ thuê xe ");
         bill.setPaymentMethod(contract.getWayToPay());
         bill.setDescribe("Thanh toán tiền cọc cho dịch vụ thuê xe " + contract.getCar().getCarName());
         bill.setStaff(contract.getStaff());
@@ -60,7 +62,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public BillResponse completeDepositBill(Integer id, Double deposit) throws Exception {
+    public BillResponse completeDepositBill(Integer id, long deposit) throws Exception {
         Bill bill = billRepository.findByBillIdAndPaymentStatusFalse(id);
         if (bill == null) {
             throw new DataNotFoundException("Bill not found or already completed");

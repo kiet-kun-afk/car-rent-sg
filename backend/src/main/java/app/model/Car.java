@@ -29,7 +29,7 @@ public class Car extends BaseEntity {
     private String carName;
 
     @Column(name = "rent_cost", nullable = false)
-    private Double rentCost;
+    private long rentCost;
 
     @Column(name = "number_of_seat", nullable = false)
     private Integer numberOfSeat;

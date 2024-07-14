@@ -18,18 +18,18 @@ public class ContractResponse {
     private LocalDateTime endDate;
 
     // giá thuê
-    private Double rentCost;
+    private long rentCost;
 
     private long numberDay;
 
     // tổng cộng
-    private Double totalRentCost;
+    private long totalRentCost;
 
     // tiến cọc
-    private Double deposit = 0.0;
+    private long deposit = 0;
 
     // giấ tiền còn lại
-    private Double amount;
+    private long amount;
 
     private Boolean statusPayment;
 

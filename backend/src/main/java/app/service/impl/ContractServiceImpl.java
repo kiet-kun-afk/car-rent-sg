@@ -64,11 +64,11 @@ public class ContractServiceImpl implements ContractService {
             throw new InvalidParamException("Contract is not valid for car: is overlapping date");
         }
 
-        Double rentCost = car.getRentCost();
+        long rentCost = car.getRentCost();
 
         long numberDay = daysBetween(startDate, endDate) + 1;
 
-        Double totalRentCost = (Double) (numberDay * rentCost);
+        long totalRentCost = (numberDay * rentCost);
 
         Contract contract = new Contract();
         contract.setCustomer(customer);
@@ -82,6 +82,7 @@ public class ContractServiceImpl implements ContractService {
         contract.setDeposit(contractDTO.getDeposit());
         contract.setStatusPayment(false);
         contract.setWayToPay(contractDTO.getWayToPay());
+
         // contract.setAttachment(fileService.upload(contractDTO.getFile()));
         contractRepository.save(contract);
         return ContractResponse.fromContract(contract);
@@ -150,18 +151,18 @@ public class ContractServiceImpl implements ContractService {
             throw new InvalidParamException("Contract is not valid for car: is overlapping date");
         }
 
-        Double rentCost = contract.getCar().getRentCost();
+        long rentCost = contract.getCar().getRentCost();
 
         long numberDay = daysBetween(startDate, endDate) + 1;
 
-        Double totalRentCost = (Double) (numberDay * rentCost);
+        long totalRentCost = (numberDay * rentCost);
         contract.setStartDate(startDate);
         contract.setEndDate(endDate);
         contract.setRentCost(rentCost);
         contract.setNumberDay(numberDay);
         contract.setTotalRentCost(totalRentCost);
         contract.setWayToPay(contractDTO.getWayToPay());
-        contract.setAttachment(fileService.upload(contractDTO.getFile()));
+        // contract.setAttachment(fileService.upload(contractDTO.getFile()));
         contractRepository.save(contract);
         return ContractResponse.fromContract(contract);
     }
@@ -280,7 +281,7 @@ public class ContractServiceImpl implements ContractService {
                         """
                                     </span>
                                 </div>
-                                <button class="btn-payment">Thanh Toán</button>
+                                <button  class="btn-payment">Thanh Toán</button>
 
                                 <script>
                                     var startSpan = document.getElementById('start');
@@ -327,6 +328,7 @@ public class ContractServiceImpl implements ContractService {
             Staff staff = staffService.getAuth();
             Contract contract = contractRepository.findByContractIdAndNoStaff(contractId);
             contract.setStaff(staff);
+            // contract.setStatusPayment(true);
             emailPaymentRequest(billService.createDepositBill(contractRepository.save(contract)));
         } catch (Exception e) {
             throw new DataNotFoundException("The contract has been confirmed or something is wrong");
@@ -334,7 +336,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void completePayContract(Integer contractId, Double deposit) throws Exception {
+    public void completePayContract(Integer contractId, long deposit) throws Exception {
         if (deposit <= 0) {
             throw new InvalidParamException("Deposit must be positive");
         }
@@ -411,4 +413,29 @@ public class ContractServiceImpl implements ContractService {
         return contracts.stream().map(ContractResponse::fromContract).toList();
     }
 
+    @Override
+    public ContractResponse getContractById(Integer contractId) throws Exception {
+        Contract contract = contractRepository.findByContractId(contractId);
+        if (contract == null) {
+            throw new DataNotFoundException("Contract not found");
+        }
+        Customer customer = customerService.getAuth();
+        if (customer != contract.getCustomer()) {
+            throw new InvalidParamException("This contract not belong to you");
+        }
+        return ContractResponse.fromContract(contract);
+    }
+
+    @Override
+    public List<ContractResponse> listRecentContracts(int limit) {
+        List<Contract> contracts = contractRepository.findRecentContracts(limit);
+        return contracts.stream().map(ContractResponse::fromContract).toList();
+    }
+
+    @Override
+    public ContractResponse findByContractId(Integer id) {
+
+        Contract contract = contractRepository.findByContractId(id);
+        return ContractResponse.fromContract(contract);
+    }
 }

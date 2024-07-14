@@ -9,15 +9,20 @@ import app.response.CarResponse;
 import app.response.ResponseObject;
 import app.service.CarService;
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -140,4 +145,97 @@ public class CarController {
                     .build());
         }
     }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PostMapping("/create")
+    public ResponseEntity<ResponseObject> create(@Valid @ModelAttribute CarDTO carDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Create car failed, validation")
+                    .data(errors)
+                    .build());
+        }
+        try {
+            CarResponse carResponse = carService.createNewCar(carDTO);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Create car successfully")
+                    .data(carResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Create car failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PutMapping("/update/{registrationPlate}")
+    public ResponseEntity<ResponseObject> update(@PathVariable("registrationPlate") String registrationPlate,
+            @Valid @ModelAttribute CarDTO carDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Update car failed, validation")
+                    .data(errors)
+                    .build());
+        }
+        try {
+            CarResponse carResponse = carService.updateCar(registrationPlate, carDTO);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Update car successfully")
+                    .data(carResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Update car failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @GetMapping("/get-cars-deleted")
+    public ResponseEntity<ResponseObject> getCarsDeleted() {
+        try {
+            List<CarResponse> cars = carService.getCarsDeleted();
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get cars deleted successfully")
+                    .data(cars)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get cars deleted failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PutMapping("/restore/{registrationPlate}")
+    public ResponseEntity<ResponseObject> restore(@PathVariable("registrationPlate") String registrationPlate) {
+        try {
+            carService.restoreCar(registrationPlate);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Restore car successfully")
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Restore car failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
 }

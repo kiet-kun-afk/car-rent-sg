@@ -17,7 +17,7 @@ public class BillResponse {
 
     private LocalDateTime payDate;
 
-    private Double payCost;
+    private long payCost;
 
     private String paymentMethod;
 

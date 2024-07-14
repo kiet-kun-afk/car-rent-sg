@@ -68,7 +68,7 @@ public class BillsController {
     }
 
     @PostMapping("/complete-deposit/{billId}")
-    public ResponseEntity<ResponseObject> completeDepositBill(@PathVariable Integer billId, @RequestParam Double cost) {
+    public ResponseEntity<ResponseObject> completeDepositBill(@PathVariable Integer billId, @RequestParam long cost) {
         try {
             BillResponse billResponse = billService.completeDepositBill(billId, cost);
             return ResponseEntity.ok(ResponseObject.builder()

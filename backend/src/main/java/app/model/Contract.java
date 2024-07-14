@@ -32,16 +32,16 @@ public class Contract {
     private LocalDateTime endDate;
 
     @Column(name = "rent_cost", nullable = false)
-    private Double rentCost;
+    private long rentCost;
 
     @Column(name = "number_day", nullable = false)
     private long numberDay;
 
     @Column(name = "total_rent_cost", nullable = false)
-    private Double totalRentCost;
+    private long totalRentCost;
 
     @Column(nullable = false)
-    private Double deposit;
+    private long deposit;
 
     @Column(name = "status_payment", nullable = false)
     private Boolean statusPayment;

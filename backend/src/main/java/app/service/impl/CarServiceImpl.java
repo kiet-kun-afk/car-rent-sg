@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import app.dto.CarDTO;
 import app.exception.DataNotFoundException;
+import app.exception.InvalidParamException;
 // import app.exception.InvalidParamException;
 import app.model.Branch;
 import app.model.Brand;
@@ -48,6 +49,9 @@ public class CarServiceImpl implements CarService {
 	@Autowired
 	CategoryRepository categoryres;
 
+	@Autowired
+	FileService fileService;
+
 	@Override
 	public List<CarResponse> getAll() {
 
@@ -72,22 +76,22 @@ public class CarServiceImpl implements CarService {
 		Category categoryid = categoryres.findById(carDTO.getCategoryId()).orElse(null);
 
 		Car car = new Car();
-		car.setBackImage(carDTO.getBackImage());
+		// car.setBackImage(carDTO.getBackImage());
 		car.setBranch(branchid);
 		car.setBrand(brandid);
 		car.setCarName(carDTO.getCarName());
 		car.setCategory(categoryid);
 		car.setDescribe(carDTO.getDescribe());
 		car.setFeatures(carDTO.getFeatures());
-		car.setFrontImage(carDTO.getFrontImage());
+		// car.setFrontImage(carDTO.getFrontImage());
 		car.setFuelConsumption(carDTO.getFuelConsumption());
 		car.setFuelType(carDTO.getFuelType());
-		car.setLeftImage(carDTO.getLeftImage());
+		// car.setLeftImage(carDTO.getLeftImage());
 		car.setNumberOfSeat(carDTO.getNumberOfSeat());
 		car.setRegistrationDate(carDTO.getRegistrationDate());
 		car.setRegistrationPlate(carDTO.getRegistrationPlate());
 		car.setRentCost(carDTO.getRentCost());
-		car.setRightImage(carDTO.getRightImage());
+		// car.setRightImage(carDTO.getRightImage());
 		car.setStatus(carDTO.getStatus());
 		car.setTransmission(carDTO.getTransmission());
 		carres.save(car);
@@ -108,7 +112,7 @@ public class CarServiceImpl implements CarService {
 
 		if (optionalcar.isPresent()) {
 			Car car = optionalcar.get();
-			car.setBackImage(carDTO.getBackImage());
+			// car.setBackImage(carDTO.getBackImage());
 			car.setBranch(branchid);
 			car.setBrand(brandid);
 			// carDTO.setCarId(car.getCarId());
@@ -116,15 +120,15 @@ public class CarServiceImpl implements CarService {
 			car.setCategory(categoryid);
 			car.setDescribe(carDTO.getDescribe());
 			car.setFeatures(carDTO.getFeatures());
-			car.setFrontImage(carDTO.getFrontImage());
+			// car.setFrontImage(carDTO.getFrontImage());
 			car.setFuelConsumption(carDTO.getFuelConsumption());
 			car.setFuelType(carDTO.getFuelType());
-			car.setLeftImage(carDTO.getLeftImage());
+			// car.setLeftImage(carDTO.getLeftImage());
 			car.setNumberOfSeat(carDTO.getNumberOfSeat());
 			car.setRegistrationDate(carDTO.getRegistrationDate());
 			car.setRegistrationPlate(carDTO.getRegistrationPlate());
 			car.setRentCost(carDTO.getRentCost());
-			car.setRightImage(carDTO.getRightImage());
+			// car.setRightImage(carDTO.getRightImage());
 			car.setStatus(carDTO.getStatus());
 			car.setTransmission(carDTO.getTransmission());
 
@@ -158,6 +162,109 @@ public class CarServiceImpl implements CarService {
 		List<Car> cars = page.getContent();
 		List<CarResponse> carResponses = cars.stream().map(CarResponse::fromCarResponse).toList();
 		return carResponses;
+	}
+
+	@Override
+	public CarResponse createNewCar(CarDTO carDTO) throws Exception {
+		String registrationPlate = carDTO.getRegistrationPlate();
+		if (carres.existsByRegistrationPlate(registrationPlate)) {
+			throw new InvalidParamException("Already registered");
+		}
+		Integer branchId = carDTO.getBranchId();
+		Branch branch = brachesres.findById(branchId)
+				.orElseThrow(() -> new DataNotFoundException("Branch not found"));
+		Integer brandId = carDTO.getBrandId();
+		Brand brand = brandres.findById(brandId)
+				.orElseThrow(() -> new DataNotFoundException("Brand not found"));
+		Integer categoryId = carDTO.getCategoryId();
+		Category category = categoryres.findById(categoryId)
+				.orElseThrow(() -> new DataNotFoundException("Category not found"));
+		Car car = new Car();
+		car.setBranch(branch);
+		car.setBrand(brand);
+		car.setCategory(category);
+		car.setRegistrationPlate(registrationPlate);
+		car.setCarName(carDTO.getCarName());
+		car.setRentCost(carDTO.getRentCost());
+		car.setNumberOfSeat(carDTO.getNumberOfSeat());
+		car.setTransmission(carDTO.getTransmission());
+		car.setFuelType(carDTO.getFuelType());
+		car.setFuelConsumption(carDTO.getFuelConsumption());
+		car.setFeatures(carDTO.getFeatures());
+		car.setFrontImage(fileService.upload(carDTO.getFrontImage()));
+		car.setBackImage(fileService.upload(carDTO.getBackImage()));
+		car.setLeftImage(fileService.upload(carDTO.getLeftImage()));
+		car.setRightImage(fileService.upload(carDTO.getRightImage()));
+		car.setDescribe(carDTO.getDescribe());
+		car.setRegistrationDate(carDTO.getRegistrationDate());
+		car.setStatus(true);
+		carres.save(car);
+		return CarResponse.fromCarResponse(car);
+	}
+
+	@Override
+	public CarResponse updateCar(String registrationPlate, CarDTO carDTO) throws Exception {
+		Car car = carres.findByRegistrationPlate(registrationPlate);
+		if (carres.existsByRegistrationPlateAndCarIdNot(registrationPlate, car.getCarId())) {
+			throw new InvalidParamException("Already registered");
+		}
+		Integer branchId = carDTO.getBranchId();
+		Branch branch = brachesres.findById(branchId)
+				.orElseThrow(() -> new DataNotFoundException("Branch not found"));
+		Integer brandId = carDTO.getBrandId();
+		Brand brand = brandres.findById(brandId)
+				.orElseThrow(() -> new DataNotFoundException("Brand not found"));
+		Integer categoryId = carDTO.getCategoryId();
+		Category category = categoryres.findById(categoryId)
+				.orElseThrow(() -> new DataNotFoundException("Category not found"));
+		car.setBranch(branch);
+		car.setBrand(brand);
+		car.setCategory(category);
+		car.setRegistrationPlate(registrationPlate);
+		car.setCarName(
+				carDTO.getCarName() == null ? car.getCarName() : carDTO.getCarName());
+		car.setRentCost(carDTO.getRentCost());
+		car.setNumberOfSeat(carDTO.getNumberOfSeat());
+		car.setTransmission(
+				carDTO.getTransmission() == null ? car.getTransmission() : carDTO.getTransmission());
+		car.setFuelType(
+				carDTO.getFuelType() == null ? car.getFuelType() : carDTO.getFuelType());
+		car.setFuelConsumption(
+				carDTO.getFuelConsumption() == null ? car.getFuelConsumption() : carDTO.getFuelConsumption());
+		car.setFeatures(
+				carDTO.getFeatures() == null ? car.getFeatures() : carDTO.getFeatures());
+		car.setFrontImage(
+				carDTO.getFrontImage() == null ? car.getFrontImage() : fileService.upload(carDTO.getFrontImage()));
+		car.setBackImage(
+				carDTO.getBackImage() == null ? car.getBackImage() : fileService.upload(carDTO.getBackImage()));
+		car.setLeftImage(
+				carDTO.getLeftImage() == null ? car.getLeftImage() : fileService.upload(carDTO.getLeftImage()));
+		car.setRightImage(
+				carDTO.getRightImage() == null ? car.getRightImage() : fileService.upload(carDTO.getRightImage()));
+		car.setDescribe(
+				carDTO.getDescribe() == null ? car.getDescribe() : carDTO.getDescribe());
+		car.setRegistrationDate(
+				carDTO.getRegistrationDate() == null ? car.getRegistrationDate() : carDTO.getRegistrationDate());
+		car.setStatus(
+				carDTO.getStatus() == null ? car.getStatus() : carDTO.getStatus());
+		carres.save(car);
+		return CarResponse.fromCarResponse(car);
+	}
+
+	@Override
+	public List<CarResponse> getCarsDeleted() throws Exception {
+		List<Car> cars = carres.findAllByStatusFalse();
+		return cars.stream().map(CarResponse::fromCarResponse).toList();
+	}
+
+	@Override
+	public void restoreCar(String registrationPlate) throws Exception {
+		Car car = carres.findByRegistrationPlateAndStatusFalse(registrationPlate);
+		if (car == null) {
+			throw new DataNotFoundException("Car not found");
+		}
+		car.setStatus(true);
+		carres.save(car);
 	}
 
 }

@@ -21,7 +21,7 @@ public class CarResponse {
 
     private String carName;
 
-    private Double rentCost;
+    private long rentCost;
 
     private Integer numberOfSeat;
 

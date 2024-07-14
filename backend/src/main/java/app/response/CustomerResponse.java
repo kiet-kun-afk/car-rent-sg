@@ -3,6 +3,7 @@ package app.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import app.model.Address;
 import app.model.Customer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,14 @@ public class CustomerResponse {
 
     private String avatarImage;
 
+    private Integer citizenCardId;
+
     private Integer driverLicenseId;
+
+    private String street;
+    private String ward;
+    private String district;
+    private String province;
 
     private LocalDateTime createdAt;
 
@@ -52,6 +60,13 @@ public class CustomerResponse {
         this.email = customer.getEmail();
         this.status = customer.getStatus();
         this.avatarImage = customer.getAvatarImage();
+
+        this.street = customer.getAddress() == null ? null : customer.getAddress().getStreet();
+        this.ward = customer.getAddress() == null ? null : customer.getAddress().getWard();
+        this.district = customer.getAddress() == null ? null : customer.getAddress().getDistrict();
+        this.province = customer.getAddress() == null ? null : customer.getAddress().getProvince();
+
+        this.citizenCardId = customer.getCitizenCard() == null ? null : customer.getCitizenCard().getCitizenId();
 
         this.driverLicenseId = customer.getDriverLicense() == null ? null
                 : customer.getDriverLicense().getDriverLicenseId();

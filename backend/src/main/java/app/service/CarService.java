@@ -23,4 +23,11 @@ public interface CarService {
 	public List<CarResponse> getCarsForIndex(Integer pageNumber, Integer pageSize)
 			throws Exception;
 
+	public CarResponse createNewCar(CarDTO carDTO) throws Exception;
+
+	public CarResponse updateCar(String registrationPlate, CarDTO carDTO) throws Exception;
+
+	public List<CarResponse> getCarsDeleted() throws Exception;
+
+	public void restoreCar(String registrationPlate) throws Exception;
 }

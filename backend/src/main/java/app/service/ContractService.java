@@ -4,7 +4,6 @@ import java.util.List;
 
 import app.dto.CarDTO;
 import app.dto.ContractDTO;
-
 import app.response.ContractResponse;
 
 public interface ContractService {
@@ -17,7 +16,7 @@ public interface ContractService {
 
     public void confirmContract(Integer contractId) throws Exception;
 
-    public void completePayContract(Integer contractId, Double deposit) throws Exception;
+    public void completePayContract(Integer contractId, long deposit) throws Exception;
 
     public List<ContractResponse> getAllContract();
 
@@ -40,4 +39,10 @@ public interface ContractService {
 
     // xe được thuê nhiều nhất
     public CarDTO getMostRentedCar();
+
+    public ContractResponse getContractById(Integer contractId) throws Exception;
+
+    public ContractResponse findByContractId(Integer contractId);
+
+    public List<ContractResponse> listRecentContracts(int limit);
 }

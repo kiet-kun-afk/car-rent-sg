@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import app.model.cards.CitizenCard;
 import app.model.cards.DriverLicense;
 
 import jakarta.persistence.*;
@@ -51,6 +52,10 @@ public class Customer extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "citizen_id")
+    private CitizenCard citizenCard;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "driver_license_id")

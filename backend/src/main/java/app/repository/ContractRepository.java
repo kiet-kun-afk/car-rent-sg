@@ -104,4 +104,9 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 			"GROUP BY c.car.carName " +
 			"ORDER BY COUNT(c.contractId) DESC")
 	List<CarDTO> findMostRentedCars();
+
+	@Query(value = "SELECT TOP (:limit) * FROM contracts ORDER BY create_date DESC", nativeQuery = true)
+	List<Contract> findRecentContracts(@Param("limit") int limit);
+
+	Contract findByContractId(Integer contractId);
 }

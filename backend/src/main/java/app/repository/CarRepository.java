@@ -1,6 +1,7 @@
 package app.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,4 +33,12 @@ public interface CarRepository extends JpaRepository<Car, Integer>, JpaSpecifica
             ORDER BY NEWID()
             """)
     Page<Car> findCarsNotInContractToday(LocalDateTime today, Pageable pageable);
+
+    boolean existsByRegistrationPlate(String registrationPlate);
+
+    boolean existsByRegistrationPlateAndCarIdNot(String registrationPlate, Integer carId);
+
+    List<Car> findAllByStatusFalse();
+
+    Car findByRegistrationPlateAndStatusFalse(String registrationPlate);
 }
