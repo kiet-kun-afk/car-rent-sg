@@ -306,6 +306,26 @@ public class ContractController {
         }
     }
 
+    @PreAuthorize("isAuthenticated")
+    @GetMapping("/customer-trip")
+    public ResponseEntity<ResponseObject> getCustomerTrip() {
+        try {
+            List<ContractResponse> contractResponses = contractService.listCustomerTrip();
+
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get all contract successfully")
+                    .data(contractResponses)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get all contract failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
     @DeleteMapping("/updateStatus/{contractId}")
     public ResponseEntity<ResponseObject> UpdateStatusPayment(@PathVariable("contractId") Integer contractId) {
         try {
@@ -321,6 +341,11 @@ public class ContractController {
                     .data(e.getMessage())
                     .build());
         }
+    }
+
+    @GetMapping("/recent")
+    public List<ContractResponse> getRecentContracts(@RequestParam(defaultValue = "5") int limit) {
+        return contractService.listRecentContracts(limit);
     }
 
 }

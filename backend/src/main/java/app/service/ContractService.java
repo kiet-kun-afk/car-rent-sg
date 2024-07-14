@@ -33,6 +33,8 @@ public interface ContractService {
 
     public List<ContractResponse> listContractStatusPaymentTrue();
 
+    public List<ContractResponse> listCustomerTrip() throws Exception;
+
     // đếm số lượng contract status true
     public long countContractsByStatusPaymentTrue();
 
@@ -44,4 +46,8 @@ public interface ContractService {
     public ContractResponse findContractById(Integer contractId);
 
     public void UpdateStatusPayment(Integer contractId) throws Exception;
+
+    // new 25/6
+    public List<ContractResponse> listRecentContracts(int limit);
+
 }

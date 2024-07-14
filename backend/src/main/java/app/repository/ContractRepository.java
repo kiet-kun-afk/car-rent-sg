@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import app.dto.CarDTO;
 
 import app.model.Contract;
+import app.model.Customer;
 
 public interface ContractRepository extends JpaRepository<Contract, Integer> {
 
@@ -61,8 +62,11 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 			SELECT c FROM Contract c
 			JOIN c.customer cc
 			WHERE cc.phoneNumber = :phoneNumber
+			ORDER BY c.deposit
 			""")
 	List<Contract> findByCustomerPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
+	List<Contract> findByCustomer(Customer customer);
 
 	@Query("""
 			SELECT c FROM Contract c
@@ -103,5 +107,9 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 
 	// new 22/6
 	Contract findByContractIdAndStatusPaymentFalse(Integer contractId);
+
+	// new 25/6
+	@Query(value = "SELECT TOP (:limit) * FROM contracts ORDER BY create_date DESC", nativeQuery = true)
+	List<Contract> findRecentContracts(@Param("limit") int limit);
 
 }

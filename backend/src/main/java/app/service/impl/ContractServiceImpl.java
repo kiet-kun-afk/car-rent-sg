@@ -3,6 +3,7 @@ package app.service.impl;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import app.model.Staff;
 import app.repository.CarRepository;
 import app.repository.ContractRepository;
 import app.response.ContractResponse;
+import app.response.CustomerResponse;
 import app.service.BillService;
 import app.service.ContractService;
 import app.service.CustomerService;
@@ -384,20 +386,17 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public List<ContractResponse> listContractStatusPaymentTrue() {
-        // TODO Auto-generated method stub
         List<Contract> contract = contractRepository.findAllByStatusPaymentTrue();
         return contract.stream().map(ContractResponse::fromContract).toList();
     }
 
     @Override
     public long countContractsByStatusPaymentTrue() {
-        // TODO Auto-generated method stub
         return contractRepository.countContractsByStatusPaymentTrue();
     }
 
     @Override
     public CarDTO getMostRentedCar() {
-        // TODO Auto-generated method stub
         List<CarDTO> cars = contractRepository.findMostRentedCars();
         if (!cars.isEmpty()) {
             return cars.get(0); // Lấy xe đầu tiên từ danh sách
@@ -408,7 +407,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public ContractResponse findContractById(Integer contractId) {
-        // TODO Auto-generated method stub
+
         Contract contract = contractRepository.findById(contractId).orElse(null);
         return ContractResponse.fromContract(contract);
     }
@@ -423,6 +422,22 @@ public class ContractServiceImpl implements ContractService {
             contract.setStatusPayment(true);
             contractRepository.save(contract);
         }
+    }
+
+    @Override
+    public List<ContractResponse> listCustomerTrip() throws Exception {
+        CustomerResponse customer = customerService.getCurrentCustomer();
+        List<Contract> contracts = contractRepository.findByCustomerPhoneNumber(customer.getPhoneNumber());
+        return contracts.stream().map(ContractResponse::fromContract).toList();
+
+    }
+
+    @Override
+    public List<ContractResponse> listRecentContracts(int limit) {
+        List<Contract> contracts = contractRepository.findRecentContracts(limit);
+        return contracts.stream()
+                .map(ContractResponse::fromContract)
+                .collect(Collectors.toList());
 
     }
 
