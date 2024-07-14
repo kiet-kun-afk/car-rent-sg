@@ -166,10 +166,22 @@ function TrangChu() {
           acc[month] += contract.totalRentCost;
           return acc;
         }, {});
-        const barLabels = Object.keys(monthlyData);
-        const barRentCosts = Object.values(monthlyData);
+
+        // Sắp xếp các tháng theo thứ tự thời gian
+        const sortedMonths = Object.keys(monthlyData).sort((a, b) => {
+          const [monthA, yearA] = a.split(" ");
+          const [monthB, yearB] = b.split(" ");
+          const dateA = new Date(`${monthA} 1, ${yearA}`);
+          const dateB = new Date(`${monthB} 1, ${yearB}`);
+          return dateA - dateB;
+        });
+
+        const barRentCosts = sortedMonths.map((month) => monthlyData[month]);
+
+        // const barLabels = Object.keys(monthlyData);
+        // const barRentCosts = Object.values(monthlyData);
         const barData = {
-          labels: barLabels,
+          labels: sortedMonths,
           datasets: [
             {
               label: "Total Rent Cost",
@@ -185,7 +197,7 @@ function TrangChu() {
 
         // Dữ liệu biểu đồ đường
         const lineData = {
-          labels: barLabels, // Sử dụng cùng labels với biểu đồ cột
+          labels: sortedMonths, // Sử dụng cùng labels với biểu đồ cột
           datasets: [
             {
               label: "Monthly Rent Cost",
