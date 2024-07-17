@@ -22,4 +22,10 @@ public class ReturnRecord extends BaseRecord {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_record_id", nullable = false)
     private DeliveryRecord deliveryRecord;
+
+    @Column(name = "remaining_amount")
+    private Double remainingAmount;
+
+    @Column(name = "surcharges_2")
+    private Double surcharges2;
 }

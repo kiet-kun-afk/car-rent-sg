@@ -8,7 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import app.dto.RecordDTO;
+import app.dto.record.DeliveryDTO;
+import app.dto.record.ReturnDTO;
 import app.response.RecordResponse;
 import app.response.ResponseObject;
 import app.service.RecordService;
@@ -22,10 +23,10 @@ public class RecordController {
 
     private final RecordService recordService;
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @PostMapping("/create-delivery-record/{contractId}")
     public ResponseEntity<ResponseObject> createDeliveryRecord(@PathVariable Integer contractId,
-            @Valid @ModelAttribute RecordDTO recordDTO,
+            @Valid @ModelAttribute DeliveryDTO recordDTO,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
@@ -51,10 +52,10 @@ public class RecordController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @PostMapping("/create-return-record/{deliveryRecordId}")
     public ResponseEntity<ResponseObject> createReturnRecord(@PathVariable Integer deliveryRecordId,
-            @Valid @ModelAttribute RecordDTO recordDTO,
+            @Valid @ModelAttribute ReturnDTO recordDTO,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
@@ -94,6 +95,25 @@ public class RecordController {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Get all delivery record failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @GetMapping("/list-return-record")
+    public ResponseEntity<ResponseObject> getAllReturnRecord() {
+        try {
+            List<RecordResponse> recordResponses = recordService.getListReturnRecord();
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get all return record successfully")
+                    .data(recordResponses)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get all return record failed")
                     .data(e.getMessage())
                     .build());
         }
