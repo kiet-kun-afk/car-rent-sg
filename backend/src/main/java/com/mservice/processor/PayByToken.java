@@ -3,7 +3,6 @@ package com.mservice.processor;
 import com.mservice.config.Environment;
 import com.mservice.enums.Language;
 import com.mservice.models.HttpResponse;
-import com.mservice.models.PaymentRequest;
 import com.mservice.models.PaymentResponse;
 import com.mservice.models.PaymentTokenRequest;
 import com.mservice.shared.constants.Parameter;
@@ -16,8 +15,10 @@ public class PayByToken extends AbstractProcess<PaymentTokenRequest, PaymentResp
         super(environment);
     }
 
-    public static PaymentResponse process(Environment env, String orderId, String requestId, String amount, String orderInfo,
-                                   String returnUrl, String notifyUrl, String extraData, String partnerClientId, String token, Boolean autoCapture) {
+    public static PaymentResponse process(Environment env, String orderId, String requestId, String amount,
+            String orderInfo,
+            String returnUrl, String notifyUrl, String extraData, String partnerClientId, String token,
+            Boolean autoCapture) {
         try {
             PayByToken m2Processor = new PayByToken(env);
 
@@ -27,7 +28,7 @@ public class PayByToken extends AbstractProcess<PaymentTokenRequest, PaymentResp
 
             return captureMoMoResponse;
         } catch (Exception exception) {
-            LogUtils.error("[PayByTokenProcess] "+ exception);
+            LogUtils.error("[PayByTokenProcess] " + exception);
         }
         return null;
     }
@@ -44,7 +45,7 @@ public class PayByToken extends AbstractProcess<PaymentTokenRequest, PaymentResp
                 throw new MoMoException("[PaymentResponse] [" + request.getOrderId() + "] -> Error API");
             }
 
-            System.out.println("uweryei7rye8wyreow8: "+ response.getData());
+            System.out.println("uweryei7rye8wyreow8: " + response.getData());
 
             PaymentResponse paymentResponse = getGson().fromJson(response.getData(), PaymentResponse.class);
             String responserawData = Parameter.REQUEST_ID + "=" + paymentResponse.getRequestId() +
@@ -58,13 +59,15 @@ public class PayByToken extends AbstractProcess<PaymentTokenRequest, PaymentResp
             return paymentResponse;
 
         } catch (Exception exception) {
-            LogUtils.error("[PaymentMoMoResponse] "+ exception);
+            LogUtils.error("[PaymentMoMoResponse] " + exception);
             throw new IllegalArgumentException("Invalid params capture MoMo Request");
         }
     }
 
-    public PaymentTokenRequest createTokenPaymentRequest(String orderId, String requestId, String amount, String orderInfo,
-                                                         String returnUrl, String notifyUrl, String extraData, String partnerClientId, String token, Boolean autoCapture) {
+    public PaymentTokenRequest createTokenPaymentRequest(String orderId, String requestId, String amount,
+            String orderInfo,
+            String returnUrl, String notifyUrl, String extraData, String partnerClientId, String token,
+            Boolean autoCapture) {
         try {
             String requestRawData = new StringBuilder()
                     .append(Parameter.ACCESS_KEY).append("=").append(partnerInfo.getAccessKey()).append("&")
@@ -81,10 +84,11 @@ public class PayByToken extends AbstractProcess<PaymentTokenRequest, PaymentResp
             String signRequest = Encoder.signHmacSHA256(requestRawData, partnerInfo.getSecretKey());
             LogUtils.debug("[PaymentTokenRequest] rawData: " + requestRawData + ", [Signature] -> " + signRequest);
 
-            return new PaymentTokenRequest(partnerInfo.getPartnerCode(), orderId, requestId, Language.EN, "MoMo Store", partnerClientId, token, Long.valueOf(amount), "test StoreId",
+            return new PaymentTokenRequest(partnerInfo.getPartnerCode(), orderId, requestId, Language.EN, "MoMo Store",
+                    partnerClientId, token, Long.valueOf(amount), "test StoreId",
                     returnUrl, notifyUrl, orderInfo, extraData, autoCapture, null, signRequest);
         } catch (Exception e) {
-            LogUtils.error("[PaymentTokenRequest] "+ e);
+            LogUtils.error("[PaymentTokenRequest] " + e);
         }
 
         return null;

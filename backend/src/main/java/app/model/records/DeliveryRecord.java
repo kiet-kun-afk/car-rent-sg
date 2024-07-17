@@ -20,4 +20,13 @@ public class DeliveryRecord extends BaseRecord {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "contract_id", nullable = false)
     private Contract contract;
+
+    @Column(name = "registration_document")
+    private String registrationDocument;
+
+    @Column(name = "insurance_document")
+    private String insuranceDocument;
+
+    @Column(name = "certificate_of_registration")
+    private String certificateOfRegistration;
 }

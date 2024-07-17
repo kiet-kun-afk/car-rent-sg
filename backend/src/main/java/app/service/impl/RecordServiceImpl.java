@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import app.dto.RecordDTO;
+import app.dto.record.DeliveryDTO;
+import app.dto.record.ReturnDTO;
 import app.exception.InvalidParamException;
 import app.model.Contract;
 import app.model.Staff;
@@ -25,11 +26,12 @@ public class RecordServiceImpl implements RecordService {
 
     private final StaffService staffService;
     private final ContractRepository contractRepository;
-    private final DeliveryRecordRepository deliveryRecordRepository;
-    private final ReturnRecordRepository recordRepository;
+    private final DeliveryRecordRepository deliveryRepository;
+    private final ReturnRecordRepository returnRepository;
+    private final FileService fileService;
 
     @Override
-    public RecordResponse createDeliveryRecord(Integer contractId, RecordDTO recordDTO) throws Exception {
+    public RecordResponse createDeliveryRecord(Integer contractId, DeliveryDTO recordDTO) throws Exception {
         Contract contract = contractRepository.findByContractIdAndPayComplete(contractId);
         if (contract == null) {
             throw new InvalidParamException("Maybe contract is not found or is not confirmed");
@@ -43,13 +45,22 @@ public class RecordServiceImpl implements RecordService {
         deliveryRecord.setDate(LocalDateTime.now());
         deliveryRecord.setNotes(recordDTO.getNotes());
         deliveryRecord.setStatus(true);
-        deliveryRecordRepository.save(deliveryRecord);
+        deliveryRecord.setRegistrationDocument(fileService
+                .saveAttachment(recordDTO.getRegistrationDocument()));
+        deliveryRecord.setInsuranceDocument(fileService
+                .saveAttachment(recordDTO.getInsuranceDocument()));
+        deliveryRecord.setCertificateOfRegistration(fileService
+                .saveAttachment(recordDTO.getCertificateOfRegistration()));
+        deliveryRecord.setAddress(recordDTO.getAddress());
+        deliveryRecord.setInterior(recordDTO.getInterior());
+        deliveryRecord.setExterior(recordDTO.getExterior());
+        deliveryRepository.save(deliveryRecord);
         return RecordResponse.fromDeliveryRecord(deliveryRecord);
     }
 
     @Override
-    public RecordResponse createReturnRecord(Integer deliveryRecordId, RecordDTO recordDTO) throws Exception {
-        DeliveryRecord deliveryRecord = deliveryRecordRepository.findByDeliveryIdAndStatusTrue(deliveryRecordId);
+    public RecordResponse createReturnRecord(Integer deliveryRecordId, ReturnDTO recordDTO) throws Exception {
+        DeliveryRecord deliveryRecord = deliveryRepository.findByDeliveryIdAndStatusTrue(deliveryRecordId);
         if (deliveryRecord == null) {
             throw new InvalidParamException("Delivery record not found");
         }
@@ -57,7 +68,7 @@ public class RecordServiceImpl implements RecordService {
             throw new InvalidParamException("Kilometer number must be greater than delivery record kilometer number");
         }
         Contract contract = deliveryRecord.getContract();
-        contract.setStatusPayment(true);
+        contract.setStatusPayment(recordDTO.getPaymentStatus());
         deliveryRecord.setStatus(false);
         Staff staff = staffService.getAuth();
         ReturnRecord returnRecord = new ReturnRecord();
@@ -68,16 +79,26 @@ public class RecordServiceImpl implements RecordService {
         returnRecord.setDate(LocalDateTime.now());
         returnRecord.setNotes(recordDTO.getNotes());
         returnRecord.setSurcharges(recordDTO.getSurcharges() == null ? 0 : recordDTO.getSurcharges());
+        returnRecord.setSurcharges2(recordDTO.getSurcharges2() == null ? 0 : recordDTO.getSurcharges2());
         returnRecord.setStatus(true);
-        recordRepository.save(returnRecord);
-        deliveryRecordRepository.save(deliveryRecord);
+        returnRecord.setAddress(recordDTO.getAddress());
+        returnRecord.setInterior(recordDTO.getInterior());
+        returnRecord.setExterior(recordDTO.getExterior());
+        returnRepository.save(returnRecord);
+        deliveryRepository.save(deliveryRecord);
         contractRepository.save(contract);
         return RecordResponse.fromReturnRecord(returnRecord);
     }
 
     @Override
     public List<RecordResponse> getListDeliveryNotReturnYet() {
-        List<DeliveryRecord> records = deliveryRecordRepository.findDeliveryRecordsWithoutReturnRecords();
+        List<DeliveryRecord> records = deliveryRepository.findDeliveryRecordsWithoutReturnRecords();
         return records.stream().map(RecordResponse::fromDeliveryRecord).toList();
+    }
+
+    @Override
+    public List<RecordResponse> getListReturnRecord() {
+        List<ReturnRecord> records = returnRepository.findByStatusTrue();
+        return records.stream().map(RecordResponse::fromReturnRecord).toList();
     }
 }

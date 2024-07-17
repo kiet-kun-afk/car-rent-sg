@@ -22,14 +22,12 @@ import java.util.Formatter;
 /**
  * @author khangdoan
  */
-@SuppressWarnings("restriction")
 public class Encoder {
 
     private static final char[] HEX_CHARS = "0123456789ABCDEF".toCharArray();
-//    private static final String ENCODING = "UTF-8";
+    //    private static final String ENCODING = "UTF-8";
 
     private static final String HMAC_SHA256 = "HmacSHA256";
-
 
     @SuppressWarnings("resource")
     private static String toHexString(byte[] bytes) {
@@ -41,7 +39,8 @@ public class Encoder {
         return sb.toString();
     }
 
-    public static String signHmacSHA256(String data, String secretKey) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
+    public static String signHmacSHA256(String data, String secretKey)
+            throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), HMAC_SHA256);
         Mac mac = Mac.getInstance(HMAC_SHA256);
         mac.init(secretKeySpec);
@@ -109,20 +108,20 @@ public class Encoder {
     public static String encryptRSA(byte[] dataBytes, String publicKey) throws Exception {
         // Note: You can use java.util.Base64 instead of sun.misc.*
         PublicKey pubk;
-//        BASE64Decoder decoder = new BASE64Decoder();
-//        BASE64Encoder encoder = new BASE64Encoder();
+        //        BASE64Decoder decoder = new BASE64Decoder();
+        //        BASE64Encoder encoder = new BASE64Encoder();
         java.util.Base64.Decoder decoder = java.util.Base64.getDecoder();
         java.util.Base64.Encoder encoder = java.util.Base64.getEncoder();
 
         byte[] publicKeyBytes = decoder.decode(publicKey);
-//        byte[] publicKeyBytes = decoder.decodeBuffer(publicKey);
+        //        byte[] publicKeyBytes = decoder.decodeBuffer(publicKey);
         EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         pubk = keyFactory.generatePublic(publicKeySpec);
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, pubk);
         return encoder.encodeToString(cipher.doFinal(dataBytes)).replace("\r", "");
-//        return new String(encoder.encode(cipher.doFinal(dataBytes)).replace("\r", ""));
+        //        return new String(encoder.encode(cipher.doFinal(dataBytes)).replace("\r", ""));
     }
 
     public static String decryptRSA(String encryptData, String privateKey) {
@@ -135,7 +134,7 @@ public class Encoder {
             cipher.init(Cipher.DECRYPT_MODE, prvk);
             return new String(cipher.doFinal(Base64.decodeBase64(encryptData)));
         } catch (Exception ex) {
-            LogUtils.error("[DecryptRSA] Error: "+ ex);
+            LogUtils.error("[DecryptRSA] Error: " + ex);
             return "";
         }
     }

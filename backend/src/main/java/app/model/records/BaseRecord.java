@@ -23,6 +23,15 @@ public abstract class BaseRecord {
     @Column(name = "fuel_number", nullable = false)
     private Integer fuelNumber;
 
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "interior")
+    private String interior;
+
+    @Column(name = "exterior")
+    private String exterior;
+
     @Column(name = "notes")
     private String notes;
 

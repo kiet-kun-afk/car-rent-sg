@@ -17,7 +17,9 @@ public class RecordDTO {
 
     private String notes;
 
-    private Double surcharges;
+    private String address;
 
-    private Boolean status;
+    private String interior;
+
+    private String exterior;
 }
