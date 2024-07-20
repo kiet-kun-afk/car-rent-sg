@@ -34,7 +34,8 @@ public class RecordServiceImpl implements RecordService {
     public RecordResponse createDeliveryRecord(Integer contractId, DeliveryDTO recordDTO) throws Exception {
         Contract contract = contractRepository.findByContractIdAndPayComplete(contractId);
         if (contract == null) {
-            throw new InvalidParamException("Maybe contract is not found or is not confirmed");
+            throw new InvalidParamException(
+                    "Không tìm thấy hợp đồng, lý do có thể là chưa xác nhận/chưa thanh toán cọc");
         }
         Staff staff = staffService.getAuth();
         DeliveryRecord deliveryRecord = new DeliveryRecord();
@@ -46,11 +47,11 @@ public class RecordServiceImpl implements RecordService {
         deliveryRecord.setNotes(recordDTO.getNotes());
         deliveryRecord.setStatus(true);
         deliveryRecord.setRegistrationDocument(fileService
-                .saveAttachment(recordDTO.getRegistrationDocument()));
+                .upload(recordDTO.getRegistrationDocument()));
         deliveryRecord.setInsuranceDocument(fileService
-                .saveAttachment(recordDTO.getInsuranceDocument()));
+                .upload(recordDTO.getInsuranceDocument()));
         deliveryRecord.setCertificateOfRegistration(fileService
-                .saveAttachment(recordDTO.getCertificateOfRegistration()));
+                .upload(recordDTO.getCertificateOfRegistration()));
         deliveryRecord.setAddress(recordDTO.getAddress());
         deliveryRecord.setInterior(recordDTO.getInterior());
         deliveryRecord.setExterior(recordDTO.getExterior());
@@ -78,8 +79,13 @@ public class RecordServiceImpl implements RecordService {
         returnRecord.setKilometerNumber(recordDTO.getKilometerNumber());
         returnRecord.setDate(LocalDateTime.now());
         returnRecord.setNotes(recordDTO.getNotes());
+        Double surcharges = recordDTO.getSurcharges();
+        Double surcharges2 = recordDTO.getSurcharges2();
+        Double deposit = Double.valueOf(contract.getDeposit());
+        Double total = Double.valueOf(contract.getTotalRentCost());
         returnRecord.setSurcharges(recordDTO.getSurcharges() == null ? 0 : recordDTO.getSurcharges());
         returnRecord.setSurcharges2(recordDTO.getSurcharges2() == null ? 0 : recordDTO.getSurcharges2());
+        returnRecord.setRemainingAmount(getRemainAmount(surcharges, surcharges2, deposit, total));
         returnRecord.setStatus(true);
         returnRecord.setAddress(recordDTO.getAddress());
         returnRecord.setInterior(recordDTO.getInterior());
@@ -88,6 +94,16 @@ public class RecordServiceImpl implements RecordService {
         deliveryRepository.save(deliveryRecord);
         contractRepository.save(contract);
         return RecordResponse.fromReturnRecord(returnRecord);
+    }
+
+    private Double getRemainAmount(Double surcharges, Double surcharges2, Double deposit, Double total) {
+        if (surcharges == null) {
+            surcharges = 0.0;
+        }
+        if (surcharges2 == null) {
+            surcharges2 = 0.0;
+        }
+        return total - surcharges - surcharges2 - deposit;
     }
 
     @Override

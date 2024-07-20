@@ -24,6 +24,8 @@ public class RecordResponse {
 
     private String staffName;
 
+    private String customerName;
+
     private Integer contractId;
 
     private String notes;
@@ -54,6 +56,7 @@ public class RecordResponse {
         this.notes = deliveryRecord.getNotes();
         this.status = deliveryRecord.getStatus();
         this.staffName = deliveryRecord.getStaff().getFullName();
+        this.customerName = deliveryRecord.getContract().getCustomer().getFullName();
         this.contractId = deliveryRecord.getContract().getContractId();
         this.address = deliveryRecord.getAddress();
         this.interior = deliveryRecord.getInterior();
@@ -74,6 +77,7 @@ public class RecordResponse {
         this.remainingAmount = returnRecord.getRemainingAmount();
         this.status = returnRecord.getStatus();
         this.staffName = returnRecord.getStaff().getFullName();
+        this.customerName = returnRecord.getDeliveryRecord().getContract().getCustomer().getFullName();
         this.contractId = returnRecord.getDeliveryRecord().getContract().getContractId();
         this.address = returnRecord.getAddress();
         this.interior = returnRecord.getInterior();
