@@ -23,7 +23,7 @@ public class RecordController {
 
     private final RecordService recordService;
 
-    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @PostMapping("/create-delivery-record/{contractId}")
     public ResponseEntity<ResponseObject> createDeliveryRecord(@PathVariable Integer contractId,
             @Valid @ModelAttribute DeliveryDTO recordDTO,
@@ -52,7 +52,7 @@ public class RecordController {
         }
     }
 
-    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @PostMapping("/create-return-record/{deliveryRecordId}")
     public ResponseEntity<ResponseObject> createReturnRecord(@PathVariable Integer deliveryRecordId,
             @Valid @ModelAttribute ReturnDTO recordDTO,

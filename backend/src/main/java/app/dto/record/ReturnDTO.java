@@ -11,7 +11,5 @@ public class ReturnDTO extends RecordDTO {
 
     private Double surcharges2;
 
-    private Double remainingAmount;
-
     private Boolean paymentStatus;
 }
