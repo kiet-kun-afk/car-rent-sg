@@ -65,7 +65,7 @@ public class CustomerResponse {
         this.district = customer.getAddress() == null ? null : customer.getAddress().getDistrict();
         this.province = customer.getAddress() == null ? null : customer.getAddress().getProvince();
 
-        this.citizenCardId = customer.getCitizenCard() == null ? null : customer.getCitizenCard().getCitizenId();
+        // this.citizenCardId = customer.getCitizenCard() == null ? null : customer.getCitizenCard().getCitizenId();
 
         this.driverLicenseId = customer.getDriverLicense() == null ? null
                 : customer.getDriverLicense().getDriverLicenseId();

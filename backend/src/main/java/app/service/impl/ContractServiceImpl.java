@@ -381,7 +381,8 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public List<ContractResponse> listContractNotDeliveryYet() {
         List<Contract> contracts = contractRepository.findContractsWithoutDeliveryRecords();
-        return contracts.stream().map(ContractResponse::fromContract).toList();
+        return contracts.stream().filter(contract -> !contract.getStatusPayment()).map(ContractResponse::fromContract)
+                .toList();
     }
 
     @Override

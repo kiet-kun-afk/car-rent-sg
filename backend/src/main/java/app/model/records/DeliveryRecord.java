@@ -29,4 +29,8 @@ public class DeliveryRecord extends BaseRecord {
 
     @Column(name = "certificate_of_registration")
     private String certificateOfRegistration;
+
+    @OneToOne(mappedBy = "deliveryRecord", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ReturnRecord returnRecord;
+
 }

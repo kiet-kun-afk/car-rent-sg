@@ -15,4 +15,8 @@ public interface RecordService {
     public List<RecordResponse> getListDeliveryNotReturnYet();
 
     public List<RecordResponse> getListReturnRecord();
+
+    public RecordResponse getDeliveryRecordById(Integer id) throws Exception;
+
+    public RecordResponse getReturnRecordById(Integer id) throws Exception;
 }
