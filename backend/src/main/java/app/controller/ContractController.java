@@ -250,7 +250,7 @@ public class ContractController {
         }
     }
 
-    @GetMapping("/all-status-payments-true")
+    @GetMapping("/all-statusPayments-true")
     public ResponseEntity<ResponseObject> listContractStatusPaymentTrue() {
         try {
             List<ContractResponse> contractResponses = contractService.listContractStatusPaymentTrue();

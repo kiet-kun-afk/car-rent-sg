@@ -26,11 +26,11 @@ public class AddressResponse {
 
     public AddressResponse(Address address) {
         this.addressId = address.getAddressId();
-        this.district = address.getDistrict();
-        this.province = address.getProvince();
-        this.ward = address.getWard();
-        this.street = address.getStreet();
-        this.rememberName = address.getRememberName();
+        this.district = address.getDistrict() == null ? "" : address.getDistrict();
+        this.province = address.getProvince() == null ? "" : address.getProvince();
+        this.ward = address.getWard() == null ? "" : address.getWard();
+        this.street = address.getStreet() == null ? "" : address.getStreet();
+        this.rememberName = address.getRememberName() == null ? "" : address.getRememberName();
     }
 
     public static AddressResponse fromResponse(Address address) {

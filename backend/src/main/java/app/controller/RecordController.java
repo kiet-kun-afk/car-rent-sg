@@ -118,4 +118,42 @@ public class RecordController {
                     .build());
         }
     }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @GetMapping("/get-delivery-record/{id}")
+    public ResponseEntity<ResponseObject> getDeliveryRecordById(@PathVariable Integer id) {
+        try {
+            RecordResponse recordResponse = recordService.getDeliveryRecordById(id);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get delivery record successfully")
+                    .data(recordResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get delivery record failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @GetMapping("/get-return-record/{id}")
+    public ResponseEntity<ResponseObject> getReturnRecordById(@PathVariable Integer id) {
+        try {
+            RecordResponse recordResponse = recordService.getReturnRecordById(id);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get return record successfully")
+                    .data(recordResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get return record failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
 }

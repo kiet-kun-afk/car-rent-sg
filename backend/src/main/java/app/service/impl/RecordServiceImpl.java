@@ -69,7 +69,7 @@ public class RecordServiceImpl implements RecordService {
             throw new InvalidParamException("Kilometer number must be greater than delivery record kilometer number");
         }
         Contract contract = deliveryRecord.getContract();
-        contract.setStatusPayment(recordDTO.getPaymentStatus());
+        contract.setStatusPayment(recordDTO.getPaymentStatus() == null ? false : recordDTO.getPaymentStatus());
         deliveryRecord.setStatus(false);
         Staff staff = staffService.getAuth();
         ReturnRecord returnRecord = new ReturnRecord();
@@ -116,5 +116,17 @@ public class RecordServiceImpl implements RecordService {
     public List<RecordResponse> getListReturnRecord() {
         List<ReturnRecord> records = returnRepository.findByStatusTrue();
         return records.stream().map(RecordResponse::fromReturnRecord).toList();
+    }
+
+    @Override
+    public RecordResponse getDeliveryRecordById(Integer id) throws Exception {
+        DeliveryRecord deliveryRecord = deliveryRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
+        return RecordResponse.fromDeliveryRecord(deliveryRecord);
+    }
+
+    @Override
+    public RecordResponse getReturnRecordById(Integer id) throws Exception {
+        ReturnRecord returnRecord = returnRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
+        return RecordResponse.fromReturnRecord(returnRecord);
     }
 }

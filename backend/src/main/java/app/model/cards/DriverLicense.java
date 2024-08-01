@@ -1,5 +1,7 @@
 package app.model.cards;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,4 +30,11 @@ public class DriverLicense {
     @Column(name = "back_image")
     private String backImage;
 
+    @Column(name = "issue_date")
+    private LocalDate issueDate;
+
+    @Column(name = "expiry_date")
+    private LocalDate expiryDate;
+
+    private String category;
 }

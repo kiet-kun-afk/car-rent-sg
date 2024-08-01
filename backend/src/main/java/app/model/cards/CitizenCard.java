@@ -1,5 +1,7 @@
 package app.model.cards;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,4 +29,10 @@ public class CitizenCard {
 
     @Column(name = "back_image", nullable = true)
     private String backImage;
+
+    @Column(name = "issue_date")
+    private LocalDate issueDate;
+
+    @Column(name = "expiry_date")
+    private LocalDate expiryDate;
 }

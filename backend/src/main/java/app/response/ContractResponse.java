@@ -28,7 +28,7 @@ public class ContractResponse {
     // tiến cọc
     private long deposit = 0;
 
-    // giấ tiền còn lại
+    // số tiền còn lại
     private long amount;
 
     private Boolean statusPayment;
@@ -36,16 +36,26 @@ public class ContractResponse {
     private String wayToPay;
 
     private String customerName;
+
     private String customerPhone;
 
+    private AddressResponse addressResponse;
+
     private String carName;
+
+    private CardResponse driverLicense;
+
     private String carRegistrationPlate;
 
     private String carImage;
 
     private Integer staffId;
 
+    private String staffName;
+
     private String attachment;
+
+    private boolean canDelivery = false;
 
     public ContractResponse(Contract contract) {
         this.contractId = contract.getContractId();
@@ -67,9 +77,19 @@ public class ContractResponse {
         this.carImage = contract.getCar().getFrontImage();
 
         this.staffId = contract.getStaff() == null ? null : contract.getStaff().getStaffId();
+        this.staffName = contract.getStaff() == null ? "" : contract.getStaff().getFullName();
         this.attachment = contract.getAttachment();
         // tiền còn lại
         this.amount = contract.getTotalRentCost() - contract.getDeposit();
+        if (contract.getDeliveryRecord() == null) {
+            canDelivery = true;
+        }
+        if (contract.getCustomer().getDriverLicense() != null) {
+            this.driverLicense = CardResponse.fromDriverLicense(contract.getCustomer().getDriverLicense());
+        }
+        if (contract.getCustomer().getAddress() != null) {
+            this.addressResponse = AddressResponse.fromResponse(contract.getCustomer().getAddress());
+        }
     }
 
     public static ContractResponse fromContract(Contract contract) {
