@@ -282,7 +282,7 @@ public class CarServiceImpl implements CarService {
 	@Override
 	public List<CarResponse> filterCar(LocalDateTime startDate, LocalDateTime endDate,
 			String brandName, String countryOrigin, String transmission, String fuelType,
-			List<String> categoryNames, Double minCost, Double maxCost, Integer minSeat, Integer maxSeat, String sortBy,
+			String categoryNames, Double minCost, Double maxCost, Integer minSeat, Integer maxSeat, String sortBy,
 			Integer pageNumber, Integer pageSize)
 			throws Exception {
 		Specification<Car> specification = Specification.where(CarSpecifications.hasStatus(true)
