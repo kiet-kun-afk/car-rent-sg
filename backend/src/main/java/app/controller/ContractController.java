@@ -154,9 +154,9 @@ public class ContractController {
         }
     }
 
-    @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()")
     @GetMapping("/all-by-customer/{phoneNumber}")
-    public ResponseEntity<ResponseObject> getAllContractByCustomer(@PathVariable String phoneNumber) {
+    public ResponseEntity<ResponseObject> getAllContractByCustomer(@PathVariable("phoneNumber") String phoneNumber) {
         try {
             List<ContractResponse> contractResponses = contractService.getAllContractByCustomer(phoneNumber);
             return ResponseEntity.ok(ResponseObject.builder()
@@ -211,7 +211,7 @@ public class ContractController {
         }
     }
 
-    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @GetMapping("/all-not-delivery-yet")
     public ResponseEntity<ResponseObject> listContractNotDeliveryYet() {
         try {
@@ -230,7 +230,7 @@ public class ContractController {
         }
     }
 
-    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @GetMapping("/all-not-delivery-yet-by-phone/{phoneNumber}")
     public ResponseEntity<ResponseObject> listContractByPhoneNumberNotDeliveryYet(@PathVariable String phoneNumber) {
         try {

@@ -45,4 +45,7 @@ public interface ContractService {
     public ContractResponse findByContractId(Integer contractId);
 
     public List<ContractResponse> listRecentContracts(int limit);
+
+    public void UpdateStatusPayment(Integer contractId, boolean status);
+
 }

@@ -38,6 +38,7 @@ public class ContractResponse {
     private String customerName;
 
     private String customerPhone;
+    private String customerImage;
 
     private AddressResponse addressResponse;
 
@@ -46,6 +47,7 @@ public class ContractResponse {
     private CardResponse driverLicense;
 
     private String carRegistrationPlate;
+    private String imgCar;
 
     private String carImage;
 
@@ -71,9 +73,13 @@ public class ContractResponse {
 
         this.customerName = contract.getCustomer().getFullName();
         this.customerPhone = contract.getCustomer().getPhoneNumber();
+        this.customerImage = contract.getCustomer().getAvatarImage();
 
         this.carName = contract.getCar().getCarName();
         this.carRegistrationPlate = contract.getCar().getRegistrationPlate();
+
+        this.imgCar = contract.getCar().getFrontImage();
+
         this.carImage = contract.getCar().getFrontImage();
 
         this.staffId = contract.getStaff() == null ? null : contract.getStaff().getStaffId();

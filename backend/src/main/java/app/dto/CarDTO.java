@@ -79,6 +79,9 @@ public class CarDTO {
     @Positive(message = "Category id seats is positive")
     private Integer categoryId;
 
+    private LocalDate updateAT;
+    private LocalDate createAT;
+
     // new
     private Long numContracts;
 

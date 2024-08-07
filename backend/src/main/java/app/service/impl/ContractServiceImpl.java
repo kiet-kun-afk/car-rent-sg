@@ -3,6 +3,7 @@ package app.service.impl;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -201,7 +202,7 @@ public class ContractServiceImpl implements ContractService {
                             .remaining-payment-info p {
                                 display: inline-block;
                                 width: 100px;
-                                text-align: right;
+                                text-align: left;
                             }
 
                             .car-info span,
@@ -218,7 +219,7 @@ public class ContractServiceImpl implements ContractService {
                                 background-color: #007bff;
                                 color: #fff;
                                 padding: 10px 20px;
-                                border: none;
+                                border-radius: 1px solid;
                                 cursor: pointer;
                             }
                         </style>
@@ -272,7 +273,7 @@ public class ContractServiceImpl implements ContractService {
                         """
                                     </span>
                                 </div>
-                                <div class="remaining-payment-info">
+                                <div class=""remaining-payment-info"">
                                     <p>Thanh toán sau:</p>
                                     <span id="money">
                                     """
@@ -280,7 +281,7 @@ public class ContractServiceImpl implements ContractService {
                         """
                                     </span>
                                 </div>
-                                <button  class="btn-payment">Thanh Toán</button>
+                                <button  class=""btn-payment"">Thanh Toán</button>
 
                                 <script>
                                     var startSpan = document.getElementById('start');
@@ -411,6 +412,16 @@ public class ContractServiceImpl implements ContractService {
         CustomerResponse customer = customerService.getCurrentCustomer();
         List<Contract> contracts = contractRepository.findByCustomerPhoneNumber(customer.getPhoneNumber());
         return contracts.stream().map(ContractResponse::fromContract).toList();
+
+    }
+
+    @Override
+    public List<ContractResponse> listRecentContracts(int limit) {
+        List<Contract> contracts = contractRepository.findRecentContracts(limit);
+        return contracts.stream()
+                .map(ContractResponse::fromContract)
+                .collect(Collectors.toList());
+
     }
 
     @Override
@@ -427,15 +438,17 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public List<ContractResponse> listRecentContracts(int limit) {
-        List<Contract> contracts = contractRepository.findRecentContracts(limit);
-        return contracts.stream().map(ContractResponse::fromContract).toList();
-    }
-
-    @Override
     public ContractResponse findByContractId(Integer id) {
 
         Contract contract = contractRepository.findByContractId(id);
         return ContractResponse.fromContract(contract);
+    }
+
+    @Override
+    public void UpdateStatusPayment(Integer contractId, boolean status) {
+        Contract contract = contractRepository.findByContractId(contractId);
+
+        contract.setStatusPayment(true);
+        contractRepository.save(contract);
     }
 }

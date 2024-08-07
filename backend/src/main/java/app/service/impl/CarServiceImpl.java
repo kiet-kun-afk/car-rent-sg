@@ -189,20 +189,27 @@ public class CarServiceImpl implements CarService {
 		car.setBrand(brand);
 		car.setCategory(category);
 		car.setRegistrationPlate(registrationPlate);
+
 		car.setCarName(carDTO.getCarName());
 		car.setRentCost(carDTO.getRentCost());
 		car.setNumberOfSeat(carDTO.getNumberOfSeat());
 		car.setTransmission(carDTO.getTransmission());
+
 		car.setFuelType(carDTO.getFuelType());
 		car.setFuelConsumption(carDTO.getFuelConsumption());
 		car.setFeatures(carDTO.getFeatures());
 		car.setFrontImage(fileService.upload(carDTO.getFrontImage()));
+
 		car.setBackImage(fileService.upload(carDTO.getBackImage()));
 		car.setLeftImage(fileService.upload(carDTO.getLeftImage()));
 		car.setRightImage(fileService.upload(carDTO.getRightImage()));
 		car.setDescribe(carDTO.getDescribe());
+
 		car.setRegistrationDate(carDTO.getRegistrationDate());
 		car.setStatus(true);
+		// car.setCreatedAt(LocalDateTime.now());
+		// car.setUpdatedAt(LocalDateTime.now());
+
 		carres.save(car);
 		return CarResponse.fromCarResponse(car);
 	}
@@ -305,6 +312,37 @@ public class CarServiceImpl implements CarService {
 						endDate == null ? LocalDateTime.now() : endDate))
 				.collect(Collectors.toList());
 		return carsWithoutOverlappingContracts.stream().map(CarResponse::fromCarResponse).toList();
+	}
+
+	@Override
+	public Page<CarResponse> filterCarPage(LocalDateTime startDate, LocalDateTime endDate, String brandName,
+			String countryOrigin, String transmission, String fuelType, List<String> categoryNames, Double minCost,
+			Double maxCost, Integer minSeat, Integer maxSeat, String sortBy, Integer pageNumber, Integer pageSize)
+			throws Exception {
+		Specification<Car> specification = Specification.where(CarSpecifications.hasStatus(true)
+				.and(CarSpecifications.hasCategory(categoryNames))
+				.and(CarSpecifications.hasCountry(countryOrigin))
+				.and(CarSpecifications.hasBrandName(brandName))
+				.and(CarSpecifications.hasTransmission(transmission))
+				.and(CarSpecifications.hasFuelType(fuelType))
+				.and(CarSpecifications.hasRentCost(minCost, maxCost))
+				.and(CarSpecifications.hasNumberOfSeat(minSeat, maxSeat)));
+		Sort sort;
+		if (sortBy == null || sortBy.isEmpty()) {
+			sort = Sort.by(Sort.Direction.DESC, "createdAt");
+		} else if (sortBy.equals("price_asc")) {
+			sort = Sort.by(Sort.Direction.ASC, "rentCost");
+		} else if (sortBy.equals("price_desc")) {
+			sort = Sort.by(Sort.Direction.DESC, "rentCost");
+		} else if (sortBy.equals("name")) {
+			sort = Sort.by("carName");
+		} else {
+			sort = Sort.by(Sort.Direction.DESC, "createdAt");
+			// default
+		}
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+		Page<Car> page = carres.findAll(specification, pageable);
+		return page.map(CarResponse::fromCarResponse);
 	}
 
 }
