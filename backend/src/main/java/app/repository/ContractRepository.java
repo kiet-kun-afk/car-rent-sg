@@ -32,7 +32,9 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 	@Query("""
 			SELECT c FROM Contract c
 			JOIN c.car cc
-			WHERE cc.registrationPlate = :registrationPlate AND c.contractId != :contractId
+			WHERE cc.registrationPlate = :registrationPlate
+			AND c.contractId != :contractId
+			AND c.staff IS NOT NULL
 			""")
 	List<Contract> findByRegistrationPlateExcludingContractId(
 			@Param("registrationPlate") String registrationPlate,
@@ -105,11 +107,8 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 			"ORDER BY COUNT(c.contractId) DESC")
 	List<CarDTO> findMostRentedCars();
 
-	// new 22/6
-	Contract findByContractIdAndStatusPaymentFalse(Integer contractId);
-
-	// new 25/6
 	@Query(value = "SELECT TOP (:limit) * FROM contracts ORDER BY create_date DESC", nativeQuery = true)
 	List<Contract> findRecentContracts(@Param("limit") int limit);
 
+	Contract findByContractId(Integer contractId);
 }

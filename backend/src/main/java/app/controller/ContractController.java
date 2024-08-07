@@ -80,7 +80,7 @@ public class ContractController {
         }
     }
 
-    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE')")
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{contractId}")
     public ResponseEntity<ResponseObject> deleteContract(@PathVariable("contractId") Integer contractId) {
         try {
@@ -116,10 +116,10 @@ public class ContractController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/complete/{contractId}")
     public ResponseEntity<ResponseObject> completeContract(@PathVariable("contractId") Integer contractId,
-            @RequestParam("deposit") Double deposit) {
+            @RequestParam("deposit") long deposit) {
         try {
             contractService.completePayContract(contractId, deposit);
             return ResponseEntity.ok(ResponseObject.builder()
@@ -211,7 +211,7 @@ public class ContractController {
         }
     }
 
-    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @GetMapping("/all-not-delivery-yet")
     public ResponseEntity<ResponseObject> listContractNotDeliveryYet() {
         try {
@@ -230,7 +230,7 @@ public class ContractController {
         }
     }
 
-    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @GetMapping("/all-not-delivery-yet-by-phone/{phoneNumber}")
     public ResponseEntity<ResponseObject> listContractByPhoneNumberNotDeliveryYet(@PathVariable String phoneNumber) {
         try {
@@ -250,7 +250,7 @@ public class ContractController {
         }
     }
 
-    @GetMapping("/all-statusPayments-true")
+    @GetMapping("/all-status-payments-true")
     public ResponseEntity<ResponseObject> listContractStatusPaymentTrue() {
         try {
             List<ContractResponse> contractResponses = contractService.listContractStatusPaymentTrue();
@@ -286,32 +286,11 @@ public class ContractController {
         }
     }
 
-    // get contract by id
-    @GetMapping("{contractId}")
-    public ResponseEntity<ResponseObject> findContractById(@PathVariable("contractId") Integer contractId) {
-
-        try {
-            ContractResponse contractResponses = contractService.findContractById(contractId);
-            return ResponseEntity.ok(ResponseObject.builder()
-                    .status(200)
-                    .message("Get all contract successfully")
-                    .data(contractResponses)
-                    .build());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(ResponseObject.builder()
-                    .status(400)
-                    .message("Get all contract failed")
-                    .data(e.getMessage())
-                    .build());
-        }
-    }
-
-    @PreAuthorize("isAuthenticated")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/customer-trip")
     public ResponseEntity<ResponseObject> getCustomerTrip() {
         try {
             List<ContractResponse> contractResponses = contractService.listCustomerTrip();
-
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Get all contract successfully")
@@ -326,18 +305,20 @@ public class ContractController {
         }
     }
 
-    @DeleteMapping("/updateStatus/{contractId}")
-    public ResponseEntity<ResponseObject> UpdateStatusPayment(@PathVariable("contractId") Integer contractId) {
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/get-contract/{contractId}")
+    public ResponseEntity<ResponseObject> getContractById(@PathVariable Integer contractId) {
         try {
-            contractService.UpdateStatusPayment(contractId);
+            ContractResponse contractResponse = contractService.getContractById(contractId);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .message("Get all contract successfully")
+                    .message("Get contract successfully")
+                    .data(contractResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
-                    .message("Get all contract failed")
+                    .message("Get contract failed")
                     .data(e.getMessage())
                     .build());
         }
@@ -348,4 +329,21 @@ public class ContractController {
         return contractService.listRecentContracts(limit);
     }
 
+    @GetMapping("/find-contract/{contractId}")
+    public ResponseEntity<ResponseObject> findContractById(@PathVariable Integer contractId) {
+        try {
+            ContractResponse contractResponse = contractService.findByContractId(contractId);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get contract successfully")
+                    .data(contractResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get contract failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
 }

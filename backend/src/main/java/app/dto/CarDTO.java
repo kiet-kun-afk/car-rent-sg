@@ -7,10 +7,13 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 
 /**
  * CarDTO
@@ -27,17 +30,18 @@ import jakarta.validation.constraints.Size;
 @NoArgsConstructor
 public class CarDTO {
 
+    @NotBlank(message = "Registration plate is required")
     private String registrationPlate;
 
     private String carName;
 
     @NotNull(message = "Rent cost is not null")
     @Positive(message = "Rent cost is positive")
-    private Double rentCost;
+    private long rentCost;
 
     @NotNull(message = "Number of seats is not null")
     @Positive(message = "Number of seats is positive")
-    @Size(min = 1, max = 40, message = "Number of seats must be between 2 to 40 characters")
+    @Max(value = 16, message = "Number of seats is from 0 to 16")
     private Integer numberOfSeat;
 
     private String transmission;
@@ -48,13 +52,13 @@ public class CarDTO {
 
     private String features;
 
-    private String frontImage;
+    private MultipartFile frontImage;
 
-    private String backImage;
+    private MultipartFile backImage;
 
-    private String rightImage;
+    private MultipartFile rightImage;
 
-    private String leftImage;
+    private MultipartFile leftImage;
 
     private String describe;
 
@@ -74,6 +78,9 @@ public class CarDTO {
     @NotNull(message = "Category id seats is not null")
     @Positive(message = "Category id seats is positive")
     private Integer categoryId;
+
+    private LocalDate updateAT;
+    private LocalDate createAT;
 
     // new
     private Long numContracts;

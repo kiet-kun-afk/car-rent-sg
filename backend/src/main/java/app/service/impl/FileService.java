@@ -87,14 +87,14 @@ public class FileService {
     }
 
     private String uploadFile(File file, String fileName) throws Exception {
-        BlobId blobId = BlobId.of("fir-test-15d04.appspot.com", fileName); // Replace with your bucker name
+        BlobId blobId = BlobId.of("carrentsg-30cbe.appspot.com", fileName); // Replace with your bucker name
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("media").build();
         InputStream inputStream = FileService.class.getClassLoader().getResourceAsStream("firebase-private-key.json");
         Credentials credentials = GoogleCredentials.fromStream(inputStream);
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         storage.create(blobInfo, Files.readAllBytes(file.toPath()));
 
-        String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/fir-test-15d04.appspot.com/o/%s?alt=media";
+        String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/carrentsg-30cbe.appspot.com/o/%s?alt=media";
         return String.format(DOWNLOAD_URL, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
     }
 

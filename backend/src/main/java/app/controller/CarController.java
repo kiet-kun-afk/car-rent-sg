@@ -9,16 +9,22 @@ import app.response.CarResponse;
 import app.response.ResponseObject;
 import app.service.CarService;
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -127,7 +133,7 @@ public class CarController {
             @RequestParam Optional<Integer> pageNumber,
             @RequestParam Optional<Integer> pageSize) {
         try {
-            Page<CarResponse> cars = carService.getCarsForIndex(pageNumber.orElse(0), pageSize.orElse(8));
+            List<CarResponse> cars = carService.getCarsForIndex(pageNumber.orElse(0), pageSize.orElse(8));
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Get page car successfully")
@@ -137,6 +143,135 @@ public class CarController {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
                     .status(400)
                     .message("Get page car failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PostMapping("/create")
+    public ResponseEntity<ResponseObject> create(@Valid @ModelAttribute CarDTO carDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Create car failed, validation")
+                    .data(errors)
+                    .build());
+        }
+        try {
+            CarResponse carResponse = carService.createNewCar(carDTO);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Create car successfully")
+                    .data(carResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Create car failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PutMapping("/update/{registrationPlate}")
+    public ResponseEntity<ResponseObject> update(@PathVariable("registrationPlate") String registrationPlate,
+            @Valid @ModelAttribute CarDTO carDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Update car failed, validation")
+                    .data(errors)
+                    .build());
+        }
+        try {
+            CarResponse carResponse = carService.updateCar(registrationPlate, carDTO);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Update car successfully")
+                    .data(carResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Update car failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @GetMapping("/get-cars-deleted")
+    public ResponseEntity<ResponseObject> getCarsDeleted() {
+        try {
+            List<CarResponse> cars = carService.getCarsDeleted();
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Get cars deleted successfully")
+                    .data(cars)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Get cars deleted failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PutMapping("/restore/{registrationPlate}")
+    public ResponseEntity<ResponseObject> restore(@PathVariable("registrationPlate") String registrationPlate) {
+        try {
+            carService.restoreCar(registrationPlate);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Restore car successfully")
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Restore car failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
+    @GetMapping("/filter-car")
+    public ResponseEntity<ResponseObject> filterCar(
+            @RequestParam(required = false) LocalDateTime startDate,
+            @RequestParam(required = false) LocalDateTime endDate,
+            @RequestParam(required = false) String brandName,
+            @RequestParam(required = false) String countryOrigin,
+            @RequestParam(required = false) String transmission,
+            @RequestParam(required = false) String fuelType,
+            @RequestParam(required = false) List<String> categoryNames,
+            @RequestParam(required = false) @Nullable Double minCost,
+            @RequestParam(required = false) @Nullable Double maxCost,
+            @RequestParam(required = false) @Nullable Integer minSeat,
+            @RequestParam(required = false) @Nullable Integer maxSeat,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam Optional<Integer> pageNumber,
+            @RequestParam Optional<Integer> pageSize) {
+        try {
+            // List<CarResponse> cars = carService
+            Page<CarResponse> cars = carService
+                    // .filterCar(startDate, endDate,
+                    .filterCarPage(startDate, endDate,
+                            brandName, countryOrigin, transmission, fuelType, categoryNames,
+                            minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Filter car successfully")
+                    .data(cars)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Filter car failed")
                     .data(e.getMessage())
                     .build());
         }

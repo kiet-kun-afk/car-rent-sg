@@ -16,6 +16,6 @@ public interface BillService {
 
     public Bill createDepositBill(Contract contract) throws Exception;
 
-    public BillResponse completeDepositBill(Integer id, Double deposit) throws Exception;
+    public BillResponse completeDepositBill(Integer id, long deposit) throws Exception;
 
 }

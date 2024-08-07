@@ -8,15 +8,6 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
-/**
- * JavaMailSender
- * Version: 1.0
- * Date: 5/25/2024
- * Modification Logs
- * DATE AUTHOR DESCRIPTION
- * -------------------------------------
- * 5/29/2024 kiet-kun-afk Copy from chatGPT
- */
 @Service
 @RequiredArgsConstructor
 public class EmailService {

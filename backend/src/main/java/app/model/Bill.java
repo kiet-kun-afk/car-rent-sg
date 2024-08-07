@@ -25,7 +25,7 @@ public class Bill {
     private LocalDateTime payDate;
 
     @Column(name = "pay_cost", nullable = false)
-    private Double payCost;
+    private long payCost;
 
     @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
@@ -34,6 +34,8 @@ public class Bill {
     private Boolean paymentStatus;
 
     private String describe;
+
+    private String incurredCost;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "contract_id", nullable = false)

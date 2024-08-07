@@ -1,6 +1,7 @@
 package app.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "cars", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "registration_plate" }) })
-
 public class Car extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class Car extends BaseEntity {
     private String carName;
 
     @Column(name = "rent_cost", nullable = false)
-    private Double rentCost;
+    private long rentCost;
 
     @Column(name = "number_of_seat", nullable = false)
     private Integer numberOfSeat;
@@ -77,4 +77,6 @@ public class Car extends BaseEntity {
     @ManyToOne
     private Category category;
 
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Contract> contracts;
 }

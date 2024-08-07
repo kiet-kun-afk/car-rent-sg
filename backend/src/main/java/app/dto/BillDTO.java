@@ -14,7 +14,7 @@ import lombok.Setter;
 public class BillDTO {
 
     @Positive(message = "Cost must is positive")
-    private Double payCost;
+    private long payCost;
 
     @NotBlank(message = "Method is required")
     private String paymentMethod;

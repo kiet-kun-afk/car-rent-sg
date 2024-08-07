@@ -9,10 +9,8 @@ import lombok.*;
 @Getter
 public class CardDTO {
 
-    @NotBlank
+    @NotBlank(message = "id card not blank")
     private String idCard;
 
     private MultipartFile frontImage;
-
-    private MultipartFile backImage;
 }

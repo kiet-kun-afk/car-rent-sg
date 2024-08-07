@@ -20,7 +20,7 @@ public class ContractDTO {
     @Future(message = "End date must be future date")
     private LocalDateTime endDate;
 
-    private Double deposit = 0.0;
+    private long deposit = 0;
 
     @NotBlank(message = "Way to pay is required")
     private String wayToPay;

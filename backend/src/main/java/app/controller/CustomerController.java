@@ -27,7 +27,7 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    // @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE', 'STAFF_ROLE')")
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAll() {
         try {
