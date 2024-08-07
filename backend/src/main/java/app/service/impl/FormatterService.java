@@ -3,7 +3,9 @@ package app.service.impl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -154,5 +156,12 @@ public class FormatterService {
         } catch (Exception e) {
             throw new InvalidParamException("Need to check format, date is yyyy-MM-dd, time is HH:mm:ss");
         }
+    }
+
+    public LocalDateTime dateToDateTime(Date date) throws Exception {
+        if (date == null) {
+            throw new InvalidParamException("Date cannot be null");
+        }
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 }
