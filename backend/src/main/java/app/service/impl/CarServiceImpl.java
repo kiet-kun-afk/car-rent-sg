@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -316,7 +317,7 @@ public class CarServiceImpl implements CarService {
 
 	@Override
 	public Page<CarResponse> filterCarPage(LocalDateTime startDate, LocalDateTime endDate, String brandName,
-			String countryOrigin, String transmission, String fuelType, List<String> categoryNames, Double minCost,
+			String countryOrigin, String transmission, String fuelType, String categoryNames, Double minCost,
 			Double maxCost, Integer minSeat, Integer maxSeat, String sortBy, Integer pageNumber, Integer pageSize)
 			throws Exception {
 		Specification<Car> specification = Specification.where(CarSpecifications.hasStatus(true)
@@ -342,7 +343,22 @@ public class CarServiceImpl implements CarService {
 		}
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 		Page<Car> page = carres.findAll(specification, pageable);
-		return page.map(CarResponse::fromCarResponse);
+		List<Car> cars = page.getContent();
+
+		List<Car> carsWithoutOverlappingContracts = cars.stream()
+				.filter(car -> contractService.isContractValidForCar(car,
+						startDate == null ? LocalDateTime.now() : startDate,
+						endDate == null ? LocalDateTime.now() : endDate))
+				.collect(Collectors.toList());
+
+		// pagination
+		int start = (int) pageable.getOffset();
+		int end = Math.min((start + pageable.getPageSize()), carsWithoutOverlappingContracts.size());
+		List<CarResponse> filteredAndPagedCars = carsWithoutOverlappingContracts.subList(start, end).stream()
+				.map(CarResponse::fromCarResponse)
+				.collect(Collectors.toList());
+
+		return new PageImpl<>(filteredAndPagedCars, pageable, carsWithoutOverlappingContracts.size());
 	}
 
 }
