@@ -29,6 +29,7 @@ import com.mservice.processor.CreateOrderMoMo;
 import com.mservice.shared.utils.LogUtils;
 
 import app.config.PaymentVNPAYConfig;
+import app.model.Contract;
 import app.response.ContractResponse;
 import app.response.ResponseObject;
 import app.service.ContractService;
@@ -59,14 +60,14 @@ public class PaymentController {
     @PostMapping("/momo")
     public ResponseEntity<Map<String, String>> createMoMoOrder(@RequestParam Integer contractId) {
         ContractResponse contractResponses = contractService.findByContractId(contractId);
-        contractResponses.setStatusPayment(true);
+        contractService.UpdateStatusPayment(contractId, true);
         LogUtils.init();
         String requestId = String.valueOf(System.currentTimeMillis());
         String orderId = String.valueOf(System.currentTimeMillis());
         long amount = (contractResponses.getTotalRentCost() * 20 / 100);
         LOGGER.info("Amount: " + amount);
         String orderInfo = "Pay With MoMo";
-        String returnURL = "http://localhost:3000/user/paymentsuccess";
+        String returnURL = "http://localhost:3000/user/paymentsuccessMomo";
         String notifyURL = "https://google.com.vn";
 
         Environment environment = Environment.selectEnv("dev");
@@ -80,6 +81,7 @@ public class PaymentController {
 
         Map<String, String> response = new HashMap<>();
         if (captureWalletMoMoResponse != null && captureWalletMoMoResponse.getPayUrl() != null) {
+
             LOGGER.info("Pay URL: " + captureWalletMoMoResponse.getPayUrl());
             response.put("status", "OK");
             response.put("message", "Successfully");
@@ -96,7 +98,7 @@ public class PaymentController {
     @PostMapping("/vnpay")
     public ResponseEntity<Map<String, String>> createVnpayOrder(@RequestParam Integer contractId) throws Exception {
         ContractResponse contractResponses = contractService.findByContractId(contractId);
-        contractResponses.setStatusPayment(true);
+
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";

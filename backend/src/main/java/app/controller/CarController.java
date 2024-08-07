@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -256,8 +257,10 @@ public class CarController {
             @RequestParam Optional<Integer> pageNumber,
             @RequestParam Optional<Integer> pageSize) {
         try {
-            List<CarResponse> cars = carService
-                    .filterCar(startDate, endDate,
+            // List<CarResponse> cars = carService
+            Page<CarResponse> cars = carService
+                    // .filterCar(startDate, endDate,
+                    .filterCarPage(startDate, endDate,
                             brandName, countryOrigin, transmission, fuelType, categoryNames,
                             minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
             return ResponseEntity.ok(ResponseObject.builder()

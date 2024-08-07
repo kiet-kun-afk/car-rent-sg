@@ -21,4 +21,7 @@ public class Category {
 
     @Column(name = "category_name", nullable = false, unique = true)
     private String categoryName;
+
+    @Column(name = "category_logo")
+    private String categoryLogo;
 }
