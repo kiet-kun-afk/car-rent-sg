@@ -264,13 +264,11 @@ public class CarController {
             LocalDateTime end = formatterService.stringToDateTime(endDate);
             List<CarResponse> cars = carService
                     .filterCar(start, end, brandName, countryOrigin, transmission, fuelType, categoryNames,
-                               minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
-            // List<CarResponse> cars = carService
-            //Page<CarResponse> cars = carService
-                    // .filterCar(startDate, endDate,
-                    //.filterCarPage(startDate, endDate,
-                            //brandName, countryOrigin, transmission, fuelType, categoryNames,
-                            //minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
+                            minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
+            // Page<CarResponse> cars = carService
+            //         .filterCarPage(start, end,
+            //                 brandName, countryOrigin, transmission, fuelType, categoryNames,
+            //                 minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Filter car successfully")

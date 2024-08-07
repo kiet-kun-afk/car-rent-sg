@@ -42,7 +42,7 @@ public interface CarService {
 
 	public Page<CarResponse> filterCarPage(LocalDateTime startDate, LocalDateTime endDate,
 			String brandName, String countryOrigin, String transmission, String fuelType,
-			List<String> categoryNames, Double minCost, Double maxCost, Integer minSeat, Integer maxSeat, String sortBy,
+			String categoryNames, Double minCost, Double maxCost, Integer minSeat, Integer maxSeat, String sortBy,
 			Integer pageNumber, Integer pageSize)
 			throws Exception;
 }
