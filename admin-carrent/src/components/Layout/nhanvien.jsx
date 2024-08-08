@@ -101,7 +101,13 @@ function NhanVien() {
           </div>
           <a href="#" className="btn-download">
             <i className="bx bxs-cloud-download"></i>
-            <span className="text">Download PDF</span>
+            <button
+              class="btn "
+              data-bs-toggle="modal"
+              data-bs-target="#createStaff"
+            >
+              Thêm Nhân Viên
+            </button>
           </a>
         </div>
 
@@ -149,12 +155,24 @@ function NhanVien() {
                 <tbody>
                   {staffs.map((staff, index) => (
                     <tr>
-                      <td>{index + 1}</td>
-                      <td>{staff.fullName}</td>
-                      <td>{staff.gender ? "Nam" : "Nữ"}</td>
-                      <td>{staff.phoneNumber}</td>
-                      <td>{staff.email}</td>
-                      <td>{staff.status ? "Hoạt động" : "Khóa"}</td>
+                      <td className="text-center">{index + 1}</td>
+                      <td className="text-start">
+                        {staff.fullName ? staff.fullName : "Họ và tên"}
+                      </td>
+                      <td className="text-center">
+                        {staff.gender ? "Nam" : "Nữ"}
+                      </td>
+                      <td className="text-center">{staff.phoneNumber}</td>
+                      <td className="text-start">{staff.email}</td>
+                      <td className="text-center">
+                        {staff.status ? (
+                          <span style={{ color: "green", fontSize: "16px" }}>
+                            Hoạt động
+                          </span>
+                        ) : (
+                          <span style={{ color: "red" }}>Khóa</span>
+                        )}
+                      </td>
                       <td>
                         <button
                           type="button"
@@ -511,6 +529,208 @@ function NhanVien() {
           </div>
         </div>
         {/* <ChitietNV show={modalShow} onHide={() => setModalShow(false)} /> */}
+
+        {/* modal create nv  */}
+
+        <div
+          class="modal fade"
+          id="createStaff"
+          tabindex="-1"
+          aria-labelledby="CreateNewStaffLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title" id="createStaff">
+                  Thêm Mới Nhân Viên
+                </h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  id="closebtn"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+
+              <form>
+                <div className="modal-body">
+                  <div className="container-custom">
+                    <div className="row">
+                      <div className="col-md-6">
+                        <h5>Thông Tin Nhân Viên</h5>
+                        <div className="form-group mt-3">
+                          <label htmlFor="frontImage">Hình Đại Diện</label>
+                          <input
+                            type="file"
+                            name="frontImage"
+                            className="form-control"
+                          />
+                        </div>
+
+                        <div className="form-group mt-3">
+                          <label htmlFor="describe">Họ và tên</label>
+                          <input
+                            type="text"
+                            id="describe"
+                            className="form-control"
+                          />
+                        </div>
+
+                        <div className="form-group mt-3">
+                          <label htmlFor="features">Số Điện Thoại</label>
+                          <input
+                            type="text"
+                            id="features"
+                            className="form-control"
+                          />
+                        </div>
+
+                        <div className="form-group mt-3">
+                          <label htmlFor="features">Email</label>
+                          <input
+                            type="text"
+                            id="features"
+                            className="form-control"
+                          />
+                        </div>
+
+                        <div className="form-group mt-3">
+                          <label htmlFor="features">Ngày Sinh</label>
+                          <input
+                            type="date"
+                            id="features"
+                            className="form-control"
+                          />
+                        </div>
+
+                        <div className="form-group mt-3">
+                          <label htmlFor="features">Chức Vụ</label>
+                          <input
+                            type="text"
+                            id="features"
+                            className="form-control"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-md-6 contact-info">
+                        <div className="contact-detail">
+                          <h5>Thông Tin căn cước </h5>
+                          <div className="form-group mt-3">
+                            <label htmlFor="frontImage">Hình Mặt Trước</label>
+                            <input
+                              type="file"
+                              name="frontImage"
+                              className="form-control"
+                            />
+                          </div>
+
+                          <div className="form-group mt-3">
+                            <label htmlFor="frontImage">Hình Mặt Sau</label>
+                            <input
+                              type="file"
+                              name="frontImage"
+                              className="form-control"
+                            />
+                          </div>
+
+                          <div className="form-group mt-3">
+                            <label htmlFor="carName">Số thẻ</label>
+                            <input
+                              type="text"
+                              id="carName"
+                              className="form-control"
+                            />
+                          </div>
+                          <div className="row mt-3">
+                            <div className="col-sm-6">
+                              <div className="form-group">
+                                <label htmlFor="numberOfSeat">Ngày Cấp</label>
+                                <input
+                                  type="date"
+                                  id="numberOfSeat"
+                                  className="form-control"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-sm-6">
+                              <div className="form-group">
+                                <label htmlFor="transmission">
+                                  Ngày Hết Hạn
+                                </label>
+                                <input
+                                  type="date"
+                                  id="transmission"
+                                  className="form-control"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <h5 class="mt-5">Thông tin địa chỉ</h5>
+
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div className="form-group">
+                                <label htmlFor="transmission">Tên Đường</label>
+                                <input
+                                  type="text"
+                                  id="transmission"
+                                  className="form-control"
+                                />
+                              </div>
+
+                              <div className="form-group  mt-3">
+                                <label htmlFor="transmission">
+                                  Tên Phường{" "}
+                                </label>
+                                <input
+                                  type="text"
+                                  id="transmission"
+                                  className="form-control"
+                                />
+                              </div>
+                            </div>
+
+                            <div class="col-sm-6 ">
+                              <div className="form-group">
+                                <label htmlFor="transmission">Tên Quận</label>
+                                <input
+                                  type="text"
+                                  id="transmission"
+                                  className="form-control"
+                                />
+                              </div>
+
+                              <div className="form-group  mt-3">
+                                <label htmlFor="transmission">
+                                  Tên Thành Phố{" "}
+                                </label>
+                                <input
+                                  type="text"
+                                  id="transmission"
+                                  className="form-control"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">
+                    Thêm Nhân Viên
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </main>
     </>
   );

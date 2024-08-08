@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar, Line, Pie } from "react-chartjs-2";
 import axios from "axios";
 import {
   Chart as ChartJS,
@@ -42,6 +42,7 @@ function formatVND(value) {
   return `${formattedPart}`;
 }
 function TrangChu() {
+  const [pieChartData, setPieChartData] = useState({});
   const [RecentContract, setRecentContract] = useState([]);
   const [Contracts, setContracts] = useState([]);
   const [filteredContracts, setFilteredContracts] = useState([]);
@@ -79,17 +80,15 @@ function TrangChu() {
     return formattedDate;
   };
 
-  const LoadListRecentContract = async () => {
+  const LoadListContract = async () => {
     const response = await axios.get(
       "http://localhost:8080/api/v1/contracts/recent"
     );
-    console.log(response.data);
+    // console.log(response.data);
     setRecentContract(response.data);
-
-    //
     try {
       const result = await axios.get(
-        "http://localhost:8080/api/v1/contracts/all-statusPayments-true"
+        "http://localhost:8080/api/v1/contracts/all-status-payments-true"
       );
       console.log(result.data.data);
 
@@ -104,7 +103,7 @@ function TrangChu() {
       const resultCountCus = await axios.get(
         "http://localhost:8080/api/v1/customers/count"
       );
-      console.log(resultCountCus.data);
+      //console.log(resultCountCus.data);
       const countCus = resultCountCus.data;
       setCountCus(countCus);
       //
@@ -113,13 +112,14 @@ function TrangChu() {
       const resultTopCar = await axios.get(
         "http://localhost:8080/api/v1/contracts/most-rented-car"
       );
-      console.log(resultTopCar.data);
+      //console.log(resultTopCar.data);
       const Top1Car = resultTopCar.data;
       setTop1Car(Top1Car);
 
       //
     } catch (error) {
       console.error("Error loading contract list:", error);
+      // toast.error("Failed to load contracts!");
     }
   };
 
@@ -149,7 +149,7 @@ function TrangChu() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/v1/contracts/all-statusPayments-true"
+          "http://localhost:8080/api/v1/contracts/all-status-payments-true"
         );
         const apiData = response.data.data;
         console.log(apiData);
@@ -166,22 +166,10 @@ function TrangChu() {
           acc[month] += contract.totalRentCost;
           return acc;
         }, {});
-
-        // Sắp xếp các tháng theo thứ tự thời gian
-        const sortedMonths = Object.keys(monthlyData).sort((a, b) => {
-          const [monthA, yearA] = a.split(" ");
-          const [monthB, yearB] = b.split(" ");
-          const dateA = new Date(`${monthA} 1, ${yearA}`);
-          const dateB = new Date(`${monthB} 1, ${yearB}`);
-          return dateA - dateB;
-        });
-
-        const barRentCosts = sortedMonths.map((month) => monthlyData[month]);
-
-        // const barLabels = Object.keys(monthlyData);
-        // const barRentCosts = Object.values(monthlyData);
+        const barLabels = Object.keys(monthlyData);
+        const barRentCosts = Object.values(monthlyData);
         const barData = {
-          labels: sortedMonths,
+          labels: barLabels,
           datasets: [
             {
               label: "Total Rent Cost",
@@ -197,7 +185,7 @@ function TrangChu() {
 
         // Dữ liệu biểu đồ đường
         const lineData = {
-          labels: sortedMonths, // Sử dụng cùng labels với biểu đồ cột
+          labels: barLabels, // Sử dụng cùng labels với biểu đồ cột
           datasets: [
             {
               label: "Monthly Rent Cost",
@@ -208,15 +196,49 @@ function TrangChu() {
             },
           ],
         };
-
         setLineChartData(lineData);
+
+        const pieLabels = apiData.map((item) => item.carName);
+        const pieRentCosts = apiData.map((item) => item.totalRentCost);
+
+        const pieData = {
+          labels: pieLabels,
+          datasets: [
+            {
+              label: "Total Rent Cost",
+              data: pieRentCosts,
+              backgroundColor: [
+                "rgba(75, 192, 192, 0.6)",
+                "rgba(54, 162, 235, 0.6)",
+                "rgba(255, 206, 86, 0.6)",
+                "rgba(255, 99, 132, 0.6)",
+                "rgba(153, 102, 255, 0.6)",
+                "rgba(255, 159, 64, 0.6)",
+                "rgba(201, 203, 207, 0.6)",
+              ],
+              borderColor: [
+                "rgba(75, 192, 192, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(255, 99, 132, 1)",
+                "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)",
+                "rgba(201, 203, 207, 1)",
+              ],
+              borderWidth: 1,
+              cutout: "50%",
+            },
+          ],
+        };
+
+        setPieChartData(pieData);
       } catch (error) {
         console.error("Error fetching the data", error);
       }
     };
 
     fetchData();
-    LoadListRecentContract();
+    LoadListContract();
   }, []);
   if (loading) return <div>Loading...</div>;
 
@@ -275,79 +297,62 @@ function TrangChu() {
             <Line data={lineChartData} />
           </div>
         </div>
-        <div className="table-data">
-          <div className="order">
-            <div className="head">
-              <h3>Đơn Hàng Gần Đây</h3>
-              <i className="bx bx-search"></i>
-              <i className="bx bx-filter"></i>
+        <div class="row d-flex m-0">
+          <div className="table-data flex-nowrap">
+            <div class="col-sm-6">
+              <div className="order">
+                <div className="head">
+                  <h3>Đơn Hàng Gần Đây</h3>
+                  <i className="bx bx-search"></i>
+                  <i className="bx bx-filter"></i>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tài khoản</th>
+                      <th>Ngày đặt hàng</th>
+                      <th>Trạng Thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {RecentContract.map((recentContract) => (
+                      <tr>
+                        <td className="w-25">
+                          <img
+                            className="w-50"
+                            src={recentContract.customerImage}
+                            alt="Upload Icon"
+                          />
+                          <p>{recentContract.customerName}</p>
+                        </td>
+                        <td>{formatDate(recentContract.createDate)}</td>
+                        <td>
+                          <span
+                            className={`status ${
+                              recentContract.statusPayment
+                                ? "completed"
+                                : "pending"
+                            }`}
+                          >
+                            {recentContract.statusPayment ? (
+                              <span>Thành Công</span>
+                            ) : (
+                              <span>Chưa Thanh Toán</span>
+                            )}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Tài khoản</th>
-                  <th>Ngày đặt hàng</th>
-                  <th>Trạng Thái</th>
-                </tr>
-              </thead>
-              <tbody>
-                {RecentContract.map((recentContract) => (
-                  <tr>
-                    <td class="w-25">
-                      <img
-                        class="w-50"
-                        src={recentContract.customerImage}
-                        alt="Upload Icon"
-                      />
-                      <p>{recentContract.customerName}</p>
-                    </td>
-                    <td>{formatDate(recentContract.createDate)}</td>
-                    <td>
-                      <span
-                        className={`status ${
-                          recentContract.statusPayment ? "completed" : "pending"
-                        }`}
-                      >
-                        {recentContract.statusPayment ? (
-                          <span>Thành Công</span>
-                        ) : (
-                          <span>Chưa Thanh Toán</span>
-                        )}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="todo">
-            <div className="head">
-              <h3>Khác</h3>
-              <i className="bx bx-plus"></i>
-              <i className="bx bx-filter"></i>
+
+            <div class="col-sm-6">
+              <div className="todo">
+                <Pie data={pieChartData} />
+              </div>
             </div>
-            <ul className="todo-list">
-              <li className="completed">
-                <p>Abc</p>
-                <i className="bx bx-dots-vertical-rounded"></i>
-              </li>
-              <li className="completed">
-                <p>Abc</p>
-                <i className="bx bx-dots-vertical-rounded"></i>
-              </li>
-              <li className="not-completed">
-                <p>Abc</p>
-                <i className="bx bx-dots-vertical-rounded"></i>
-              </li>
-              <li className="completed">
-                <p>Abc</p>
-                <i className="bx bx-dots-vertical-rounded"></i>
-              </li>
-              <li className="not-completed">
-                <p>Abc</p>
-                <i className="bx bx-dots-vertical-rounded"></i>
-              </li>
-            </ul>
           </div>
         </div>
       </main>

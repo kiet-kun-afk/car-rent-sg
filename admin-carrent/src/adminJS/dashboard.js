@@ -55,6 +55,7 @@ window.onload = function () {
 			}
 		});
 
+
 		switchMode.addEventListener('change', function () {
 			if (this.checked) {
 				document.body.classList.add('dark');
@@ -68,6 +69,7 @@ window.onload = function () {
 				modeText.innerHTML = 'Dark Mode';
 			}
 		});
+
 
 		brandImg.addEventListener('click', function () {
 			allSideMenu.forEach(i => {

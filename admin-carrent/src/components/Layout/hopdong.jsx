@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+<<<<<<< HEAD
+=======
+import axiosConfig from "../../config/axiosConfig";
+>>>>>>> 27a5cb14d69faac568df7bd546d18495d08680f9
 
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -7,6 +11,7 @@ import Form from "react-bootstrap/Form";
 
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+<<<<<<< HEAD
 
 function chitietHD(props) {
   return (
@@ -40,6 +45,8 @@ function chitietHD(props) {
   );
 }
 
+=======
+>>>>>>> 27a5cb14d69faac568df7bd546d18495d08680f9
 function formatVND(value) {
   // Check if value is a number
   if (typeof value !== "number") {
@@ -125,7 +132,11 @@ function HopDong() {
   const [ContractsById, setContractById] = useState(null);
   const LoadContractById = async (ContractId) => {
     const result1 = await axios.get(
+<<<<<<< HEAD
       `http://localhost:8080/api/v1/contracts/${ContractId}`
+=======
+      `http://localhost:8080/api/v1/contracts/get-contract/${ContractId}`
+>>>>>>> 27a5cb14d69faac568df7bd546d18495d08680f9
     );
     console.log(result1.data.data);
 
@@ -134,6 +145,7 @@ function HopDong() {
   };
 
   const DeleteContract = async (ContractId) => {
+<<<<<<< HEAD
     const result2 = await axios.delete(
       `http://localhost:8080/api/v1/contracts/updateStatus/${ContractId}`
     );
@@ -141,6 +153,15 @@ function HopDong() {
 
     // var btnclose = document.getElementById("closebtn");
     // btnclose.click();
+=======
+    const result2 = await axios.put(
+      `http://localhost:8080/api/v1/contracts/confirm/${ContractId}`
+    );
+    console.log(result2.data.message);
+
+    var btnclose = document.getElementById("closebtn");
+    btnclose.click();
+>>>>>>> 27a5cb14d69faac568df7bd546d18495d08680f9
     LoadListContract();
   };
 
@@ -234,6 +255,7 @@ function HopDong() {
                 <tbody>
                   {Contracts.map((contract, index) => (
                     <tr key={contract.contractId}>
+<<<<<<< HEAD
                       <td>{index + 1}</td>
                       <td>{formatDate(contract.createDate)}</td>
                       <td>{contract.contractId}</td>
@@ -248,21 +270,62 @@ function HopDong() {
                       <td>{contract.numberDay}</td>
                       <td>{formatVND(contract.deposit)}</td>
                       <td>{formatVND(contract.totalRentCost)}</td>
+=======
+                      <td className="text-center">{index + 1}</td>
+                      <td className="text-center">
+                        {formatDate(contract.createDate)}
+                      </td>
+                      <td className="text-center">{contract.contractId}</td>
+                      <td className="text-center">{contract.wayToPay}</td>
+                      <td className="text-start">{contract.customerName}</td>
+                      <td className="text-center">
+                        {maskPhoneNumber(contract.customerPhone)}
+                      </td>
+                      <td className="text-start">{contract.carName}</td>
+                      <td className="text-center">
+                        {contract.carRegistrationPlate}
+                      </td>
+                      <td className="text-center">
+                        {formatDate(contract.startDate)}
+                      </td>
+                      <td className="text-center">
+                        {formatDate(contract.endDate)}
+                      </td>
+                      <td className="text-end">
+                        {formatVND(contract.rentCost)}
+                      </td>
+                      <td className="text-center">{contract.numberDay}</td>
+                      <td className="text-end">
+                        {formatVND(contract.deposit)}
+                      </td>
+                      <td className="text-end">
+                        {formatVND(contract.totalRentCost)}
+                      </td>
+>>>>>>> 27a5cb14d69faac568df7bd546d18495d08680f9
                       <td className="status completed">
                         <span>
                           {contract.statusPayment ? (
                             <span style={{ color: "green", fontSize: "16px" }}>
+<<<<<<< HEAD
                               Thành Công{" "}
                             </span>
                           ) : (
                             <span style={{ color: "red" }}>
                               Chưa Thanh Toán
+=======
+                              Thành Công
+                            </span>
+                          ) : (
+                            <span style={{ color: "red" }}>
+                              Đang Chờ Thanh Toán
+>>>>>>> 27a5cb14d69faac568df7bd546d18495d08680f9
                             </span>
                           )}
                         </span>
                       </td>
 
                       <td>
+<<<<<<< HEAD
                         <button
                           type="button"
                           class="btn btn-light"
@@ -273,6 +336,37 @@ function HopDong() {
                         >
                           <i class="fa-solid fa-eye"></i>
                         </button>
+=======
+                        {contract.statusPayment ? (
+                          <button
+                            disabled={true}
+                            type="button"
+                            class="btn btn-light"
+                            data-bs-toggle="modal"
+                            data-bs-target="#chitietHD"
+                            variant="light"
+                            onClick={() =>
+                              handleButtonClick(contract.contractId)
+                            }
+                          >
+                            <i class="fa-solid fa-eye"></i>
+                          </button>
+                        ) : (
+                          
+                          <button
+                            type="button"
+                            class="btn btn-light"
+                            data-bs-toggle="modal"
+                            data-bs-target="#chitietHD"
+                            variant="light"
+                            onClick={() =>
+                              handleButtonClick(contract.contractId)
+                            }
+                          >
+                            <i class="fa-solid fa-eye"></i>
+                          </button>
+                        )}
+>>>>>>> 27a5cb14d69faac568df7bd546d18495d08680f9
                       </td>
                     </tr>
                   ))}
@@ -283,7 +377,10 @@ function HopDong() {
         </div>
 
         {/* Model new */}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 27a5cb14d69faac568df7bd546d18495d08680f9
         <div
           class="modal fade"
           id="chitietHD"
@@ -343,11 +440,19 @@ function HopDong() {
                           <label for="name">Tổng Tiền Hợp Đồng</label>
                           <input
                             type="text"
+<<<<<<< HEAD
                             value={formatVND(
                               ContractsById
                                 ? ContractsById.totalRentCost
                                 : "tổng tiền"
                             )}
+=======
+                            value={
+                              ContractsById
+                                ? ContractsById.totalRentCost
+                                : "tổng tiền"
+                            }
+>>>>>>> 27a5cb14d69faac568df7bd546d18495d08680f9
                             class="form-control"
                           />
                         </div>

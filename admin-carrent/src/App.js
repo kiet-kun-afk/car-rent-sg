@@ -15,10 +15,12 @@ import TrangChu from './components/Layout/trangchu';
 import Xe from './components/Layout/xe';
 import KhachHang from './components/Layout/khachhang';
 import HoaDon from './components/Layout/hoadon';
-import HopDong from './components/Layout/hopdong';
+import DonThue from './components/Layout/donthue';
 import ThongKe from './components/Layout/thongke';
 import BieuDo from './components/Layout/bieudo';
 import NhanVien from './components/Layout/nhanvien';
+import GiaoXe from './components/Layout/bangiaoxe';
+import TraXe from './components/Layout/traxe';
 import Error from './components/error';
 
 
@@ -52,8 +54,8 @@ const router = createBrowserRouter([
         element: <HoaDon/>,
       },
       {
-        path: "/admin/hopdong",
-        element: <HopDong/>,
+        path: "/admin/donthue",
+        element: <DonThue/>,
       },
       {
         path: "/admin/thongke",
@@ -66,6 +68,14 @@ const router = createBrowserRouter([
       {
         path: "/admin/nhanvien",
         element: <NhanVien/>,
+      },
+      {
+        path: "/admin/giaoxe",
+        element: <GiaoXe/>,
+      },
+      {
+        path: "/admin/traxe",
+        element: <TraXe/>,
       }
     ]
   },

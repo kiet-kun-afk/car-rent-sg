@@ -17,13 +17,13 @@ function Forgotpass() {
                         <div class="forgot-form">
                             <form action="" method="post">
                                 <div class="form-item">
-                                    <div class="item-title">
+                                    <div class="forgot-title">
                                         <h1>Nhập Email</h1>
                                         <h5>Email được dùng để đăng ký tài khoản.</h5>
                                     </div>
                                     <div class="item-form">
                                         <div class="mb-3">
-                                            <input name="email" type="text" class="form-control" placeholder="Email" />
+                                            <input name="email" type="text" class="form-control-forgot" placeholder="Email" />
                                         </div>
                                         <div class="form-error ${errorMessage==null?'d-lg-none':'' }">
                                             {/* <span class="error-item">

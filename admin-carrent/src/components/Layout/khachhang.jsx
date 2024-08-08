@@ -1,42 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
+import axiosConfig from "../../../src/config/axiosConfig";
 
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { color } from "@mui/system";
-import { colors } from "@mui/material";
 
 function KhachHang() {
-  const sNotify = () =>
-    toast.success("Success !", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      transition: Bounce,
-    });
-  const errNotify = () =>
-    toast.error("Error !", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      transition: Bounce,
-    });
-
+  const [customers, setCustomers] = useState([]);
   const [customersWithPhone, setcustomersWithPhone] = useState(null);
+  const [addresss, setAddresss] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   // chuyển kiểu date
   const formatDate = (localdatetime) => {
@@ -57,29 +30,34 @@ function KhachHang() {
   };
   //
 
-  const [customers, setCustomer] = useState([]);
   const loadListCustomer = async () => {
-    const result = await axios.get(
+    const result1 = await axios.get(
       "http://localhost:8080/api/v1/customers/all"
     );
-    console.log(result.data.data);
+    console.log(result1.data);
 
-    setCustomer(result.data.data);
-    console.log(customers);
+    setCustomers(result1.data.data);
   };
-
-  useEffect(() => {
-    loadListCustomer();
-  }, []);
 
   const loadListCustomerPhonenumber = async (phoneNumber) => {
     const result1 = await axios.get(
       `http://localhost:8080/api/v1/customers/${phoneNumber}`
     );
-    console.log(result1.data.data);
+    // console.log(result1.data.data);
 
     setcustomersWithPhone(result1.data.data);
     console.log(customersWithPhone);
+  };
+
+  const findCustomerAddress = async () => {
+    try {
+      const response = await axiosConfig.get(
+        "http://localhost:8080/api/v1/address/get-customer-address"
+      );
+      setAddresss(response.data.data);
+    } catch (error) {
+      console.error("Error fetching customer address:", error);
+    }
   };
 
   const DeleteCustomer = async (phoneNumber) => {
@@ -88,13 +66,11 @@ function KhachHang() {
         `http://localhost:8080/api/v1/customers/delete/${phoneNumber}`
       );
       console.log(result1.data.message);
-      sNotify();
+
       var btnclose = document.getElementById("closebtn");
       btnclose.click();
       loadListCustomer();
-    } catch (error) {
-      errNotify();
-    }
+    } catch (error) {}
   };
 
   const handleButtonClick = async (phoneNumber) => {
@@ -104,6 +80,24 @@ function KhachHang() {
   const DeleteButtonClick = async (phoneNumber) => {
     await DeleteCustomer(phoneNumber);
   };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredCustomer = customers.filter((customer) => {
+    const normalizedSearchQuery = searchQuery.toLowerCase();
+    return (
+      (customer.fullName &&
+        customer.fullName.toLowerCase().includes(normalizedSearchQuery)) ||
+      (customer.phoneNumber &&
+        customer.phoneNumber.toLowerCase().includes(normalizedSearchQuery))
+    );
+  });
+
+  useEffect(() => {
+    loadListCustomer();
+  }, []);
 
   return (
     <>
@@ -136,10 +130,16 @@ function KhachHang() {
             <div className="head">
               <h3>Danh sách khách hàng</h3>
 
-              <form action="" id="search-box">
+              <form
+                action=""
+                id="search-box"
+                onSubmit={(e) => e.preventDefault()}
+              >
                 <input
                   type="text"
                   id="search-text"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                   placeholder="Bạn cần tìm kiếm gì nhỉ?"
                 />
                 <button id="search-btn">
@@ -173,15 +173,19 @@ function KhachHang() {
                   </tr>
                 </thead>
                 <tbody>
-                  {customers.map((customer, index) => (
+                  {filteredCustomer.map((customer, index) => (
                     <tr key={customer.customer_id}>
-                      <td>{index + 1}</td>
-                      <td>{customer.fullName}</td>
+                      <td className="text-center">{index + 1}</td>
+                      <td className="text-start">
+                        {customer.fullName ? customer.fullName : "Họ và tên"}
+                      </td>
                       <td>{formatDate(customer.birthDate)}</td>
-                      <td>{customer.gender ? "Nam" : "Nữ"}</td>
-                      <td>{customer.phoneNumber}</td>
-                      <td>{customer.email}</td>
-                      <td>{customer.address.street}</td>
+                      <td className="text-center">
+                        {customer.gender ? "Nam" : "Nữ"}
+                      </td>
+                      <td className="text-center">{customer.phoneNumber}</td>
+                      <td className="text-start">{customer.email}</td>
+                      <td className="text-start">{customer.street}</td>
                       <td className="status completed">
                         <span>
                           {customer.status ? (
@@ -198,14 +202,14 @@ function KhachHang() {
                       <td>
                         <button
                           type="button"
-                          class="btn btn-light"
+                          className="btn btn-light"
                           data-bs-toggle="modal"
                           data-bs-target="#chitietKH"
                           onClick={() =>
                             handleButtonClick(customer.phoneNumber)
                           }
                         >
-                          <i class="fa-solid fa-eye"></i>
+                          <i className="fa-solid fa-eye"></i>
                         </button>
                       </td>
                     </tr>
@@ -218,31 +222,31 @@ function KhachHang() {
 
         {/* Modal new */}
         <div
-          class="modal fade"
+          className="modal fade"
           id="chitietKH"
           tabindex="-1"
           aria-labelledby="chitietKHLabel"
           aria-hidden="true"
         >
-          <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="chitietKHLabel">
+          <div className="modal-dialog modal-lg modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h2 className="modal-title " id="chitietKHLabel">
                   Chi tiết khách hàng
-                </h1>
+                </h2>
                 <button
                   type="button"
-                  class="btn-close"
+                  className="btn-close"
                   id="closebtn"
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 ></button>
               </div>
-              <div class="modal-body">
-                <div class="container-custom">
-                  <div class="row">
-                    <div class="col-md-6 ">
-                      <div class="profile-info">
+              <div className="modal-body">
+                <div className="container-custom">
+                  <div className="row">
+                    <div className="col-md-6 ">
+                      <div className="profile-info">
                         <img
                           src={`../img/${
                             customersWithPhone
@@ -252,14 +256,14 @@ function KhachHang() {
                           alt="Profile Picture"
                         />
                       </div>
-                      <div class="profile-details">
+                      <div className="profile-details">
                         <h3>
                           {customersWithPhone
                             ? customersWithPhone.fullName
                             : "Người Dùng"}
                         </h3>
-                        <div class="row m-0">
-                          <div class="col-sm-9">
+                        <div className="row m-0">
+                          <div className="col-sm-9">
                             <p>
                               {" "}
                               Tham Gia:{" "}
@@ -268,15 +272,15 @@ function KhachHang() {
                                 : "Ngày Tham Gia"}
                             </p>
                           </div>
-                          <div class="col-sm-3 p-0 d-flex align-items-center justify-content-center">
+                          <div className="col-sm-3 p-0 d-flex align-items-center justify-content-center">
                             <span>
                               {customersWithPhone ? (
                                 customersWithPhone.status ? (
-                                  <span class="badge text-bg-success">
+                                  <span className="badge text-bg-success">
                                     Hoạt Động{" "}
                                   </span>
                                 ) : (
-                                  <span class="badge text-bg-danger">
+                                  <span className="badge text-bg-danger">
                                     Ngưng Hoạt Động
                                   </span>
                                 )
@@ -288,9 +292,9 @@ function KhachHang() {
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-6 contact-info">
-                      <div class="contact-detail">
-                        <div class="form-group mt-3">
+                    <div className="col-md-6 contact-info">
+                      <div className="contact-detail">
+                        <div className="form-group mt-3">
                           <label for="gplx">Số điện thoại</label>
                           <input
                             type="text"
@@ -300,11 +304,11 @@ function KhachHang() {
                                 ? customersWithPhone.phoneNumber
                                 : "Số điện thoại"
                             }
-                            class="form-control"
+                            className="form-control"
                             readonly
                           />
                         </div>
-                        <div class="form-group mt-3">
+                        <div className="form-group mt-3">
                           <label for="name">Email</label>
                           <input
                             type="text"
@@ -314,13 +318,13 @@ function KhachHang() {
                                 ? customersWithPhone.email
                                 : "email"
                             }
-                            class="form-control"
+                            className="form-control"
                             readonly
                           />
                         </div>
-                        <div class="row mt-3">
-                          <div class="col-sm-6">
-                            <div class="form-group">
+                        <div className="row mt-3">
+                          <div className="col-sm-6">
+                            <div className="form-group">
                               <label for="name">Giới tính</label>
                               <input
                                 type="text"
@@ -332,13 +336,13 @@ function KhachHang() {
                                       : "Nữ"
                                     : "gender"
                                 }
-                                class="form-control"
+                                className="form-control"
                                 readonly
                               />
                             </div>
                           </div>
-                          <div class="col-sm-6">
-                            <div class="form-group">
+                          <div className="col-sm-6">
+                            <div className="form-group">
                               <label for="dob">Ngày sinh</label>
                               <input
                                 type="text"
@@ -348,29 +352,29 @@ function KhachHang() {
                                     ? formatDate(customersWithPhone.birthDate)
                                     : "birthdate"
                                 }
-                                class="form-control"
+                                className="form-control"
                                 readonly
                               />
                             </div>
                           </div>
                         </div>
-                        <div class="form-group mt-3">
+                        <div className="form-group mt-3">
                           <label for="gplx">Địa chỉ</label>
                           <input
                             type="text"
                             id="address"
                             value={
                               customersWithPhone
-                                ? customersWithPhone.address.street +
+                                ? customersWithPhone.street +
                                   ", " +
-                                  customersWithPhone.address.ward +
+                                  customersWithPhone.ward +
                                   ", " +
-                                  customersWithPhone.address.district +
+                                  customersWithPhone.district +
                                   ", " +
-                                  customersWithPhone.address.province
+                                  customersWithPhone.province
                                 : "gender"
                             }
-                            class="form-control"
+                            className="form-control"
                             readonly
                           />
                         </div>
@@ -379,18 +383,18 @@ function KhachHang() {
                   </div>
                 </div>
 
-                <div class="container-custom">
-                  <div class="header-custom">
-                    <h2>Giấy phép lái xe</h2>
+                <div className="container-custom">
+                  <div className="header-custom">
+                    <h3>Giấy phép lái xe</h3>
                   </div>
-                  {/* <!-- <div class="alert-custom">
+                  {/* <!-- <div className="alert-custom">
                                         Lưu ý: để tránh phát sinh vấn đề trong quá trình thuê xe, người đặt xe trên Mioto (đã xác
                                         thực GPLX) đồng thời phải là người nhận xe.
                                     </div> --> */}
-                  <div class="row m-0 license-content">
-                    <div class="col-md-4 left">
+                  <div className="row m-0 license-content">
+                    <div className="col-md-4 left">
                       <img
-                        class="img-fluid rounded mx-auto"
+                        className="img-fluid rounded mx-auto"
                         src={`../img/${
                           customersWithPhone
                             ? customersWithPhone.avatarImage
@@ -399,8 +403,8 @@ function KhachHang() {
                         alt="Upload Icon"
                       />
                     </div>
-                    <div class="col-md-8 ps-4 right">
-                      <div class="form-group">
+                    <div className="col-md-8 ps-4 right">
+                      <div className="form-group">
                         <label for="gplx">Số GPLX</label>
                         <input
                           type="text"
@@ -410,11 +414,11 @@ function KhachHang() {
                               ? customersWithPhone.idCard
                               : "idCard"
                           }
-                          class="form-control"
+                          className="form-control"
                           disabled
                         />
                       </div>
-                      <div class="form-group">
+                      <div className="form-group">
                         <label for="name">Họ và tên</label>
                         <input
                           type="text"
@@ -424,11 +428,11 @@ function KhachHang() {
                               ? customersWithPhone.fullName
                               : "Người Dùng"
                           }
-                          class="form-control"
+                          className="form-control"
                           disabled
                         />
                       </div>
-                      <div class="form-group">
+                      <div className="form-group">
                         <label for="dob">Ngày sinh</label>
                         <input
                           type="text"
@@ -438,7 +442,7 @@ function KhachHang() {
                               ? formatDate(customersWithPhone.birthDate)
                               : "gender"
                           }
-                          class="form-control"
+                          className="form-control"
                           disabled
                         />
                       </div>
@@ -446,11 +450,11 @@ function KhachHang() {
                   </div>
                 </div>
               </div>
-              <div class="modal-footer">
-                {/* <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> */}
+              <div className="modal-footer">
+                {/* <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button> */}
                 <button
                   type="button"
-                  class="btn btn-success"
+                  className="btn btn-success"
                   onClick={() =>
                     DeleteButtonClick(
                       customersWithPhone

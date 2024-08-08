@@ -33,7 +33,7 @@ function ThongKe() {
   const LoadListContract = async () => {
     try {
       const result = await axios.get(
-        "http://localhost:8080/api/v1/contracts/all-statusPayments-true"
+        "http://localhost:8080/api/v1/contracts/all-status-payments-true"
       );
       console.log(result.data.data);
 
@@ -166,7 +166,7 @@ function ThongKe() {
           </div>
           <button onClick={exportToExcel} href="#" className="btn-download">
             <i className="bx bxs-cloud-download"></i>
-            <span className="text">Download PDF</span>
+            <span className="text">Xuất File Excel</span>
           </button>
         </div>
         <ul className="box-info">
@@ -210,7 +210,7 @@ function ThongKe() {
 
               <input
                 className="form-control  w-25"
-                type="datetime-local"
+                type="date"
                 id="startdate"
                 value={startDate}
                 placeholder="Ngày bắt đầu "
@@ -219,7 +219,7 @@ function ThongKe() {
 
               <input
                 className="form-control  w-25"
-                type="datetime-local"
+                type="date"
                 id="enddate"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
@@ -272,20 +272,32 @@ function ThongKe() {
                 <tbody>
                   {filteredContracts.map((contract, index) => (
                     <tr key={contract.contractId}>
-                      <td>{index + 1}</td>
-                      <td>{contract.createDate}</td>
-                      <td>{contract.customerName}</td>
-                      <td>{contract.customerPhone}</td>
-                      <td>{contract.wayToPay}</td>
-                      <td>
+                      <td className="text-center">{index + 1}</td>
+                      <td className="text-center">
+                        {formatDate(contract.createDate)}
+                      </td>
+                      <td className="text-start">{contract.customerName}</td>
+                      <td className="text-center">{contract.customerPhone}</td>
+                      <td className="text-center">{contract.wayToPay}</td>
+                      <td className="text-center">
                         {contract.carName} - {contract.carRegistrationPlate}
                       </td>
-                      <td>{formatDate(contract.startDate)}</td>
-                      <td>{formatDate(contract.endDate)}</td>
-                      <td>{formatVND(contract.rentCost)}</td>
-                      <td>{contract.numberDay}</td>
-                      <td>{formatVND(contract.deposit)}</td>
-                      <td>{formatVND(contract.totalRentCost)}</td>
+                      <td className="text-center">
+                        {formatDate(contract.startDate)}
+                      </td>
+                      <td className="text-center">
+                        {formatDate(contract.endDate)}
+                      </td>
+                      <td className="text-end">
+                        {formatVND(contract.rentCost)}
+                      </td>
+                      <td className="text-center">{contract.numberDay}</td>
+                      <td className="text-end">
+                        {formatVND(contract.deposit)}
+                      </td>
+                      <td className="text-end">
+                        {formatVND(contract.totalRentCost)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

@@ -65,8 +65,7 @@ p {
 }
 
 .item-title {
-	margin: 0 auto;
-	padding-top: 20px;
+	margin-bottom: 20px;
 	text-align: center;
 	font-size: 40px;
 }
@@ -74,10 +73,9 @@ p {
 .item-form {
 	display: flex;
 	flex-direction: column;
-	padding-top: 24px;
 }
 
-.form-control {
+.form-control-login {
 	height: 44px;
 	font-weight: 600;
 	border-radius: 0;
@@ -161,6 +159,26 @@ p {
 	display: flex;
 	flex-direction: column;
 	position: relative;
+	margin-bottom: 20px;
+}
+
+.input-field-err {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	position: relative;
+	padding: 10px;
+	display: none;
+}
+
+.hasErr{
+	display: block;
+}
+
+.input-field-err .err-message{
+	text-align: center;
+	color: #dc3545;
+    font-size: 14px;
 }
 
 .input-field-checkinput{
@@ -172,7 +190,6 @@ p {
 	padding-left: 10px;
 }
 
-
 .input-form {
 	height: 45px;
 	width: 100%;
@@ -180,7 +197,6 @@ p {
 	border: none;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 	outline: none;
-	margin-bottom: 30px;
 	color: #40414a;
 }
 
@@ -193,14 +209,14 @@ p {
 }
 
 .input-field .input-form:focus~label {
-	top: -20px;
+	top: -16px;
 	font-size: 13px;
 }
 
 .input-field .input-form:valid~label {
 	top: -10px;
 	font-size: 13px;
-	color: #5d5076;
+	color: var(--green);
 }
 
 .input-field .input-form:focus,

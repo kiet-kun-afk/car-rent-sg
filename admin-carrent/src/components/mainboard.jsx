@@ -11,6 +11,7 @@ import Header from "./header";
 
 import "../styles/style.css";
 import "../styles/styleKH.css";
+import "../styles/styleBB.css";
 
 import "../adminJS/dashboard";
 
@@ -77,16 +78,28 @@ function Mainboard() {
               <span className="text">Khách Hàng</span>
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link to="/admin/hoadon">
               <i className="bx bx-task"></i>
               <span className="text">Đơn Hàng</span>
             </Link>
+          </li> */}
+          <li>
+            <Link to="/admin/donthue">
+              <i className="bx bx-receipt"></i>
+              <span className="text">Đơn Thuê</span>
+            </Link>
           </li>
           <li>
-            <Link to="/admin/hopdong">
+            <Link to="/admin/giaoxe">
               <i className="bx bx-receipt"></i>
-              <span className="text">Hợp Đồng</span>
+              <span className="text">Biên Bản Bàn Giao</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/admin/traxe">
+              <i className="bx bx-receipt"></i>
+              <span className="text">Biên Bản Trả Xe</span>
             </Link>
           </li>
           <li>
@@ -98,7 +111,7 @@ function Mainboard() {
           <li>
             <Link to="/admin/bieudo">
               <i className="bx bx-line-chart"></i>
-              <span className="text">Biểu Đồ</span>
+              <span className="text">Theo dỗi giao dịch</span>
             </Link>
           </li>
           {userRoles === "ADMIN_ROLE" ? (

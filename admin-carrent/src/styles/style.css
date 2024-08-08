@@ -30,6 +30,7 @@ li {
 	--light-yellow: #FFF2C6;
 	--orange: #FD7238;
 	--light-orange: #FFE0D3;
+	--green: #5fcf86;
 }
 
 html {
@@ -93,7 +94,7 @@ body {
 	left: 0;
 	background: var(--light);
 	padding-top: 30px;
-	padding-bottom: 30px;
+	padding-bottom: 25px;
 	z-index: 500;
 	box-sizing: content-box;
 }
@@ -470,6 +471,10 @@ body.dark .mode .moon-sun .moon {
 	align-items: center;
 }
 
+#content nav .profile span {
+	padding: 0 10px;
+}
+
 #content nav .profile img {
 	width: 36px;
 	height: 36px;
@@ -713,15 +718,15 @@ body.dark .mode .moon-sun .moon {
 	border: #eee;
 }
 
-#content main .table-data .order table tr td .status.completed {
+#content main .table-data .order  table tr td .status.completed {
 	background: #17aa83;
 }
 
-#content main .table-data .order table tr td .status.process {
+#content main .table-data .order  table tr td .status.process {
 	background: #ffce26;
 }
 
-#content main .table-data .order table tr td .status.pending {
+#content main .table-data .order  table tr td .status.pending {
 	background: #fd7238;
 }
 
