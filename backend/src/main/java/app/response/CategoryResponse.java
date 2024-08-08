@@ -16,9 +16,12 @@ public class CategoryResponse {
 
     private String categoryName;
 
+    private String categoryImage;
+
     public CategoryResponse(Category category) {
         this.categoryId = category.getCategoryId();
         this.categoryName = category.getCategoryName();
+        this.categoryImage = category.getCategoryImage();
     }
 
     public static CategoryResponse fromCategoryResponse(Category category) {

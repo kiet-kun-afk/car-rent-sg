@@ -269,6 +269,9 @@ public class CarController {
             // brandName, countryOrigin, transmission, fuelType, categoryNames,
             // minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0),
             // pageSize.orElse(20));
+            //         .filterCarPage(start, end,
+            //                 brandName, countryOrigin, transmission, fuelType, categoryNames,
+            //                 minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Filter car successfully")
