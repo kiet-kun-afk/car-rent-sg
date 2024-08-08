@@ -237,6 +237,7 @@ function DetailCustomer() {
       .then((response) => response.json())
       .then((data) => {
         setCities(data);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -761,9 +762,7 @@ function DetailCustomer() {
                                   value={selectedProvince}
                                   onChange={handleProvinceChange}
                                 >
-                                  <option value="" >
-                                    Chọn tỉnh thành phố
-                                  </option>
+                                  <option value="">Chọn tỉnh thành phố</option>
                                   {cities.map((province) => (
                                     <option
                                       key={province.Id}
@@ -787,9 +786,7 @@ function DetailCustomer() {
                                   onChange={handleDistrictChange}
                                   disabled={!selectedProvince}
                                 >
-                                  <option value="" >
-                                    Chọn quận huyện
-                                  </option>
+                                  <option value="">Chọn quận huyện</option>
                                   {districts.map((district) => (
                                     <option
                                       key={district.Id}
@@ -813,9 +810,7 @@ function DetailCustomer() {
                                   onChange={handleWardChange}
                                   disabled={!selectedDistrict}
                                 >
-                                  <option value="" >
-                                    Chọn phường xã
-                                  </option>
+                                  <option value="">Chọn phường xã</option>
                                   {wards.map((ward) => (
                                     <option key={ward.Id} value={ward.Name}>
                                       {ward.Name}

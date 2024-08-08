@@ -88,7 +88,7 @@ function HopDong() {
     setContracts(response.data.data);
   };
 
-  const [ContractsById, setContractById] = useState("");
+  const [contract, setContractById] = useState("");
   const LoadContractById = async (ContractId) => {
     const result1 = await axios.get(
       `http://localhost:8080/api/v1/contracts/find-contract/${ContractId}`
@@ -107,13 +107,11 @@ function HopDong() {
       var btnclose = document.getElementById("closebtn");
       btnclose.click();
       LoadListContract();
-      ToastComponent("success", "Xác nhận thành công !"); 
+      ToastComponent("success", "Xác nhận thành công !");
       console.log(result2.data.message);
-      
     } catch (error) {
       ToastComponent("err", "Xác nhận thất bại!");
     }
-   
   };
 
   const handleButtonClick = async (ContractId) => {
@@ -124,9 +122,140 @@ function HopDong() {
     await DeleteContract(ContractId);
   };
 
+  const [user, setUser] = useState(null);
+
+  const handleListDelivery = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/api/v1/contracts/all-not-delivery-yet"
+    );
+    console.log(response.data.data);
+    setContracts(response.data.data);
+  };
+
+  const fetchUser = async () => {
+    try {
+      const response = await axiosConfig.get(
+        "http://localhost:8080/api/v1/staffs/current-staff"
+      );
+      setUser(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("Failed to fetch user", error);
+    }
+  };
+
+  const [nowDate, setNowDate] = useState("");
+
   useEffect(() => {
     LoadListContract();
+    const currentDate = new Date();
+    setNowDate(formatDate(currentDate));
   }, []);
+
+  const listDelivery = (e) => {
+    handleListDelivery();
+  };
+
+  const loadStaff = (e) => {
+    fetchUser();
+  };
+
+  const [address, setAddress] = useState("");
+  const [interior, setInterior] = useState("");
+  const [exterior, setExterior] = useState("");
+  const [fuelNumber, setFuelNumber] = useState(0);
+  const [kilometerNumber, setKiloNumber] = useState(0);
+  const [fileRegistration, setFileRegistration] = useState(null);
+  const [fileInsurance, setFileInsurance] = useState(null);
+  const [fileCertificate, setFileCertificate] = useState(null);
+
+  const handleAddress = (address) => {
+    setAddress(address.target.value);
+  };
+
+  const handleInputExterior = (interior) => {
+    setInterior(interior.target.value);
+  };
+
+  const handleInputInterior = (exterior) => {
+    setExterior(exterior.target.value);
+  };
+
+  const handleInputKilometer = (kilometer) => {
+    setKiloNumber(kilometer.target.value);
+  };
+
+  const handleInputFuel = (fuelNumber) => {
+    setFuelNumber(fuelNumber.target.value);
+  };
+
+  const setDocumentRegistration = (e) => {
+    const file = e.target.files[0];
+    setFileRegistration(file);
+  };
+  const setDocumentInsurance = (e) => {
+    const file = e.target.files[0];
+    setFileInsurance(file);
+  };
+  const setDocumentCertificate = (e) => {
+    const file = e.target.files[0];
+    setFileCertificate(file);
+  };
+
+  const account = localStorage.getItem("token");
+
+  const handleCreateDelivery = async (contractId) => {
+    const formData = new FormData();
+    formData.append("address", address);
+    formData.append("interior", interior);
+    formData.append("exterior", exterior);
+    formData.append("kilometerNumber", kilometerNumber);
+    formData.append("fuelNumber", fuelNumber);
+
+    // Chỉ thêm tệp vào formData nếu nó tồn tại
+    // if (fileRegistration) {
+    // 	formData.append("registrationDocument", fileRegistration);
+    // } else {
+    // 	formData.append("registrationDocument", null);
+    // }
+
+    // if (fileInsurance) {
+    // 	formData.append("insuranceDocument", fileInsurance);
+    // } else {
+    // 	formData.append("insuranceDocument", null);
+    // }
+
+    // if (fileCertificate) {
+    // 	formData.append("certificateOfRegistration", fileCertificate);
+    // } else {
+    // 	formData.append("certificateOfRegistration", null);
+    // }
+
+    // Cách code khác
+    formData.append("registrationDocument", fileRegistration ?? null);
+    formData.append("insuranceDocument", fileInsurance ?? null);
+    formData.append("certificateOfRegistration", fileCertificate ?? null);
+
+    if (account) {
+      try {
+        const res = await axiosConfig.post(
+          `http://localhost:8080/api/v1/records/create-delivery-record/${contractId}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        var btnClose = document.getElementById("closeBGX");
+        btnClose.click();
+        LoadListContract();
+        ToastComponent("success", "Tạo biên bản bàn giao thành công!");
+      } catch (error) {
+        console.error("Failed to create delivery record", error);
+      }
+    }
+  };
 
   return (
     <>
@@ -279,11 +408,319 @@ function HopDong() {
                             <i class="fa-solid fa-eye"></i>
                           </button>
                         )}
+                        {contract.canDelivery & !contract.statusPayment ? (
+                          <button
+                            type="button"
+                            className="btn btn-light"
+                            onClick={() => {
+                              loadStaff();
+                              handleButtonClick(contract.contractId);
+                            }}
+                            data-bs-toggle="modal"
+                            data-bs-target="#bienbanBGX"
+                          >
+                            <i className="fa-regular fa-address-card"></i>
+                          </button>
+                        ) : (
+                          ""
+                        )}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+
+        {/* Model create delivery */}
+        <div
+          className="modal fade"
+          id="bienbanBGX"
+          tabIndex="-1"
+          aria-labelledby="bienbanBGX"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-lg modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h2 className="modal-title">Tạo biên bản bàn giao</h2>
+                <button
+                  id="closeBGX"
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div className="container-custom">
+                  <div className="row">
+                    <div className="col-md-6 contact-info">
+                      <div className="header-custom-1">
+                        <h5>Bên Giao</h5>
+                      </div>
+                      <div className="contact-detail">
+                        <div className="form-group mt-3">
+                          <label htmlFor="name">Họ và tên</label>
+                          <input
+                            type="text"
+                            id="name"
+                            className="form-control"
+                            value={user?.fullName || ""}
+                            disabled
+                          />
+                        </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="gplx">Số điện thoại</label>
+                          <input
+                            type="text"
+                            id="gplx"
+                            className="form-control"
+                            value={user?.phoneNumber || ""}
+                            disabled
+                          />
+                        </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="name">Ngày giao</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="nowDate"
+                            name="nowDate"
+                            value={nowDate}
+                            readOnly
+                          />
+                        </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="name">Địa điểm giao xe</label>
+                          <input
+                            onChange={handleAddress}
+                            type="text"
+                            id="address"
+                            className="form-control"
+                            placeholder="Nhập địa điểm giao xe"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6 contact-info">
+                      <div className="header-custom-1">
+                        <h5>Bên Nhận</h5>
+                      </div>
+                      <div className="contact-detail">
+                        <div className="form-group mt-3">
+                          <label htmlFor="name">Họ và tên</label>
+                          <input
+                            type="text"
+                            placeholder="Họ và tên khách hàng"
+                            id="name"
+                            className="form-control"
+                            value={contract.customerName}
+                          />
+                        </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="gplx">Số điện thoại</label>
+                          <input
+                            type="text"
+                            placeholder="Số điện thoại khách hàng"
+                            id="gplx"
+                            className="form-control"
+                            value={contract.customerPhone}
+                          />
+                        </div>
+                        <div className="row mt-3">
+                          <div className="col-sm-6">
+                            <div className="form-group">
+                              <label htmlFor="name">Số GPLX</label>
+                              <input
+                                type="text"
+                                placeholder="Số GPLX"
+                                id="gplx"
+                                className="form-control"
+                                value={contract.driverLicense?.idCard || ""}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-sm-6">
+                            <div className="form-group">
+                              <label htmlFor="dob">Ngày cấp</label>
+                              <input
+                                type="text"
+                                id="dob"
+                                className="form-control"
+                                value={
+                                  contract.driverLicense?.licenseIssuedDate
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="name">Địa chỉ</label>
+                          <input
+                            type="text"
+                            placeholder="Địa chỉ khách hàng"
+                            id="address"
+                            className="form-control"
+                            value={
+                              contract.addressResponse
+                                ? contract.addressResponse.street +
+                                  ", " +
+                                  contract.addressResponse.ward +
+                                  ", " +
+                                  contract.addressResponse.district
+                                : ""
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="container-custom">
+                  <div className="header-custom">
+                    <h4>Xe</h4>
+                  </div>
+                  <div className="row m-0 license-content">
+                    {/* Thông tin xe */}
+                    <div className="header-custom-1">
+                      <h5>Thông tin xe</h5>
+                    </div>
+                    <div className="row m-0">
+                      <div className="col-sm-6 ps-0 pe-3 ">
+                        <div className="form-group">
+                          <label htmlFor="gplx">Xe</label>
+                          <input
+                            placeholder="Tên xe"
+                            type="text"
+                            id="gplx"
+                            className="form-control"
+                            value={contract.carName}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-sm-6 ps-3 pe-0">
+                        <div className="form-group">
+                          <label htmlFor="dob">Biển Số</label>
+                          <input
+                            placeholder="Biển số xe"
+                            type="text"
+                            id="gplx"
+                            className="form-control"
+                            value={contract.carRegistrationPlate}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tình trạng xe */}
+                    <div className="header-custom-1">
+                      <h5>Tình trạng xe</h5>
+                    </div>
+                    <div className="row m-0">
+                      <div className="col-sm-6 ps-0 pe-3 ">
+                        <div className="form-group">
+                          <label htmlFor="gplx">Ngoại thất</label>
+                          <textarea
+                            onChange={handleInputExterior}
+                            placeholder="Nhập trạng thái ngoại thất xe trước khi giao"
+                            type="text"
+                            id="gplx"
+                            className="form-control"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-sm-6 ps-3 pe-0">
+                        <div className="form-group">
+                          <label htmlFor="dob">Nội thất</label>
+                          <textarea
+                            onChange={handleInputInterior}
+                            placeholder="Nhập trạng thái nội thất xe trước khi giao"
+                            type="text"
+                            id="gplx"
+                            className="form-control"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row m-0">
+                      <div className="col-sm-6 ps-0 pe-3 ">
+                        <div className="form-group">
+                          <label htmlFor="gplx">Số xăng khi giao</label>
+                          <input
+                            onChange={handleInputFuel}
+                            placeholder="Nhập số lít xăng trước khi giao"
+                            type="number"
+                            id="gplx"
+                            className="form-control"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-sm-6 ps-3 pe-0">
+                        <div className="form-group">
+                          <label htmlFor="dob">Số KM khi giao</label>
+                          <input
+                            onChange={handleInputKilometer}
+                            placeholder="Nhập số KM trước khi giao"
+                            type="number"
+                            id="gplx"
+                            className="form-control"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Hồ sơ xe */}
+                    <div className="header-custom-1">
+                      <h5>Bộ hồ sơ xe</h5>
+                    </div>
+                    <div className="form-group mt-1">
+                      <label htmlFor="name">Giấy đăng kí ô tô</label>
+                      <input
+                        onChange={setDocumentRegistration}
+                        type="file"
+                        id="name"
+                        className="form-control"
+                        placeholder="Giấy Tờ Xe"
+                      />
+                    </div>
+
+                    <div className="form-group mt-1">
+                      <label htmlFor="dob">Giấy chứng nhận bảo hiểm</label>
+                      <input
+                        onChange={setDocumentInsurance}
+                        type="file"
+                        id="dob"
+                        className="form-control"
+                        placeholder="Bảo hiểm xe"
+                      />
+                    </div>
+
+                    <div className="form-group mt-1">
+                      <label htmlFor="dob">Giấy đăng kiểm xe</label>
+                      <input
+                        onChange={setDocumentCertificate}
+                        type="file"
+                        id="dob"
+                        className="form-control"
+                        placeholder="Giấy tờ đăng kiểm xe"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                {/* <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button> */}
+                <button
+                  onClick={() => handleCreateDelivery(contract.contractId)}
+                  type="button"
+                  className="btn btn-success"
+                >
+                  <i className="fa-solid fa-check"></i> Tạo biên bản bàn giao
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -323,9 +760,7 @@ function HopDong() {
                             type="text"
                             id="mahopdong"
                             value={
-                              ContractsById
-                                ? ContractsById.contractId
-                                : "mã hợp đồng"
+                              contract ? contract.contractId : "mã hợp đồng"
                             }
                             class="form-control"
                             readOnly
@@ -337,9 +772,7 @@ function HopDong() {
                           <input
                             type="text"
                             value={formatDate(
-                              ContractsById
-                                ? ContractsById.createDate
-                                : "ngày tạo"
+                              contract ? contract.createDate : "ngày tạo"
                             )}
                             class="form-control"
                           />
@@ -350,9 +783,7 @@ function HopDong() {
                           <input
                             type="text"
                             value={
-                              ContractsById
-                                ? ContractsById.totalRentCost
-                                : "tổng tiền"
+                              contract ? contract.totalRentCost : "tổng tiền"
                             }
                             class="form-control"
                           />
@@ -366,8 +797,8 @@ function HopDong() {
                           <input
                             type="text"
                             value={
-                              ContractsById
-                                ? ContractsById.customerName
+                              contract
+                                ? contract.customerName
                                 : "tên khách hàng"
                             }
                             class="form-control"
@@ -379,8 +810,8 @@ function HopDong() {
                           <input
                             type="text"
                             value={
-                              ContractsById
-                                ? ContractsById.customerPhone
+                              contract
+                                ? contract.customerPhone
                                 : "số điện thoại"
                             }
                             class="form-control"
@@ -392,9 +823,7 @@ function HopDong() {
                           <input
                             type="text"
                             value={formatVND(
-                              ContractsById
-                                ? ContractsById.deposit
-                                : "tiền cọc "
+                              contract ? contract.deposit : "tiền cọc "
                             )}
                             class="form-control"
                           />
@@ -415,9 +844,7 @@ function HopDong() {
                     <div class="col-md-4 left">
                       <img
                         class="img-fluid rounded mx-auto"
-                        src={`../img/${
-                          ContractsById ? ContractsById.imgCar : "avt"
-                        }`}
+                        src={`${contract ? contract.imgCar : "avt"}`}
                         alt="Upload Icon"
                       />
                     </div>
@@ -427,9 +854,7 @@ function HopDong() {
                         <label for="name">Tên Xe</label>
                         <input
                           type="text"
-                          value={
-                            ContractsById ? ContractsById.carName : " Tên xe "
-                          }
+                          value={contract ? contract.carName : " Tên xe "}
                           class="form-control"
                         />
                       </div>
@@ -439,8 +864,8 @@ function HopDong() {
                         <input
                           type="text"
                           value={
-                            ContractsById
-                              ? ContractsById.carRegistrationPlate
+                            contract
+                              ? contract.carRegistrationPlate
                               : " Biển số"
                           }
                           class="form-control"
@@ -454,9 +879,7 @@ function HopDong() {
                             <input
                               type="text"
                               value={formatDate(
-                                ContractsById
-                                  ? ContractsById.startDate
-                                  : "Ngày bắt đầu"
+                                contract ? contract.startDate : "Ngày bắt đầu"
                               )}
                               class="form-control"
                             />
@@ -469,9 +892,7 @@ function HopDong() {
                             <input
                               type="text"
                               value={formatDate(
-                                ContractsById
-                                  ? ContractsById.endDate
-                                  : "Ngày kết thúc"
+                                contract ? contract.endDate : "Ngày kết thúc"
                               )}
                               class="form-control"
                             />
@@ -486,9 +907,7 @@ function HopDong() {
                             <input
                               type="text"
                               value={formatVND(
-                                ContractsById
-                                  ? ContractsById.rentCost
-                                  : "Chi phí thuê"
+                                contract ? contract.rentCost : "Chi phí thuê"
                               )}
                               class="form-control"
                             />
@@ -501,9 +920,7 @@ function HopDong() {
                             <input
                               type="text"
                               value={
-                                ContractsById
-                                  ? ContractsById.numberDay
-                                  : "số ngày thuê "
+                                contract ? contract.numberDay : "số ngày thuê "
                               }
                               class="form-control"
                             />
@@ -518,15 +935,13 @@ function HopDong() {
 
               <div class="modal-footer justify-content-between">
                 <div class="row">
-                  {ContractsById.staffId == null ? (
+                  {contract.staffId == null ? (
                     <button
                       type="button"
                       class="btn btn-success text-end"
                       onClick={() =>
                         DeleteButtonClick(
-                          ContractsById
-                            ? ContractsById.contractId
-                            : "mã hợp đồng"
+                          contract ? contract.contractId : "mã hợp đồng"
                         )
                       }
                     >

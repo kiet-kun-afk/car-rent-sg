@@ -718,15 +718,15 @@ body.dark .mode .moon-sun .moon {
 	border: #eee;
 }
 
-#content main .table-data .order table tr td .status.completed {
+#content main .table-data .order  table tr td .status.completed {
 	background: #17aa83;
 }
 
-#content main .table-data .order table tr td .status.process {
+#content main .table-data .order  table tr td .status.process {
 	background: #ffce26;
 }
 
-#content main .table-data .order table tr td .status.pending {
+#content main .table-data .order  table tr td .status.pending {
 	background: #fd7238;
 }
 

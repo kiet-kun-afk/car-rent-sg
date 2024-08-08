@@ -111,7 +111,7 @@ function Mainboard() {
           <li>
             <Link to="/admin/bieudo">
               <i className="bx bx-line-chart"></i>
-              <span className="text">Biểu Đồ</span>
+              <span className="text">Theo dỗi giao dịch</span>
             </Link>
           </li>
           {userRoles === "ADMIN_ROLE" ? (

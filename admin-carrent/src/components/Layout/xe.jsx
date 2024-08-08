@@ -57,11 +57,100 @@ function Xe() {
   const [Cars, setCars] = useState([]);
   const [Brand, setBrand] = useState([]);
   const [Categories, setCategories] = useState([]);
+  const [Branch, SetBranch] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [CarsWithRegistrationPlate, setcarsWithRegistrationPlate] =
     useState(null);
-  const [selectedBrandId, setSelectedBrandId] = useState("");
-  const [selectedCategoryId, SetselectedCategoryId] = useState("");
+  // const [selectedBrandId, setSelectedBrandId] = useState("");
+  // const [selectedCategoryId, SetselectedCategoryId] = useState("");
+  // const [selectedBranchId, SetselectedBranchId] = useState("");
+
+  const [images, setImages] = useState({
+    frontImage: null,
+    backImage: null,
+    leftImage: null,
+    rightImage: null,
+  });
+
+  const [registrationPlate, setRegistrationPlate] = useState("");
+  const [carName, setCarName] = useState("");
+
+  const [transmission, setTransmission] = useState("");
+
+  const [fuelType, setFuelType] = useState("");
+  const [fuelConsumption, setFuelConsumption] = useState("");
+
+  const [rentCost, setRentCost] = useState("");
+  const [brandId, setBrandId] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [branchId, setBranchId] = useState("");
+  const [numberOfSeat, setNumberOfSeat] = useState("");
+
+  const [registrationDate, setRegistrationDate] = useState("");
+  const [describe, setDescribe] = useState("");
+  const [features, setFeatures] = useState("");
+
+  const handleChange = (e, setter) => {
+    setter(e.target.value);
+  };
+
+  const handleRadioChange = (e) => {
+    setFuelType(e.target.value);
+  };
+
+  const handleImageChange = (e) => {
+    const { name, files } = e.target;
+    setImages({
+      ...images,
+      [name]: files[0],
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const numberOfSeatInteger = parseInt(numberOfSeat, 10) || 0;
+    const rentCostInteger = parseInt(rentCost, 10) || 0;
+    const brandIdInteger = parseInt(brandId, 10) || 0;
+    const categoryIdInteger = parseInt(categoryId, 10) || 0;
+    const branchIdInteger = parseInt(branchId, 10) || 0;
+
+    console.log("tên:" + fuelType);
+    const formData = new FormData();
+    for (const key in images) {
+      formData.append(key, images[key]);
+    }
+
+    formData.append("brandId", brandIdInteger);
+    formData.append("categoryId", categoryIdInteger);
+    formData.append("registrationPlate", registrationPlate);
+    formData.append("carName", carName);
+    formData.append("numberOfSeat", numberOfSeatInteger);
+    formData.append("transmission", transmission);
+    formData.append("fuelType", fuelType);
+    formData.append("fuelConsumption", fuelConsumption);
+    formData.append("rentCost", rentCostInteger);
+    formData.append("branchId", branchIdInteger);
+    formData.append("registrationDate", registrationDate);
+    formData.append("describe", describe);
+    formData.append("features", features);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/cars/create",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      sNotify();
+      console.log(response.data);
+    } catch (error) {
+      console.error("There was an error submitting the form!", error);
+      errNotify();
+    }
+  };
 
   const LoadListCar = async () => {
     const result = await axios.get("http://localhost:8080/api/v1/cars");
@@ -95,6 +184,13 @@ function Xe() {
     setCategories(result.data.data);
   };
 
+  const LoadBranch = async () => {
+    const result = await axios.get("http://localhost:8080/api/v1/branches");
+    console.log(result.data.data);
+
+    SetBranch(result.data.data);
+  };
+
   const DeleteCar = async (registrationPlate) => {
     try {
       const result2 = await axios.delete(
@@ -122,19 +218,23 @@ function Xe() {
     setSearchQuery(event.target.value);
   };
 
-  const handleChangeBrand = (event) => {
-    const selectedId = event.target.value;
-    setSelectedBrandId(selectedId);
-    console.log("Selected Brand ID:", selectedId);
-  };
+  // const handleChangeBrand = (event) => {
+  //   const selectedId = event.target.value;
+  //   setSelectedBrandId(selectedId);
+  //   console.log("Selected Brand ID:", selectedId);
+  // };
 
-  const handleChangeCategory = (event) => {
-    const selectedId = event.target.value;
-    SetselectedCategoryId(selectedId);
-    console.log("Selected Brand ID:", selectedId);
-  };
+  // const handleChangeCategory = (event) => {
+  //   const selectedId = event.target.value;
+  //   SetselectedCategoryId(selectedId);
+  //   console.log("Selected Brand ID:", selectedId);
+  // };
 
-  
+  // const handleChangeBranch = (event) => {
+  //   const selectedId = event.target.value;
+  //   SetselectedBranchId(selectedId);
+  //   console.log("Selected Branch ID:", selectedId);
+  // };
 
   const filteredCars = Cars.filter((car) => {
     const normalizedSearchQuery = searchQuery.toLowerCase();
@@ -147,26 +247,28 @@ function Xe() {
         car.brandName.toLowerCase().includes(normalizedSearchQuery))
     );
   });
+
   useEffect(() => {
     LoadListCar();
     LoadBrand();
     LoadCategory();
+    LoadBranch();
   }, []);
 
   function formatVND(value) {
-		// Check if value is a number
-		if (typeof value !== "number") {
-			return "";
-		}
+    // Check if value is a number
+    if (typeof value !== "number") {
+      return "";
+    }
 
-		// Convert value to a string with two decimal places
-		const formattedValue = value.toFixed(2).toString();
+    // Convert value to a string with two decimal places
+    const formattedValue = value.toFixed(2).toString();
 
-		// Add thousands separators
-		const parts = formattedValue.split(".");
-		const formattedPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-		return `${formattedPart}`;
-	}
+    // Add thousands separators
+    const parts = formattedValue.split(".");
+    const formattedPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return `${formattedPart}`;
+  }
   return (
     <>
       <main>
@@ -261,7 +363,9 @@ function Xe() {
                       </td>
                       <td className="text-end">{car.rentCost}</td>
                       <td className="text-start">{car.branchName}</td>
-                      <td className="text-center">{formatDate(car.registrationDate)}</td>
+                      <td className="text-center">
+                        {formatDate(car.registrationDate)}
+                      </td>
                       <td className="status completed">
                         <span>
                           {car.status ? (
@@ -548,141 +652,271 @@ function Xe() {
                 ></button>
               </div>
 
-              <div class="modal-body">
-                <div class="container-custom">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group mt-3">
-                        <label for="Frontimg">Hình Trước Xe</label>
-                        <input type="file" class="form-control" />
-                      </div>
-                      <div class="form-group mt-3">
-                        <label for="Leftimg">Hình Trái Xe</label>
-                        <input type="file" class="form-control" />
-                      </div>
-                      <div class="form-group mt-3">
-                        <label for="Rightimg">Hình Phải Xe</label>
-                        <input type="file" class="form-control" />
-                      </div>
-                      <div class="form-group mt-3">
-                        <label for="Backimg">Hình Sau Xe</label>
-                        <input type="file" class="form-control" />
-                      </div>
+              <form onSubmit={handleSubmit}>
+                <div className="modal-body">
+                  <div className="container-custom">
+                    <div className="row">
+                      <div className="col-md-6">
+                        <div className="form-group mt-3">
+                          <label htmlFor="frontImage">Hình Trước Xe</label>
+                          <input
+                            type="file"
+                            name="frontImage"
+                            className="form-control"
+                            onChange={handleImageChange}
+                          />
+                        </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="leftImage">Hình Trái Xe</label>
+                          <input
+                            type="file"
+                            name="leftImage"
+                            className="form-control"
+                            onChange={handleImageChange}
+                          />
+                        </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="rightImage">Hình Phải Xe</label>
+                          <input
+                            type="file"
+                            name="rightImage"
+                            className="form-control"
+                            onChange={handleImageChange}
+                          />
+                        </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="backImage">Hình Sau Xe</label>
+                          <input
+                            type="file"
+                            name="backImage"
+                            className="form-control"
+                            onChange={handleImageChange}
+                          />
+                        </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="brand-select">Thương Hiệu</label>
+                          <select
+                            className="form-select"
+                            value={brandId}
+                            onChange={(e) => handleChange(e, setBrandId)}
+                          >
+                            {Brand.map((brand) => (
+                              <option key={brand.brandId} value={brand.brandId}>
+                                {brand.brandName}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="category-select">Thể Loại</label>
+                          <select
+                            className="form-select"
+                            value={categoryId}
+                            onChange={(e) => handleChange(e, setCategoryId)}
+                          >
+                            {Categories.map((category) => (
+                              <option
+                                key={category.categoryId}
+                                value={category.categoryId}
+                              >
+                                {category.categoryName}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
 
-                      <div class="form-group mt-3">
-                        <label htmlFor="brand-select">Thương Hiệu</label>
-                        <select
-                          class="form-select"
-                          aria-label="Default select example"
-                          value={selectedBrandId}
-                          onChange={handleChangeBrand}
-                        >
-                          {Brand.map((brand) => (
-                            <option key={brand.brandId} value={brand.brandId}>
-                              {brand.brandName}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                        <div className="form-group mt-3">
+                          <label htmlFor="describe">Mô tả</label>
+                          <input
+                            type="text"
+                            id="describe"
+                            className="form-control"
+                            value={describe}
+                            onChange={(e) => handleChange(e, setDescribe)}
+                          />
+                        </div>
 
-                      <div class="form-group mt-3">
-                        <label htmlFor="brand-select">Thể Loại</label>
-                        <select
-                          class="form-select"
-                          aria-label="Default select example"
-                          value={selectedBrandId}
-                          onChange={handleChangeCategory}
-                        >
-                          {Categories.map((category) => (
-                            <option
-                              key={category.categoryId}
-                              value={category.categoryId}
+                        <div className="form-group mt-3">
+                          <label htmlFor="features">Đặc Trưng</label>
+                          <input
+                            type="text"
+                            id="features"
+                            className="form-control"
+                            value={features}
+                            onChange={(e) => handleChange(e, setFeatures)}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-6 contact-info">
+                        <div className="contact-detail">
+                          <div className="form-group mt-3">
+                            <label htmlFor="licensePlate">Biển Số</label>
+                            <input
+                              type="text"
+                              id="registrationPlate"
+                              className="form-control"
+                              value={registrationPlate}
+                              onChange={(e) =>
+                                handleChange(e, setRegistrationPlate)
+                              }
+                            />
+                          </div>
+                          <div className="form-group mt-3">
+                            <label htmlFor="carName">Tên Xe</label>
+                            <input
+                              type="text"
+                              id="carName"
+                              className="form-control"
+                              value={carName}
+                              onChange={(e) => handleChange(e, setCarName)}
+                            />
+                          </div>
+                          <div className="row mt-3">
+                            <div className="col-sm-6">
+                              <div className="form-group">
+                                <label htmlFor="numberOfSeat">Số Chỗ</label>
+                                <input
+                                  type="text"
+                                  id="numberOfSeat"
+                                  className="form-control"
+                                  value={numberOfSeat}
+                                  onChange={(e) =>
+                                    handleChange(e, setNumberOfSeat)
+                                  }
+                                />
+                              </div>
+                            </div>
+                            <div className="col-sm-6">
+                              <div className="form-group">
+                                <label htmlFor="transmission">
+                                  Truyền Động
+                                </label>
+                                <input
+                                  type="text"
+                                  id="transmission"
+                                  className="form-control"
+                                  value={transmission}
+                                  onChange={(e) =>
+                                    handleChange(e, setTransmission)
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="row mt-3">
+                            <div className="col-sm-6">
+                              <label htmlFor="fuelType">Nhiên liệu</label>
+                              <div className="form-group d-flex mt-3">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    id="petrol"
+                                    name="fuelType"
+                                    value="Xăng"
+                                    checked={fuelType === "Xăng"}
+                                    onChange={handleRadioChange}
+                                  />
+                                  <label htmlFor="petrol">Xăng</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    id="diesel"
+                                    name="fuelType"
+                                    value="Dầu"
+                                    checked={fuelType === "Dầu"}
+                                    onChange={handleRadioChange}
+                                  />
+                                  <label htmlFor="diesel">Dầu</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    id="electric"
+                                    name="fuelType"
+                                    value="Điện"
+                                    checked={fuelType === "Điện"}
+                                    onChange={handleRadioChange}
+                                  />
+                                  <label htmlFor="electric">Điện</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="form-group mt-3">
+                            <label htmlFor="fuelConsumption">
+                              Nhiên liệu tiêu hao
+                            </label>
+                            <input
+                              type="text"
+                              id="fuelConsumption"
+                              className="form-control"
+                              value={fuelConsumption}
+                              onChange={(e) =>
+                                handleChange(e, setFuelConsumption)
+                              }
+                            />
+                          </div>
+
+                          <div className="form-group mt-3">
+                            <label htmlFor="branch-select">Chi Nhánh</label>
+                            <select
+                              className="form-select"
+                              value={branchId}
+                              onChange={(e) => handleChange(e, setBranchId)}
                             >
-                              {category.categoryName}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 contact-info">
-                      <div class="contact-detail">
-                        <div class="form-group mt-3">
-                          <label for="gplx">Biển Số</label>
-                          <input type="text" id="bienso" class="form-control" />
-                        </div>
-
-                        <div class="row mt-3">
-                          <div class="col-sm-6">
-                            <div class="form-group">
-                              <label for="name">Số Chỗ</label>
-                              <input
-                                type="text"
-                                id="socho"
-                                class="form-control"
-                              />
-                            </div>
+                              {Branch.map((branch) => (
+                                <option
+                                  key={branch.branchId}
+                                  value={branch.branchId}
+                                >
+                                  {branch.branchName}
+                                </option>
+                              ))}
+                            </select>
                           </div>
-                          <div class="col-sm-6">
-                            <div class="form-group">
-                              <label for="brand">Hãng Xe</label>
-                              <input
-                                type="text"
-                                id="hãng"
-                                class="form-control"
-                              />
-                            </div>
+
+                          <div className="form-group mt-3">
+                            <label htmlFor="rentCost">Giá Cho Thuê</label>
+                            <input
+                              type="number"
+                              id="rentCost"
+                              className="form-control"
+                              value={rentCost}
+                              onChange={(e) => handleChange(e, setRentCost)}
+                            />
                           </div>
-                        </div>
+                          <div className="form-group mt-3">
+                            <label htmlFor="registrationDate">
+                              Ngày Đăng Kiểm
+                            </label>
 
-                        <div class="row mt-3">
-                          <div class="col-sm-6">
-                            <div class="form-group">
-                              <label for="name">Nhiên liệu</label>
-                              <input
-                                type="text"
-                                id="socho"
-                                class="form-control"
-                              />
-                            </div>
+                            <input
+                              type="date"
+                              id="registrationDate"
+                              className="form-control"
+                              value={registrationDate}
+                              onChange={(e) =>
+                                handleChange(e, setRegistrationDate)
+                              }
+                            />
                           </div>
-                          <div class="col-sm-6">
-                            <div class="form-group">
-                              <label for="brand">Nhiên liệu tiêu hao</label>
-                              <input
-                                type="text"
-                                id="hãng"
-                                class="form-control"
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="form-group mt-3">
-                          <label for="gplx">Giá Cho Thuê</label>
-                          <input type="text" class="form-control" />
-                        </div>
-
-                        <div class="form-group mt-3">
-                          <label for="gplx">Chi Nhánh</label>
-                          <input type="text" id="gia" class="form-control" />
-                        </div>
-
-                        <div class="form-group mt-3">
-                          <label for="gplx">Ngày Đăng Kiểm</label>
-                          <input type="text" id="gia" class="form-control" />
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="modal-footer">
-                <button type="button" class="btn btn-success">
-                  Vô Hiệu Hóa trạng thái
-                </button>
-              </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">
+                    Tạo Xe
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

@@ -33,7 +33,7 @@ function ThongKe() {
   const LoadListContract = async () => {
     try {
       const result = await axios.get(
-        "http://localhost:8080/api/v1/contracts/all-statusPayments-true"
+        "http://localhost:8080/api/v1/contracts/all-status-payments-true"
       );
       console.log(result.data.data);
 

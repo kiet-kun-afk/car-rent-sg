@@ -209,9 +209,10 @@ h5 {
 	color: #6f6f6f;
 }
 
-.modal-advanced-filter .advanced-filter__item .range-value .line {
+.line {
 	width: 25px;
 	height: 1px;
+	margin-top: 50px !important;
 	background: #aaa;
 }
 
@@ -224,14 +225,6 @@ h5 {
 
 .modal-advanced-filter .advanced-filter__item .features .custom-checkbox-selected {
 	width: calc(33.33% - 10px);
-}
-
-input[type=checkbox],
-input[type=radio] {
-	/* position: absolute; */
-	/* visibility: hidden; */
-	width: auto;
-	box-shadow: none;
 }
 
 .custom-checkbox-indeterminate label,
@@ -273,6 +266,10 @@ input[type=radio] {
 	color: #fff;
 	background-color: #5fcf86;
 	border-color: #5fcf86;
+}
+
+.btn.btn-primary:hover {
+	box-shadow: 0 8px 24px 12px rgba(0, 0, 0, .08), 0 20px 24px -4px rgba(0, 0, 0, .08);
 }
 
 .c-container {
@@ -356,6 +353,72 @@ input[type=radio] {
 	position: relative;
 	width: 100%;
 	margin: 0 auto;
+}
+
+/* Filters */
+.timeCursor{
+	cursor: pointer;
+}
+
+.custom-background{
+	background-color: #b6efca !important;
+	border-color: #169342 !important;
+	color: #eef7ff;
+}
+
+.btn.btn-filter{
+	color: #6c757d ;
+	background-color: #fff;
+	border-color: #6c757d ;
+}
+
+.btn-filter:hover{
+	background-color: #5fcf86 !important;
+	color: #212529 !important;
+	border-color: #169342 !important;
+	box-shadow: 0 8px 24px 12px rgba(0, 0, 0, .08), 0 20px 24px -4px rgba(0, 0, 0, .08);
+}
+
+.form-item{
+	display: flex;
+    flex-direction: column;
+    padding: 14px 18px;
+}
+
+.card-style{
+	cursor: pointer;
+}
+
+.card-style:hover{
+	background-color: #effaf3;
+	border: 1px solid #5fcf86;
+}
+
+.custom-radio-brand{
+	width: calc(50% - 6px);
+}
+.custom-radio-fuel{
+	width: 25%;
+}
+
+.custom-radio-brand label,.custom-radio-fuel  label{
+	position: relative;
+    display: flex;
+	flex-wrap: wrap;
+    align-items: center;
+    cursor: pointer;
+    padding-left: 6px;
+	gap: 8px;
+    line-height: 24px;
+    top: 0;
+    left: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #262626;
+}
+.custom-radio-brand img{
+	width: 24px;
+	height: 24px;
 }
 
 /* Banner */
@@ -1043,6 +1106,44 @@ footer {
 .payment img {
 	width: 46px;
 }
+
+.price-range-slider {
+	width: 300px;
+	margin: 20px auto;
+	font-family: Arial, sans-serif;
+  }
+  
+  .price-inputs {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 10px;
+  }
+  
+  .price-input {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  }
+  
+  .price-input label {
+	margin-bottom: 5px;
+	font-size: 12px;
+	color: #777;
+  }
+  
+  .price-input input {
+	width: 60px;
+	text-align: center;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 5px;
+  }
+  
+  .separator {
+	font-size: 24px;
+	color: #777;
+  }
 
 @media only screen and (max-width: 900px) {
 	.c-header .c-container {

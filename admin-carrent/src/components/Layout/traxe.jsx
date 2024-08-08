@@ -41,44 +41,46 @@ function TraXe() {
     setnowDate(currentDate);
   }
 
-  const [staffs, setStaffs] = useState([]);
-  const loadListStaff = async () => {
-    const result = await axios.get("http://localhost:8080/api/v1/staffs");
+  const [records, setRecords] = useState([]);
+  const loadListRecords = async () => {
+    const result = await axios.get(
+      "http://localhost:8080/api/v1/records/list-return-record"
+    );
     console.log(result.data.data);
 
-    setStaffs(result.data.data);
+    setRecords(result.data.data);
   };
 
-  const handleCarID = (e) => {
-    const staffID = e.currentTarget.getAttribute("data-id");
-    console.log(staffID);
-    if (staffID) {
-      loadStaff(staffID);
+  const getRecord = (e) => {
+    const recordId = e.currentTarget.getAttribute("data-id");
+    console.log(recordId);
+    if (recordId) {
+      loadRecord(recordId);
     } else {
-      alert("Please enter a user ID");
+      alert("Please enter an id");
     }
   };
 
-  const [staff, setStaff] = useState(null);
-  const loadStaff = async (staffID) => {
+  const [record, setRecord] = useState(null);
+  const loadRecord = async (id) => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/api/v1/staffs/${staffID}`
+        `http://localhost:8080/api/v1/records/get-return-record/${id}`
       );
-      setStaff(res.data.data);
-      console.log(staff);
+      setRecord(res.data.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    loadListStaff();
+    loadListRecords();
+    getCurrentDate();
   }, []);
 
-  const formatDate = (localdatetime) => {
-    // Tạo một đối tượng Date từ localdatetime
-    const date = new Date(localdatetime);
+  const formatDate = (localDatetime) => {
+    // Tạo một đối tượng Date từ localDatetime
+    const date = new Date(localDatetime);
 
     // Lấy ra ngày, tháng và năm
     const day = date.getDate();
@@ -113,10 +115,6 @@ function TraXe() {
               </li>
             </ul>
           </div>
-          <a href="#" className="btn-download">
-            <i class="fa-solid fa-plus"></i>
-            <span className="text">Thêm mới</span>
-          </a>
         </div>
 
         <div className="table-data">
@@ -159,18 +157,20 @@ function TraXe() {
                   </tr>
                 </thead>
                 <tbody>
-                  {staffs.map((staff, index) => (
+                  {records.map((record, index) => (
                     <tr>
                       <td>{index + 1}</td>
-                      <td className="text-center">dd/MM/yyyy</td>
-                      <td className="text-start">{staff.fullName? staff.fullName : "Nhân viên" }</td>
-                      <td>Khách hàng</td>
+                      <td>{formatDate(record.createDate)}</td>
+                      <td>
+                        {record.staffName ? record.staffName : "Nhân viên"}
+                      </td>
+                      <td>{record.customerName}</td>
                       <td>
                         <button
                           type="button"
                           className="btn btn-light"
-                          data-id={staff.email}
-                          onClick={handleCarID}
+                          data-id={record.id}
+                          onClick={getRecord}
                           data-bs-toggle="modal"
                           data-bs-target="#bienbanTX"
                         >
@@ -197,7 +197,7 @@ function TraXe() {
           <div className="modal-dialog modal-lg modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h2 className="modal-title">Chi tiết biên bản bàn giao</h2>
+                <h2 className="modal-title">Chi tiết biên bản trả xe</h2>
                 <button
                   type="button"
                   className="btn-close"
@@ -205,7 +205,7 @@ function TraXe() {
                   aria-label="Close"
                 ></button>
               </div>
-              {staff ? (
+              {record ? (
                 <div className="modal-body">
                   <div className="container-custom">
                     <div className="row">
@@ -221,7 +221,9 @@ function TraXe() {
                               id="name"
                               className="form-control"
                               value={
-                                staff.fullName ? staff.fullName : "Nhân viên"
+                                record.staffName
+                                  ? record.staffName
+                                  : "Nhân viên"
                               }
                             />
                           </div>
@@ -231,17 +233,17 @@ function TraXe() {
                               type="text"
                               id="gplx"
                               className="form-control"
-                              value={staff.phoneNumber}
+                              value={record.staffPhoneNumber}
                             />
                           </div>
                           <div className="form-group mt-3">
-                            <label htmlFor="name">Ngày giao </label>
+                            <label htmlFor="name">Ngày trả</label>
                             <input
-                              type="date"
+                              type="text"
                               className="form-control"
                               id="nowDate"
                               name="nowDate"
-                              value={nowDate}
+                              value={formatDate(record.createDate)}
                               onChange={(e) => setnowDate(e.target.value)}
                             />
                           </div>
@@ -251,9 +253,7 @@ function TraXe() {
                               type="text"
                               id="address"
                               className="form-control"
-                              value={
-                                staff.address ? "Quận 12, TP.HCM" : "TP.HCM"
-                              }
+                              value={record.address}
                             />
                           </div>
                         </div>
@@ -270,6 +270,7 @@ function TraXe() {
                               placeholder="Họ và tên khách hàng"
                               id="name"
                               className="form-control"
+                              value={record.customerName}
                             />
                           </div>
                           <div className="form-group mt-3">
@@ -279,17 +280,19 @@ function TraXe() {
                               placeholder="Số điện thoại khách hàng"
                               id="gplx"
                               className="form-control"
+                              value={record.customerPhoneNumber}
                             />
                           </div>
                           <div className="row mt-3">
                             <div className="col-sm-6">
                               <div className="form-group">
-                                <label htmlFor="name">Số CCCD</label>
+                                <label htmlFor="name">Số GPLX</label>
                                 <input
                                   type="text"
-                                  placeholder="Số CCCD"
+                                  placeholder="Số GPLX"
                                   id="gplx"
                                   className="form-control"
+                                  value={record.licenseNumber}
                                 />
                               </div>
                             </div>
@@ -300,6 +303,7 @@ function TraXe() {
                                   type="date"
                                   id="dob"
                                   className="form-control"
+                                  value={record.licenseIssuedDate}
                                 />
                               </div>
                             </div>
@@ -311,6 +315,7 @@ function TraXe() {
                               placeholder="Địa chỉ khách hàng"
                               id="address"
                               className="form-control"
+                              value={record.customerAddress}
                             />
                           </div>
                         </div>
@@ -336,6 +341,7 @@ function TraXe() {
                               type="text"
                               id="gplx"
                               className="form-control"
+                              value={record.carName}
                             />
                           </div>
                         </div>
@@ -347,6 +353,33 @@ function TraXe() {
                               type="text"
                               id="gplx"
                               className="form-control"
+                              value={record.registrationPlate}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row m-0">
+                        <div className="col-sm-6 ps-0 pe-3 ">
+                          <div className="form-group">
+                            <label htmlFor="gplx">Số xăng khi giao</label>
+                            <input
+                              placeholder="Tên xe"
+                              type="text"
+                              id="gplx"
+                              className="form-control"
+                              value={record.fuelNumber + " lít"}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-sm-6 ps-3 pe-0">
+                          <div className="form-group">
+                            <label htmlFor="dob">Số KM khi giao</label>
+                            <input
+                              placeholder="Biển số xe"
+                              type="text"
+                              id="gplx"
+                              className="form-control"
+                              value={record.kilometerNumber + " KM"}
                             />
                           </div>
                         </div>
@@ -365,6 +398,7 @@ function TraXe() {
                               type="text"
                               id="gplx"
                               className="form-control"
+                              value={record.exterior}
                             />
                           </div>
                         </div>
@@ -376,6 +410,7 @@ function TraXe() {
                               type="text"
                               id="gplx"
                               className="form-control"
+                              value={record.interior}
                             />
                           </div>
                         </div>
@@ -392,6 +427,7 @@ function TraXe() {
                           id="name"
                           className="form-control"
                           placeholder="Giấy Tờ Xe"
+                          value={record.registrationDocument}
                         />
                       </div>
 
@@ -402,6 +438,7 @@ function TraXe() {
                           id="dob"
                           className="form-control"
                           placeholder="Bảo hiểm xe"
+                          value={record.insuranceDocument}
                         />
                       </div>
 
@@ -412,6 +449,7 @@ function TraXe() {
                           id="dob"
                           className="form-control"
                           placeholder="Giấy tờ đăng kiểm xe"
+                          value={record.vehicleInspectionDocument}
                         />
                       </div>
 
@@ -426,6 +464,7 @@ function TraXe() {
                           id="dob"
                           className="form-control"
                           placeholder="Số tiền còn lại cần phải thanh toán"
+                          value={record.remainingAmount}
                         />
                       </div>
                       <div className="row m-0 pt-1">
@@ -437,6 +476,7 @@ function TraXe() {
                               type="text"
                               id="gplx"
                               className="form-control"
+                              value={record.surcharges}
                             />
                           </div>
                         </div>
@@ -448,6 +488,7 @@ function TraXe() {
                               type="text"
                               id="gplx"
                               className="form-control"
+                              value={record.surcharges2}
                             />
                           </div>
                         </div>

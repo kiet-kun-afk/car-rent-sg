@@ -9,6 +9,7 @@ function KhachHang() {
   const [customers, setCustomers] = useState([]);
   const [customersWithPhone, setcustomersWithPhone] = useState(null);
   const [addresss, setAddresss] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   // chuyển kiểu date
   const formatDate = (localdatetime) => {
@@ -80,6 +81,20 @@ function KhachHang() {
     await DeleteCustomer(phoneNumber);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredCustomer = customers.filter((customer) => {
+    const normalizedSearchQuery = searchQuery.toLowerCase();
+    return (
+      (customer.fullName &&
+        customer.fullName.toLowerCase().includes(normalizedSearchQuery)) ||
+      (customer.phoneNumber &&
+        customer.phoneNumber.toLowerCase().includes(normalizedSearchQuery))
+    );
+  });
+
   useEffect(() => {
     loadListCustomer();
   }, []);
@@ -115,10 +130,16 @@ function KhachHang() {
             <div className="head">
               <h3>Danh sách khách hàng</h3>
 
-              <form action="" id="search-box">
+              <form
+                action=""
+                id="search-box"
+                onSubmit={(e) => e.preventDefault()}
+              >
                 <input
                   type="text"
                   id="search-text"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                   placeholder="Bạn cần tìm kiếm gì nhỉ?"
                 />
                 <button id="search-btn">
@@ -152,7 +173,7 @@ function KhachHang() {
                   </tr>
                 </thead>
                 <tbody>
-                  {customers.map((customer, index) => (
+                  {filteredCustomer.map((customer, index) => (
                     <tr key={customer.customer_id}>
                       <td className="text-center">{index + 1}</td>
                       <td className="text-start">
