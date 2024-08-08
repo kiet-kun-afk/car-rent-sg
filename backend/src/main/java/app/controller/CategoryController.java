@@ -32,10 +32,10 @@ public class CategoryController {
     @GetMapping("")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            List<CategoryResponse> categoryReponses = categoryService.getAll();
+            List<CategoryResponse> categoryResponse = categoryService.getAll();
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
-                    .data(categoryReponses)
+                    .data(categoryResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
@@ -50,11 +50,11 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getOne(@PathVariable Integer id) {
         try {
-            CategoryResponse categoryReponse = categoryService.getOne(id);
+            CategoryResponse categoryResponse = categoryService.getOne(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Get all category successfully")
-                    .data(categoryReponse)
+                    .data(categoryResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
@@ -68,11 +68,11 @@ public class CategoryController {
     @PostMapping("")
     public ResponseEntity<ResponseObject> Post(@RequestBody CategoryDTO categoryDTO) {
         try {
-            CategoryResponse categoryReponse = categoryService.Post(categoryDTO);
+            CategoryResponse categoryResponse = categoryService.Post(categoryDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Create category successfully")
-                    .data(categoryReponse)
+                    .data(categoryResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
@@ -86,11 +86,11 @@ public class CategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseObject> Put(@PathVariable Integer id, @RequestBody CategoryDTO categoryDTO) {
         try {
-            CategoryResponse categoryReponse = categoryService.Put(id, categoryDTO);
+            CategoryResponse categoryResponse = categoryService.Put(id, categoryDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Update category successfully")
-                    .data(categoryReponse)
+                    .data(categoryResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()
