@@ -106,13 +106,13 @@ function DetailCar() {
   useEffect(() => {
     fetchData();
     if (startDate && endDate) {
-		const days = calculateDays(startDate, endDate);
-		setCountDate(days);
-		setTotalPrice(days * car.rentCost);
-	  } else {
-		setCountDate(0);
-		setTotalPrice(0);
-	  }
+      const days = calculateDays(startDate, endDate);
+      setCountDate(days);
+      setTotalPrice(days * car.rentCost);
+    } else {
+      setCountDate(0);
+      setTotalPrice(0);
+    }
   }, [startDate, endDate]);
 
   function formatVND(value) {
@@ -149,24 +149,24 @@ function DetailCar() {
               <div className="row">
                 <div className="col-md-8 left-img">
                   <img
-                    src={`../../img/${car.frontImage}`}
+                    src={`${car.frontImage}`}
                     alt="Car Image"
                     className="img-fluid"
                   />
                 </div>
                 <div className="col-md-4 right-img">
                   <img
-                    src={`../../img/${car.frontImage}`}
+                    src={`${car.backImage}`}
                     alt="Car Image"
                     className="img-fluid mb-2"
                   />
                   <img
-                    src={`../../img/${car.frontImage}`}
+                    src={`${car.rightImage}`}
                     alt="Car Image"
                     className="img-fluid mb-2"
                   />
                   <img
-                    src={`../../img/${car.frontImage}`}
+                    src={`${car.leftImage}`}
                     alt="Car Image"
                     className="img-fluid mb-2"
                   />
@@ -708,7 +708,7 @@ function DetailCar() {
                     </button>
                     <form onSubmit={handleCreateContract}>
                       <div
-                        className="date-time-form justify-content-center"
+                        className="date-time-form justify-content-center flex-wrap "
                         id="chooseDate"
                       >
                         <div className="form-item">
@@ -768,7 +768,10 @@ function DetailCar() {
                         <div className="price-item total">
                           <p>Thành tiền</p>
                           <p className="cost">
-                            <span id="totalPrice" text="TOTAL AMOUNT">{formatVND(totalPrice)}</span>đ
+                            <span id="totalPrice" text="TOTAL AMOUNT">
+                              {formatVND(totalPrice)}
+                            </span>
+                            đ
                           </p>
                         </div>
                       </div>

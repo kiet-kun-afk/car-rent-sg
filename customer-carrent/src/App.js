@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
 	Routes,
 	Route,
@@ -20,7 +21,8 @@ import CusDetailCustomerInfor from "./components/layout/common/inforCustomer";
 import CusDetailCustomerTrip from "./components/layout/common/trip";
 import CusDetailCustomerChangePass from "./components/layout/common/changepass";
 import CusDetailCustomerPayment from "./components/layout/thanhtoan";
-import PaymentSuccess from './components/layout/hoadon';
+import PaymentSuccessMomo from './components/layout/hoadonMomo';
+import PaymentSuccessVnpay from './components/layout/hoadonVnpay';
 import PrivateRoute from "./PrivateRoute";
 import { AuthProvider } from "./config/AuthContext";
 
@@ -64,7 +66,9 @@ const App = () => {
 					element={<CusDetailProduct />}
 				/>
 				<Route path="/carrentsg/payment/:contractId" element={<CusDetailCustomerPayment />} />
-				<Route path="/user/paymentsuccess" element={<PaymentSuccess />} />
+				<Route path="/user/paymentsuccessMomo" element={<PaymentSuccessMomo />} />
+				<Route path="/user/paymentsuccessVnpay" element={<PaymentSuccessVnpay />} /><Route path="/user/paymentsuccessMomo" element={<PaymentSuccessMomo />} />
+				<Route path="/user/paymentsuccessVnpay" element={<PaymentSuccessVnpay />} />
 				<Route
 					path="/carrentsg/customer"
 					element={
