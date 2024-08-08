@@ -391,6 +391,14 @@ img {
 .account-section .account-container .content-account .driver-license .content .info-license__img .fix-img {
     padding-bottom: 65%;
     border-radius: 16px;
+    cursor: pointer;
+}
+
+.fix-img input {
+    opacity: 0;
+    z-index: 0;
+    position: absolute;
+    cursor: pointer;
 }
 
 .account-section .account-container .content-account .driver-license .content .info-license {
@@ -667,4 +675,12 @@ input {
     font-weight: 600;
     color: #6f6f6f;
     text-align: center;
+}
+
+.editbtnDiss {
+    display: none !important;
+}
+
+.editbtnActive {
+    display: block !important;
 }
