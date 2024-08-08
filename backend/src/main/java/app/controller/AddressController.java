@@ -70,7 +70,7 @@ public class AddressController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseObject> Post(@RequestBody AddressDTO addressDTO) {
+    public ResponseEntity<ResponseObject> Post(@ModelAttribute AddressDTO addressDTO) {
         try {
             AddressResponse addressResponse = addressService.Post(addressDTO);
             return ResponseEntity.ok(ResponseObject.builder()

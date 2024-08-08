@@ -1,5 +1,9 @@
 package app.dto;
 
+import java.time.LocalDate;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,8 +22,12 @@ public class CitizenCardDTO {
 
     // can't upload file
     @NotBlank
-    private String frontImage;
+    private MultipartFile frontImage;
 
     @NotBlank
-    private String backImage;
+    private MultipartFile backImage;
+
+    private LocalDate expiryDate;
+
+    private LocalDate issueDate;
 }

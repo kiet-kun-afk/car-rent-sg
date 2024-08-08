@@ -1,6 +1,9 @@
 package app.dto.login;
 
+import java.time.LocalDate;
 import java.util.Set;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -19,4 +22,13 @@ public class RegisterStaffDTO {
     private String phoneNumber;
 
     Set<String> roles;
+
+    private MultipartFile avatar_img;
+
+    private LocalDate birthday;
+
+    private String fullname;
+
+    private boolean gender;
+
 }
