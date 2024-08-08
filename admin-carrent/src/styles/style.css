@@ -9,7 +9,6 @@
 
 a {
 	text-decoration: none;
-	cursor: pointer;
 }
 
 li {
@@ -31,6 +30,7 @@ li {
 	--light-yellow: #FFF2C6;
 	--orange: #FD7238;
 	--light-orange: #FFE0D3;
+	--green: #5fcf86;
 }
 
 html {
@@ -94,7 +94,7 @@ body {
 	left: 0;
 	background: var(--light);
 	padding-top: 30px;
-	padding-bottom: 30px;
+	padding-bottom: 25px;
 	z-index: 500;
 	box-sizing: content-box;
 }
@@ -469,6 +469,10 @@ body.dark .mode .moon-sun .moon {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+#content nav .profile span {
+	padding: 0 10px;
 }
 
 #content nav .profile img {

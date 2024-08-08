@@ -19,6 +19,8 @@ import CusDetailCustomer from "./components/layout/chitietkhachhang";
 import CusDetailCustomerInfor from "./components/layout/common/inforCustomer";
 import CusDetailCustomerTrip from "./components/layout/common/trip";
 import CusDetailCustomerChangePass from "./components/layout/common/changepass";
+import CusDetailCustomerPayment from "./components/layout/thanhtoan";
+import PaymentSuccess from './components/layout/hoadon';
 import PrivateRoute from "./PrivateRoute";
 import { AuthProvider } from "./config/AuthContext";
 
@@ -61,6 +63,8 @@ const App = () => {
 					path="/carrentsg/car/:id"
 					element={<CusDetailProduct />}
 				/>
+				<Route path="/carrentsg/payment/:contractId" element={<CusDetailCustomerPayment />} />
+				<Route path="/user/paymentsuccess" element={<PaymentSuccess />} />
 				<Route
 					path="/carrentsg/customer"
 					element={

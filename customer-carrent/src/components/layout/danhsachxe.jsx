@@ -18,7 +18,7 @@ function CustomerCar() {
 		const result = await axios.get(
 			"http://localhost:8080/api/v1/cars/index?pageNumber=0&pageSize=20"
 		);
-		setCars(result.data.data.content);
+		setCars(result.data.data);
 	};
 
 	useEffect(() => {
