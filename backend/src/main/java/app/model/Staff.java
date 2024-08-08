@@ -1,26 +1,13 @@
 package app.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import app.model.cards.CitizenCard;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,27 +23,23 @@ import lombok.Setter;
 @Table(name = "staffs", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "phone_number" }),
         @UniqueConstraint(columnNames = { "email" }) })
-public class Staff {
+public class Staff extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "staff_id")
     private Integer staffId;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(name = "full_name")
+    private String fullName;
 
     private Boolean gender;
 
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -71,13 +54,14 @@ public class Staff {
     private String avatarImage;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "citizen_id")
     private CitizenCard citizenCard;
 }

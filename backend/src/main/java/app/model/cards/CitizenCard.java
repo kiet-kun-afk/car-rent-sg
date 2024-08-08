@@ -1,12 +1,8 @@
 package app.model.cards;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDate;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,21 +13,26 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "citizen_cards", uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "id_card" }) })
+@Table(name = "citizen_cards")
 public class CitizenCard {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "address_id")
+    @Column(name = "citizen_id")
     private Integer citizenId;
 
     @Column(name = "id_card", nullable = true)
-    private Integer idCard;
+    private String idCard;
 
     @Column(name = "front_image", nullable = true)
     private String frontImage;
 
     @Column(name = "back_image", nullable = true)
     private String backImage;
+
+    @Column(name = "issue_date")
+    private LocalDate issueDate;
+
+    @Column(name = "expiry_date")
+    private LocalDate expiryDate;
 }

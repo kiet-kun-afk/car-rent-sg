@@ -1,17 +1,9 @@
 package app.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import app.model.records.DeliveryRecord;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,29 +22,26 @@ public class Contract {
     @Column(name = "contract_id")
     private Integer contractId;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "create_date", nullable = false)
-    private Date createDate;
+    private LocalDateTime createDate;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "start_date", nullable = false)
-    private Date startDate;
+    private LocalDateTime startDate;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "end_date", nullable = false)
-    private Date endDate;
+    private LocalDateTime endDate;
 
     @Column(name = "rent_cost", nullable = false)
-    private Double rentCost;
+    private long rentCost;
 
     @Column(name = "number_day", nullable = false)
-    private Integer numberDay;
+    private long numberDay;
 
     @Column(name = "total_rent_cost", nullable = false)
-    private Double totalRentCost;
+    private long totalRentCost;
 
     @Column(nullable = false)
-    private Double deposit;
+    private long deposit;
 
     @Column(name = "status_payment", nullable = false)
     private Boolean statusPayment;
@@ -69,6 +58,11 @@ public class Contract {
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id", nullable = false)
+    @JoinColumn(name = "staff_id")
     private Staff staff;
+
+    private String attachment;
+
+    @OneToOne(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private DeliveryRecord deliveryRecord;
 }

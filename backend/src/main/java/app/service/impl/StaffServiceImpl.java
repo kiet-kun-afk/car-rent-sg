@@ -1,21 +1,30 @@
 package app.service.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import app.dto.StaffDTO;
 import app.dto.login.LoginDTO;
 import app.dto.login.RegisterStaffDTO;
+import app.exception.DataNotFoundException;
 import app.exception.InvalidParamException;
 import app.jwt.JwtTokenProvider;
+import app.model.Address;
 import app.model.Role;
 import app.model.Staff;
+import app.model.cards.CitizenCard;
+import app.repository.AddressRepository;
+import app.repository.CitizenCardRepository;
 import app.repository.RoleRepository;
 import app.repository.StaffRepository;
 import app.response.LoginResponse;
@@ -37,10 +46,13 @@ import lombok.RequiredArgsConstructor;
 public class StaffServiceImpl implements StaffService {
 
     private final AuthenticationManager authenticationManager;
-    private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final StaffRepository staffRepository;
     private final RoleRepository roleRepository;
+    private final AddressRepository addressRepository;
+    private final CitizenCardRepository citizenRepository;
+    private final ValidService validService;
+    private final PasswordResetService passwordResetService;
 
     @Override
     public LoginResponse loginStaff(LoginDTO loginDTO) throws Exception {
@@ -50,7 +62,14 @@ public class StaffServiceImpl implements StaffService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new LoginResponse("Login successfully", jwtTokenProvider.generateToken(authentication));
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        // Get roles from Authentication
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        return new LoginResponse("Login successfully", token, roles);
     }
 
     @Override
@@ -60,17 +79,24 @@ public class StaffServiceImpl implements StaffService {
             throw new InvalidParamException("Email is already registered");
         }
 
-        if (staffRepository.existsByPhoneNumber(staffDTO.getPhoneNumber())) {
+        String phoneNumber = staffDTO.getPhoneNumber();
+        if (!validService.validatePhoneNumber(phoneNumber)) {
+            throw new InvalidParamException("Phone number is not valid");
+        }
+
+        if (staffRepository.existsByPhoneNumber(phoneNumber)) {
             throw new InvalidParamException("Phone number is already registered");
         }
 
         Staff staff = new Staff();
         staff.setEmail(staffDTO.getEmail());
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
-        staff.setPassword(passwordEncoder.encode(staffDTO.getPhoneNumber()));
+        staff.setPassword(UUID.randomUUID().toString());
         staff.setRoles(getRoles(staffDTO.getRoles()));
+        staff.setStatus(true);
 
         staffRepository.save(staff);
+        passwordResetService.createPasswordResetToken(staff.getEmail(), "staff", "first");
         return StaffResponse.registerStaff(staff);
     }
 
@@ -100,6 +126,99 @@ public class StaffServiceImpl implements StaffService {
             }
         }
         return roles;
+    }
+
+    // curd
+
+    @Override
+    public List<StaffResponse> getAll() {
+        return staffRepository.findAll().stream().map(StaffResponse::fromStaff).toList();
+    }
+
+    @Override
+    public StaffResponse getOne(String email) {
+        Staff staff = staffRepository.findByEmail(email).orElse(null);
+        return StaffResponse.fromStaff(staff);
+    }
+
+    @Override
+    public StaffResponse Post(StaffDTO staffDTO) {
+
+        Address address = addressRepository.findById(staffDTO.getAddress()).orElse(null);
+        CitizenCard citizencard = citizenRepository.findById(staffDTO.getCitizenCard()).orElse(null);
+
+        Staff staff = new Staff();
+
+        staff.setAvatarImage(staffDTO.getAvatarImage());
+        staff.setBirthDate(staffDTO.getBirthDate());
+        staff.setEmail(staffDTO.getEmail());
+        // staff.setFirstName(staffDTO.getFirstName());
+        staff.setGender(staffDTO.getGender());
+        staff.setRoles(getRoles(staffDTO.getRoles()));
+        // staff.setLastName(staffDTO.getLastName());
+        staff.setPhoneNumber(staffDTO.getPhoneNumber());
+        staff.setPassword(staffDTO.getPassword());
+        staff.setStatus(staffDTO.getStatus());
+        staff.setAddress(address);
+        staff.setCitizenCard(citizencard);
+
+        staffRepository.save(staff);
+
+        return StaffResponse.fromStaff(staff);
+
+    }
+
+    @Override
+    public StaffResponse Put(String email, StaffDTO staffDTO) throws Exception {
+
+        Address address = addressRepository.findById(staffDTO.getAddress()).orElse(null);
+        CitizenCard citizencard = citizenRepository.findById(staffDTO.getCitizenCard()).orElse(null);
+
+        Staff staff = staffRepository.findByEmail(email)
+                .orElseThrow(() -> new DataNotFoundException("staff not found"));
+
+        staff.setAvatarImage(staffDTO.getAvatarImage());
+        staff.setBirthDate(staffDTO.getBirthDate());
+        staff.setEmail(staffDTO.getEmail());
+        // staff.setFirstName(staffDTO.getFirstName());
+        staff.setGender(staffDTO.getGender());
+        staff.setRoles(getRoles(staffDTO.getRoles()));
+        // staff.setLastName(staffDTO.getLastName());
+        staff.setPhoneNumber(staffDTO.getPhoneNumber());
+        staff.setPassword(staffDTO.getPassword());
+        staff.setStatus(staffDTO.getStatus());
+        staff.setAddress(address);
+        staff.setCitizenCard(citizencard);
+        staffRepository.save(staff);
+        return StaffResponse.fromStaff(staff);
+
+    }
+
+    @Override
+    public void Delete(String email) throws Exception {
+
+        Staff staff = staffRepository.findByEmailAndStatusTrue(email);
+        if (staff == null) {
+            throw new DataNotFoundException("Couldn't find staff");
+        }
+        staff.setStatus(false);
+        staffRepository.save(staff);
+
+    }
+
+    @Override
+    public Staff getAuth() throws Exception {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Staff staff = staffRepository.findByEmailAndStatusTrue(email);
+        if (staff == null) {
+            throw new DataNotFoundException("Staff not found");
+        }
+        return staff;
+    }
+
+    @Override
+    public StaffResponse getCurrentStaff() throws Exception {
+        return StaffResponse.fromStaff(getAuth());
     }
 
 }

@@ -1,20 +1,27 @@
 package app.dto.login;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
 public class RegisterCustomerDTO {
+
+    @NotBlank(message = "Email is required")
+    @Email
     private String email;
 
-    @JsonProperty("phone_number")
+    @NotBlank(message = "Phone number is required")
     private String phoneNumber;
 
+    @NotBlank(message = "Full name is required")
+    private String fullName;
+
+    @NotBlank(message = "Password is required")
     private String password;
 
-    @JsonProperty("re_password")
+    @NotBlank(message = "Retype password is required")
     private String rePassword;
 }

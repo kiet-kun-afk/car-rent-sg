@@ -2,8 +2,8 @@ package app.dto.login;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,9 +11,11 @@ import lombok.Setter;
 @Getter
 public class RegisterStaffDTO {
 
+    @NotBlank(message = "Email is required")
+    @Email
     private String email;
 
-    @JsonProperty("phone_number")
+    @NotBlank(message = "Phone number is required")
     private String phoneNumber;
 
     Set<String> roles;

@@ -1,8 +1,7 @@
 package app.response;
 
-import java.sql.Date;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import app.model.Customer;
 import lombok.Getter;
@@ -16,52 +15,66 @@ public class CustomerResponse {
 
     private Integer customerId;
 
-    @JsonProperty("first_name")
-    private String firstName;
+    // private String firstName;
 
-    @JsonProperty("last_name")
-    private String lastName;
+    // private String lastName;
+
+    private String fullName;
 
     private Boolean gender;
 
-    @JsonProperty("phone_number")
     private String phoneNumber;
 
-    @JsonProperty("birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     private String email;
 
     private Boolean status;
 
-    @JsonProperty("avatar_image")
     private String avatarImage;
 
-    private String password;
-
-    @JsonProperty("address_id")
-    private Integer addressId;
-
-    @JsonProperty("citizen_id")
     private Integer citizenCardId;
 
-    @JsonProperty("driver_license_id")
     private Integer driverLicenseId;
+
+    private String street;
+    private String ward;
+    private String district;
+    private String province;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    private String idCard;
 
     public CustomerResponse(Customer customer) {
         this.customerId = customer.getCustomerId();
-        this.firstName = customer.getFirstName();
-        this.lastName = customer.getLastName();
+        // this.firstName = customer.getFirstName();
+        // this.lastName = customer.getLastName();
+        this.fullName = customer.getFullName();
         this.gender = customer.getGender();
         this.phoneNumber = customer.getPhoneNumber();
         this.birthDate = customer.getBirthDate();
         this.email = customer.getEmail();
         this.status = customer.getStatus();
         this.avatarImage = customer.getAvatarImage();
-        this.password = customer.getPassword();
-        this.addressId = customer.getAddress().getAddressId();
-        this.citizenCardId = customer.getCitizenCard().getCitizenId();
-        this.driverLicenseId = customer.getDriverLicense().getDriverLicenseId();
+
+        this.street = customer.getAddress() == null ? null : customer.getAddress().getStreet();
+        this.ward = customer.getAddress() == null ? null : customer.getAddress().getWard();
+        this.district = customer.getAddress() == null ? null : customer.getAddress().getDistrict();
+        this.province = customer.getAddress() == null ? null : customer.getAddress().getProvince();
+
+        // this.citizenCardId = customer.getCitizenCard() == null ? null : customer.getCitizenCard().getCitizenId();
+
+        this.driverLicenseId = customer.getDriverLicense() == null ? null
+                : customer.getDriverLicense().getDriverLicenseId();
+
+        this.idCard = customer.getDriverLicense() == null ? null : customer.getDriverLicense().getIdCard();
+
+        this.createdAt = customer.getCreatedAt();
+        this.updatedAt = customer.getUpdatedAt();
+
     }
 
     public static CustomerResponse fromCustomer(Customer customer) {
@@ -73,6 +86,7 @@ public class CustomerResponse {
         response.setCustomerId(customer.getCustomerId());
         response.setEmail(customer.getEmail());
         response.setPhoneNumber(customer.getPhoneNumber());
+        response.setFullName(customer.getFullName());
         // response.setFirstName(customer.getFirstName());
         // response.setLastName(customer.getLastName());
         // response.setGender(customer.getGender());

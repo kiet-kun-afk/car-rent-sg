@@ -1,15 +1,7 @@
 package app.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Setter
 @Getter
@@ -31,4 +23,17 @@ public class Address {
     private String ward;
 
     private String street;
+
+    private String rememberName;
+
+    public Address(String province, String district, String ward, String street, String rememberName) {
+        this.province = province;
+        this.district = district;
+        this.ward = ward;
+        this.street = street;
+        this.rememberName = rememberName;
+    }
+
+    @OneToOne(mappedBy = "address")
+    private Customer customer;
 }

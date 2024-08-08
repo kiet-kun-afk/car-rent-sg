@@ -1,18 +1,9 @@
 package app.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +16,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "cars", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "registration_plate" }) })
-public class Car {
+public class Car extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -39,7 +30,7 @@ public class Car {
     private String carName;
 
     @Column(name = "rent_cost", nullable = false)
-    private Double rentCost;
+    private long rentCost;
 
     @Column(name = "number_of_seat", nullable = false)
     private Integer numberOfSeat;
@@ -69,15 +60,14 @@ public class Car {
 
     private String describe;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "registration_date", nullable = false)
-    private Date registrationDate;
+    private LocalDate registrationDate;
 
     @Column(nullable = false)
     private Boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "branch_id", nullable = false)
+    @JoinColumn(name = "branch_id")
     private Branch branch;
 
     @ManyToOne
@@ -85,6 +75,8 @@ public class Car {
     private Brand brand;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Contract> contracts;
 }
