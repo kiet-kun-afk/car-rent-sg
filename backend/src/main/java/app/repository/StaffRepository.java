@@ -34,4 +34,5 @@ public interface StaffRepository extends JpaRepository<Staff, Integer> {
     Boolean existsByEmail(String email);
 
     Boolean existsByPhoneNumber(String phoneNumber);
+
 }

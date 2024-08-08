@@ -20,4 +20,5 @@ public interface AddressService {
     public AddressResponse updateCustomerAddress(AddressDTO addressDTO) throws Exception;
 
     public AddressResponse getCustomerAddress() throws Exception;
+
 }
