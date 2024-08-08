@@ -1,7 +1,5 @@
 package app.repository.specification;
 
-import java.util.List;
-
 import org.springframework.data.jpa.domain.Specification;
 
 import app.model.Car;
@@ -44,10 +42,10 @@ public class CarSpecifications {
         };
     }
 
-    public static Specification<Car> hasCategory(List<String> categoryNames) {
+    public static Specification<Car> hasCategory(String categoryNames) {
         return (root, query, cb) -> {
-            if (categoryNames != null && categoryNames.isEmpty()) {
-                return root.get("category").get("categoryName").in(categoryNames);
+            if (categoryNames != null && !categoryNames.equals("")) {
+                return cb.equal(root.get("category").get("categoryName"), categoryNames);
             }
             return null;
         };

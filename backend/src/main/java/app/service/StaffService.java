@@ -28,4 +28,5 @@ public interface StaffService {
     public void Delete(String email) throws Exception;
 
     public StaffResponse getCurrentStaff() throws Exception;
+
 }

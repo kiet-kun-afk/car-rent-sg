@@ -8,6 +8,7 @@ import app.dto.CarDTO;
 import app.response.CarResponse;
 import app.response.ResponseObject;
 import app.service.CarService;
+import app.service.impl.FormatterService;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -240,15 +240,17 @@ public class CarController {
         }
     }
 
+    private final FormatterService formatterService;
+
     @GetMapping("/filter-car")
     public ResponseEntity<ResponseObject> filterCar(
-            @RequestParam(required = false) LocalDateTime startDate,
-            @RequestParam(required = false) LocalDateTime endDate,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
             @RequestParam(required = false) String brandName,
             @RequestParam(required = false) String countryOrigin,
             @RequestParam(required = false) String transmission,
             @RequestParam(required = false) String fuelType,
-            @RequestParam(required = false) List<String> categoryNames,
+            @RequestParam(required = false) String categoryNames,
             @RequestParam(required = false) @Nullable Double minCost,
             @RequestParam(required = false) @Nullable Double maxCost,
             @RequestParam(required = false) @Nullable Integer minSeat,
@@ -257,12 +259,16 @@ public class CarController {
             @RequestParam Optional<Integer> pageNumber,
             @RequestParam Optional<Integer> pageSize) {
         try {
-            // List<CarResponse> cars = carService
-            Page<CarResponse> cars = carService
-                    // .filterCar(startDate, endDate,
-                    .filterCarPage(startDate, endDate,
-                            brandName, countryOrigin, transmission, fuelType, categoryNames,
+            LocalDateTime start = formatterService.stringToDateTime(startDate);
+            LocalDateTime end = formatterService.stringToDateTime(endDate);
+            List<CarResponse> cars = carService
+                    .filterCar(start, end, brandName, countryOrigin, transmission, fuelType, categoryNames,
                             minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
+            // Page<CarResponse> cars = carService
+            // .filterCarPage(start, end,
+            // brandName, countryOrigin, transmission, fuelType, categoryNames,
+            // minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0),
+            // pageSize.orElse(20));
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Filter car successfully")

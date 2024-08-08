@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -54,6 +55,9 @@ public class StaffServiceImpl implements StaffService {
     private final ValidService validService;
     private final PasswordResetService passwordResetService;
 
+    @Autowired
+    FileService fileService;
+
     @Override
     public LoginResponse loginStaff(LoginDTO loginDTO) throws Exception {
 
@@ -93,6 +97,9 @@ public class StaffServiceImpl implements StaffService {
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
         staff.setPassword(UUID.randomUUID().toString());
         staff.setRoles(getRoles(staffDTO.getRoles()));
+        staff.setBirthDate(staffDTO.getBirthday());
+        staff.setFullName(staffDTO.getFullname());
+        staff.setAvatarImage(fileService.upload(staffDTO.getAvatar_img()));
         staff.setStatus(true);
 
         staffRepository.save(staff);
@@ -152,10 +159,10 @@ public class StaffServiceImpl implements StaffService {
         staff.setAvatarImage(staffDTO.getAvatarImage());
         staff.setBirthDate(staffDTO.getBirthDate());
         staff.setEmail(staffDTO.getEmail());
-        // staff.setFirstName(staffDTO.getFirstName());
+
         staff.setGender(staffDTO.getGender());
         staff.setRoles(getRoles(staffDTO.getRoles()));
-        // staff.setLastName(staffDTO.getLastName());
+
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
         staff.setPassword(staffDTO.getPassword());
         staff.setStatus(staffDTO.getStatus());

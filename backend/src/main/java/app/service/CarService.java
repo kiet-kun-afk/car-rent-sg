@@ -36,13 +36,13 @@ public interface CarService {
 
 	public List<CarResponse> filterCar(LocalDateTime startDate, LocalDateTime endDate,
 			String brandName, String countryOrigin, String transmission, String fuelType,
-			List<String> categoryNames, Double minCost, Double maxCost, Integer minSeat, Integer maxSeat, String sortBy,
+			String categoryNames, Double minCost, Double maxCost, Integer minSeat, Integer maxSeat, String sortBy,
 			Integer pageNumber, Integer pageSize)
 			throws Exception;
 
 	public Page<CarResponse> filterCarPage(LocalDateTime startDate, LocalDateTime endDate,
 			String brandName, String countryOrigin, String transmission, String fuelType,
-			List<String> categoryNames, Double minCost, Double maxCost, Integer minSeat, Integer maxSeat, String sortBy,
+			String categoryNames, Double minCost, Double maxCost, Integer minSeat, Integer maxSeat, String sortBy,
 			Integer pageNumber, Integer pageSize)
 			throws Exception;
 }

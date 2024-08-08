@@ -19,6 +19,9 @@ public class CitizenCardServiceImpl implements CitizenCardService {
     @Autowired
     CitizenCardRepository citizenCardRes;
 
+    @Autowired
+    FileService fileService;
+
     @Override
     public List<CitizenCardResponse> getAll() {
 
@@ -38,8 +41,11 @@ public class CitizenCardServiceImpl implements CitizenCardService {
         citizenCard.setIdCard(citizenCardDTO.getIdCard());
 
         // how to upload image with String type
-        citizenCard.setBackImage(citizenCardDTO.getBackImage());
-        citizenCard.setFrontImage(citizenCardDTO.getFrontImage());
+        citizenCard.setBackImage(fileService.upload(citizenCardDTO.getBackImage()));
+        citizenCard.setFrontImage(fileService.upload(citizenCardDTO.getFrontImage()));
+        citizenCard.setExpiryDate(citizenCardDTO.getExpiryDate());
+        citizenCard.setIssueDate(citizenCardDTO.getIssueDate());
+
         citizenCardRes.save(citizenCard);
 
         return CitizenCardResponse.fromCitizenCard(citizenCard);
@@ -56,8 +62,8 @@ public class CitizenCardServiceImpl implements CitizenCardService {
             citizenCard.setIdCard(citizenCardDTO.getIdCard());
 
             // need fix to upload image
-            citizenCard.setBackImage(citizenCardDTO.getBackImage());
-            citizenCard.setFrontImage(citizenCardDTO.getFrontImage());
+            citizenCard.setBackImage(fileService.upload(citizenCardDTO.getBackImage()));
+            citizenCard.setFrontImage(fileService.upload(citizenCardDTO.getFrontImage()));
             citizenCardRes.save(citizenCard);
             return CitizenCardResponse.fromCitizenCard(citizenCard);
         } else {
