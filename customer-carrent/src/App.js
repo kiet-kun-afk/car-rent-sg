@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import {
 	Routes,
@@ -21,8 +21,9 @@ import CusDetailCustomerInfor from "./components/layout/common/inforCustomer";
 import CusDetailCustomerTrip from "./components/layout/common/trip";
 import CusDetailCustomerChangePass from "./components/layout/common/changepass";
 import CusDetailCustomerPayment from "./components/layout/thanhtoan";
-import PaymentSuccessMomo from './components/layout/hoadonMomo';
-import PaymentSuccessVnpay from './components/layout/hoadonVnpay';
+import PaymentSuccessMomo from "./components/layout/hoadonMomo";
+import PaymentSuccessVnpay from "./components/layout/hoadonVnpay";
+import ResetPassword from "./components/layout/Login/resetpass";
 import PrivateRoute from "./PrivateRoute";
 import { AuthProvider } from "./config/AuthContext";
 
@@ -45,6 +46,10 @@ const App = () => {
 		<AuthProvider>
 			<Routes>
 				<Route
+					path="/reset-password/:token"
+					element={<ResetPassword />}
+				/>
+				<Route
 					path="/"
 					element={<Navigate to="/carrentsg" replace />}
 				/>
@@ -65,10 +70,26 @@ const App = () => {
 					path="/carrentsg/car/:id"
 					element={<CusDetailProduct />}
 				/>
-				<Route path="/carrentsg/payment/:contractId" element={<CusDetailCustomerPayment />} />
-				<Route path="/user/paymentsuccessMomo" element={<PaymentSuccessMomo />} />
-				<Route path="/user/paymentsuccessVnpay" element={<PaymentSuccessVnpay />} /><Route path="/user/paymentsuccessMomo" element={<PaymentSuccessMomo />} />
-				<Route path="/user/paymentsuccessVnpay" element={<PaymentSuccessVnpay />} />
+				<Route
+					path="/carrentsg/payment/:contractId"
+					element={<CusDetailCustomerPayment />}
+				/>
+				<Route
+					path="/user/paymentsuccessMomo"
+					element={<PaymentSuccessMomo />}
+				/>
+				<Route
+					path="/user/paymentsuccessVnpay"
+					element={<PaymentSuccessVnpay />}
+				/>
+				<Route
+					path="/user/paymentsuccessMomo"
+					element={<PaymentSuccessMomo />}
+				/>
+				<Route
+					path="/user/paymentsuccessVnpay"
+					element={<PaymentSuccessVnpay />}
+				/>
 				<Route
 					path="/carrentsg/customer"
 					element={
