@@ -1,7 +1,12 @@
 package app.constants;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class Constants {
-    public static final String urlBackend = "${url.backend}";
-    public static final String urlCustomer = "${url.customer}";
-    public static final String urlStaff = "${url.staff}";
+    @Value("${url.backend}")
+    public static String urlBackend;
+    @Value("${url.customer}")
+    public static String urlCustomer;
+    @Value("${url.staff}")
+    public static String urlStaff;
 }

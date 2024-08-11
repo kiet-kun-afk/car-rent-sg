@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("${api.prefix}/payments")
 @RequiredArgsConstructor
-@CrossOrigin(origins = Constants.urlCustomer)
+@CrossOrigin(origins = "${url.customer}")
 public class PaymentController {
     private final ContractService contractService;
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentController.class);
