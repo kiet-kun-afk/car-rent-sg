@@ -55,7 +55,7 @@ public class PasswordResetService {
 
             tokenRepository.save(token);
 
-            String resetUrl = "http://localhost:8080/api/reset-password?token=" + token.getToken();
+            String resetUrl = "http://localhost:3000/reset-password/" + token.getToken();
             emailService.sendMail(customer.getEmail(),
                     "Reset Password", "<a href=\"" + resetUrl + "\">Click to reset your password</a>");
 
@@ -79,7 +79,7 @@ public class PasswordResetService {
 
             tokenRepository.save(token);
 
-            String resetUrl = "http://localhost:8080/api/reset-password?token=" + token.getToken();
+            String resetUrl = "http://localhost:3001/reset-password/" + token.getToken();
             emailService.sendMail(staff.getEmail(),
                     "Reset Password", "<a href=\"" + resetUrl + "\">Click to reset your password</a>");
 
