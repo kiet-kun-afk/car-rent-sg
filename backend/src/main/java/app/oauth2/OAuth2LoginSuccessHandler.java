@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import app.constants.Constants;
 import app.jwt.JwtTokenProvider;
 import app.model.Customer;
 import app.repository.CustomerRepository;
@@ -65,7 +66,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
         // generate JWT token and add into response
         String token = jwtTokenProvider.generateToken(authentication);
-        String redirectUrl = "http://localhost:3000/oauth2/redirect?token=" + token;
+        String redirectUrl = Constants.urlCustomer + "/oauth2/redirect?token=" + token;
 
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }

@@ -29,6 +29,7 @@ import com.mservice.processor.CreateOrderMoMo;
 import com.mservice.shared.utils.LogUtils;
 
 import app.config.PaymentVNPAYConfig;
+import app.constants.Constants;
 import app.response.ContractResponse;
 import app.response.ResponseObject;
 import app.service.ContractService;
@@ -37,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("${api.prefix}/payments")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = Constants.urlCustomer)
 public class PaymentController {
     private final ContractService contractService;
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentController.class);
@@ -66,7 +67,7 @@ public class PaymentController {
         long amount = (contractResponses.getTotalRentCost() * 20 / 100);
         LOGGER.info("Amount: " + amount);
         String orderInfo = "Pay With MoMo";
-        String returnURL = "http://localhost:3000/user/paymentsuccessMomo";
+        String returnURL = Constants.urlCustomer + "/user/paymentsuccessMomo";
         String notifyURL = "https://google.com.vn";
 
         Environment environment = Environment.selectEnv("dev");
