@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import app.constants.Constants;
 import app.jwt.JwtAuthenticationEntryPoint;
 import app.jwt.JwtAuthenticationFilter;
 import app.oauth2.CustomOAuth2UserService;
@@ -48,7 +49,7 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService))
                         .successHandler(oAuth2LoginSuccessHandler)
-                        .failureUrl("http://localhost:3000/carrentsg"))
+                        .failureUrl(Constants.urlCustomer + "/carrentsg"))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint));
 
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

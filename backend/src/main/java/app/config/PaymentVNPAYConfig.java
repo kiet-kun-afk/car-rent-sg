@@ -14,12 +14,13 @@ import java.util.Random;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import app.constants.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class PaymentVNPAYConfig {
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "http://localhost:8080/user/paymentsuccessVnpay";
+    public static String vnp_ReturnUrl = Constants.urlBackend + "/user/paymentsuccessVnpay";
     public static String vnp_TmnCode = "ZJEKG2P1";
     public static String secretKey = "NJKGNGMVKVZZDBWLFOKHEZIYGYRTKQKC";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";

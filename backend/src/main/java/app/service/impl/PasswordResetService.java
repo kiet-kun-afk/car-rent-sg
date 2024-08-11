@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import app.constants.Constants;
 import app.model.Customer;
 import app.model.PasswordResetToken;
 import app.model.Staff;
@@ -55,7 +56,7 @@ public class PasswordResetService {
 
             tokenRepository.save(token);
 
-            String resetUrl = "http://localhost:3000/reset-password/" + token.getToken();
+            String resetUrl = Constants.urlCustomer + "/reset-password/" + token.getToken();
             emailService.sendMail(customer.getEmail(),
                     "Reset Password", "<a href=\"" + resetUrl + "\">Click to reset your password</a>");
 
@@ -79,7 +80,7 @@ public class PasswordResetService {
 
             tokenRepository.save(token);
 
-            String resetUrl = "http://localhost:3001/reset-password/" + token.getToken();
+            String resetUrl = Constants.urlStaff + "/reset-password/" + token.getToken();
             emailService.sendMail(staff.getEmail(),
                     "Reset Password", "<a href=\"" + resetUrl + "\">Click to reset your password</a>");
 
