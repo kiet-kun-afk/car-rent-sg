@@ -42,7 +42,7 @@ public class Customer extends BaseEntity {
     @Column(nullable = false)
     private Boolean status;
 
-    @Column(name = "avatar_image")
+    @Column(name = "avatar_image", columnDefinition = "varchar(max)")
     private String avatarImage;
 
     @Column(nullable = false)

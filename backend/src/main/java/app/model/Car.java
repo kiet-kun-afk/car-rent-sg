@@ -58,6 +58,7 @@ public class Car extends BaseEntity {
     @Column(name = "left_image")
     private String leftImage;
 
+    @Column(name = "describe", columnDefinition = "nvarchar(max)")
     private String describe;
 
     @Column(name = "registration_date", nullable = false)
