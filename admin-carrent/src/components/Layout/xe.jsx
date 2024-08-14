@@ -430,7 +430,7 @@ function Xe() {
                     <div class="col-md-6">
                       <div class="profile-info">
                         <img
-                          src={`../img/${
+                          src={`${
                             CarsWithRegistrationPlate
                               ? CarsWithRegistrationPlate.frontImage
                               : "avt"

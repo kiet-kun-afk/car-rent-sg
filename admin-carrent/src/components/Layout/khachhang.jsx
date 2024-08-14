@@ -248,7 +248,7 @@ function KhachHang() {
                     <div className="col-md-6 ">
                       <div className="profile-info">
                         <img
-                          src={`../img/${
+                          src={`${
                             customersWithPhone
                               ? customersWithPhone.avatarImage
                               : "avt"
@@ -395,7 +395,7 @@ function KhachHang() {
                     <div className="col-md-4 left">
                       <img
                         className="img-fluid rounded mx-auto"
-                        src={`../img/${
+                        src={`${
                           customersWithPhone
                             ? customersWithPhone.avatarImage
                             : "avt"

@@ -156,4 +156,22 @@ public class RecordController {
                     .build());
         }
     }
+
+    @PutMapping("/save-return/{returnId}/{remainCost}")
+    public ResponseEntity<ResponseObject> saveReturn(@PathVariable Integer returnId, @PathVariable Double remainCost) {
+        try {
+            recordService.saveReturn(returnId, remainCost);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Save return successfully")
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Save return failed")
+                    .data(e.getMessage())
+                    .build());
+        }
+    }
+
 }

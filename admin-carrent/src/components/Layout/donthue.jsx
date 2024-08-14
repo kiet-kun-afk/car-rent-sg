@@ -549,9 +549,9 @@ function HopDong() {
                                 type="text"
                                 id="dob"
                                 className="form-control"
-                                value={
-                                  contract.driverLicense?.licenseIssuedDate
-                                }
+                                value={formatDate(
+                                  contract.driverLicense?.issueDate
+                                )}
                               />
                             </div>
                           </div>

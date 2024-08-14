@@ -19,4 +19,6 @@ public interface RecordService {
     public RecordResponse getDeliveryRecordById(Integer id) throws Exception;
 
     public RecordResponse getReturnRecordById(Integer id) throws Exception;
+
+    public void saveReturn(Integer returnId, Double remainCost) throws Exception;
 }

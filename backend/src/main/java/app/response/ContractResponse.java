@@ -59,6 +59,12 @@ public class ContractResponse {
 
     private boolean canDelivery = false;
 
+    private AddressResponse address;
+
+    private long remainCost;
+
+    private long remainBill;
+
     public ContractResponse(Contract contract) {
         this.contractId = contract.getContractId();
         this.createDate = contract.getCreateDate();
@@ -96,6 +102,14 @@ public class ContractResponse {
         if (contract.getCustomer().getAddress() != null) {
             this.addressResponse = AddressResponse.fromResponse(contract.getCustomer().getAddress());
         }
+
+        if (contract.getCar().getBranch().getAddress() != null) {
+            this.address = AddressResponse.fromResponse(contract.getCar().getBranch().getAddress());
+        }
+
+        this.remainCost = contract.getRemainCost();
+
+        this.remainBill = contract.getBill() == null ? 0 : contract.getBill().getRemainCost();
     }
 
     public static ContractResponse fromContract(Contract contract) {

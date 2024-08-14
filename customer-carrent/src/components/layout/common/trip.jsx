@@ -37,6 +37,7 @@ function InforCustomer() {
         `http://localhost:8080/api/v1/contracts/customer-trip`
       );
       setCustomerTrip(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.error("Failed to fetch customer", error);
     }
@@ -83,6 +84,11 @@ function InforCustomer() {
     navigate(`/carrentsg/payment/${contractId}`);
   };
 
+  const handlePayRemain = (contractId) => {
+    // Redirect to the payment page with the carId
+    navigate(`/carrentsg/payment/${contractId}`);
+  };
+
   return (
     <>
       <div className="content-title">
@@ -104,7 +110,18 @@ function InforCustomer() {
                     <i class="fa-solid fa-cart-shopping"></i> Thanh toán
                   </a>
                 ) : (
-                  <span class="">Hoàn tất</span>
+                  <div>
+                    {contract.remainBill == 0 ? (
+                      <span class="text-success fs-5 fw-2">Đã Cọc</span>
+                    ) : (
+                      <button
+                        class="btn btn-primary"
+                        onClick={() => handlePayRemain(contract.contractId)}
+                      >
+                        Thanh toán số tiền còn lại
+                      </button>
+                    )}
+                  </div>
                 )
               ) : (
                 <div>
@@ -161,7 +178,14 @@ function InforCustomer() {
                   </div>
                   <div className="info-box__item">
                     <p>Thanh toán sau</p>
-                    <p className="main">{formatVND(contract.amount)} VND</p>
+                    <p className="main">
+                      {formatVND(
+                        contract.remainBill == 0
+                          ? contract.remainCost
+                          : contract.remainBill
+                      )}{" "}
+                      VND
+                    </p>
                   </div>
                 </div>
               </div>

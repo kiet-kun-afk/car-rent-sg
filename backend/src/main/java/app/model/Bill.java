@@ -27,6 +27,9 @@ public class Bill {
     @Column(name = "pay_cost", nullable = false)
     private long payCost;
 
+    @Column(name = "remain_cost", nullable = false)
+    private long remainCost;
+
     @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
 

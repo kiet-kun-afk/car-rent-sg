@@ -98,6 +98,8 @@ public class RecordResponse {
         this.insuranceDocument = deliveryRecord.getInsuranceDocument();
         this.vehicleInspectionDocument = deliveryRecord.getCertificateOfRegistration();
         this.contract = ContractResponse.fromContract(deliveryRecord.getContract());
+        this.licenseIssuedDate = deliveryRecord.getContract().getCustomer().getDriverLicense() == null ? null
+                : deliveryRecord.getContract().getCustomer().getDriverLicense().getIssueDate();
     }
 
     public RecordResponse(ReturnRecord returnRecord) {

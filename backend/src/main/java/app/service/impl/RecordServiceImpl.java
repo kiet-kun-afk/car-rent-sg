@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import app.dto.record.DeliveryDTO;
 import app.dto.record.ReturnDTO;
 import app.exception.InvalidParamException;
+import app.model.Bill;
 import app.model.Contract;
 import app.model.Staff;
 import app.model.records.DeliveryRecord;
 import app.model.records.ReturnRecord;
+import app.repository.BillRepository;
 import app.repository.ContractRepository;
 import app.repository.DeliveryRecordRepository;
 import app.repository.ReturnRecordRepository;
@@ -29,6 +31,7 @@ public class RecordServiceImpl implements RecordService {
     private final DeliveryRecordRepository deliveryRepository;
     private final ReturnRecordRepository returnRepository;
     private final FileService fileService;
+    private final BillRepository billRepository;
 
     @Override
     public RecordResponse createDeliveryRecord(Integer contractId, DeliveryDTO recordDTO) throws Exception {
@@ -83,6 +86,8 @@ public class RecordServiceImpl implements RecordService {
         Double surcharges2 = recordDTO.getSurcharges2();
         Double deposit = Double.valueOf(contract.getDeposit());
         Double total = Double.valueOf(contract.getTotalRentCost());
+        // contract.setRemainCost(getRemainAmount(surcharges, surcharges2, deposit,
+        // total).longValue());
         returnRecord.setSurcharges(recordDTO.getSurcharges() == null ? 0 : recordDTO.getSurcharges());
         returnRecord.setSurcharges2(recordDTO.getSurcharges2() == null ? 0 : recordDTO.getSurcharges2());
         returnRecord.setRemainingAmount(getRemainAmount(surcharges, surcharges2, deposit, total));
@@ -103,7 +108,7 @@ public class RecordServiceImpl implements RecordService {
         if (surcharges2 == null) {
             surcharges2 = 0.0;
         }
-        return total - surcharges - surcharges2 - deposit;
+        return total + surcharges + surcharges2 - deposit;
     }
 
     @Override
@@ -128,5 +133,19 @@ public class RecordServiceImpl implements RecordService {
     public RecordResponse getReturnRecordById(Integer id) throws Exception {
         ReturnRecord returnRecord = returnRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
         return RecordResponse.fromReturnRecord(returnRecord);
+    }
+
+    @Override
+    public void saveReturn(Integer returnId, Double remainCost) throws Exception {
+        Contract contract = contractRepository.findContractByReturnId(returnId);
+        contract.setRemainCost(remainCost.longValue());
+        Bill bill = billRepository.findBillByReturnId(returnId);
+        bill.setRemainCost(remainCost.longValue());
+        try {
+            billRepository.save(bill);
+            contractRepository.save(contract);
+        } catch (Exception e) {
+            throw new Exception("Lưu thất bại");
+        }
     }
 }

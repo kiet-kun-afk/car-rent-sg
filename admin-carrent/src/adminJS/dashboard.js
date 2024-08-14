@@ -56,19 +56,19 @@ window.onload = function () {
 		});
 
 
-		switchMode.addEventListener('change', function () {
-			if (this.checked) {
-				document.body.classList.add('dark');
-				brandImg.setAttribute('src', whiteImg);
-				lineDash.classList.replace('line', 'line_white');
-				modeText.innerHTML = 'Light Mode';
-			} else {
-				document.body.classList.remove('dark');
-				brandImg.setAttribute('src', blackImg);
-				lineDash.classList.replace('line_white', 'line');
-				modeText.innerHTML = 'Dark Mode';
-			}
-		});
+		// switchMode.addEventListener('change', function () {
+		// 	if (this.checked) {
+		// 		document.body.classList.add('dark');
+		// 		brandImg.setAttribute('src', whiteImg);
+		// 		lineDash.classList.replace('line', 'line_white');
+		// 		modeText.innerHTML = 'Light Mode';
+		// 	} else {
+		// 		document.body.classList.remove('dark');
+		// 		brandImg.setAttribute('src', blackImg);
+		// 		lineDash.classList.replace('line_white', 'line');
+		// 		modeText.innerHTML = 'Dark Mode';
+		// 	}
+		// });
 
 
 		brandImg.addEventListener('click', function () {

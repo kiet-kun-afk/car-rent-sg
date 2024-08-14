@@ -43,6 +43,9 @@ public class Contract {
     @Column(nullable = false)
     private long deposit;
 
+    @Column(name = "remain_cost", nullable = false)
+    private long remainCost;
+
     @Column(name = "status_payment", nullable = false)
     private Boolean statusPayment;
 
@@ -65,4 +68,7 @@ public class Contract {
 
     @OneToOne(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private DeliveryRecord deliveryRecord;
+
+    @OneToOne(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Bill bill;
 }

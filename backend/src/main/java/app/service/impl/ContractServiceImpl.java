@@ -17,6 +17,7 @@ import app.model.Car;
 import app.model.Contract;
 import app.model.Customer;
 import app.model.Staff;
+import app.repository.BillRepository;
 import app.repository.CarRepository;
 import app.repository.ContractRepository;
 import app.response.ContractResponse;
@@ -38,6 +39,7 @@ public class ContractServiceImpl implements ContractService {
     private final CarRepository carRepository;
     private final EmailService emailService;
     private final BillService billService;
+    private final BillRepository billRepository;
 
     @Override
     public ContractResponse createContract(String registrationPlate, ContractDTO contractDTO) throws Exception {
@@ -82,6 +84,7 @@ public class ContractServiceImpl implements ContractService {
         contract.setDeposit(contractDTO.getDeposit());
         contract.setStatusPayment(false);
         contract.setWayToPay(contractDTO.getWayToPay());
+        contract.setRemainCost((long) (totalRentCost * 0.8));
 
         // contract.setAttachment(fileService.upload(contractDTO.getFile()));
         contractRepository.save(contract);
@@ -447,8 +450,10 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void UpdateStatusPayment(Integer contractId, boolean status) {
         Contract contract = contractRepository.findByContractId(contractId);
-
-        contract.setStatusPayment(true);
+        Bill bill = contract.getBill();
+        bill.setPaymentStatus(status);
+        contract.setStatusPayment(status);
         contractRepository.save(contract);
+        billRepository.save(bill);
     }
 }

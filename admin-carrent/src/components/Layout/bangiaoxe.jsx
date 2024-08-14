@@ -384,10 +384,10 @@ function GiaoXe() {
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
-                              <label htmlFor="dob">Ngày cấp</label>
+                              <label htmlFor="issueCard">Ngày cấp</label>
                               <input
                                 type="text"
-                                id="dob"
+                                id="issueCard"
                                 className="form-control"
                                 value={
                                   record?.licenseIssuedDate || "Chưa cập nhật"
@@ -732,7 +732,7 @@ function GiaoXe() {
                     <div className="row m-0">
                       <div className="col-sm-6 ps-0 pe-3 ">
                         <div className="form-group">
-                          <label htmlFor="gplx">Số xăng khi giao</label>
+                          <label htmlFor="gplx">Số xăng khi trả</label>
                           <input
                             type="text"
                             id="gplx"
@@ -744,7 +744,7 @@ function GiaoXe() {
                       </div>
                       <div className="col-sm-6 ps-3 pe-0">
                         <div className="form-group">
-                          <label htmlFor="dob">Số KM khi giao</label>
+                          <label htmlFor="dob">Số KM khi trả</label>
                           <input
                             placeholder="Nhập số KM khi trả"
                             type="text"

@@ -56,6 +56,7 @@ public class BillServiceImpl implements BillService {
         bill.setDescribe("Thanh toán tiền cọc cho dịch vụ thuê xe " + contract.getCar().getCarName());
         bill.setStaff(contract.getStaff());
         bill.setPaymentStatus(false);
+        bill.setRemainCost(0);
         billRepository.save(bill);
         contract.setDeposit(bill.getPayCost());
         return bill;

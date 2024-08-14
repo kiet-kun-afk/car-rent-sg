@@ -111,4 +111,11 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 	List<Contract> findRecentContracts(@Param("limit") int limit);
 
 	Contract findByContractId(Integer contractId);
+
+	@Query("SELECT c FROM Contract c " +
+			"JOIN c.deliveryRecord dr " +
+			"JOIN dr.returnRecord rr " +
+			"WHERE rr.returnId = :returnId")
+	Contract findContractByReturnId(@Param("returnId") Integer returnId);
+
 }
