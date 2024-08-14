@@ -75,11 +75,11 @@ public class StaffLoginController {
                         .data(errors)
                         .build());
             }
-            StaffResponse staff = staffService.registerStaff(staffDTO);
+            staffService.registerStaff(staffDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Register success")
-                    .data(staff)
+                    .data("Register success")
                     .build());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseObject.builder()

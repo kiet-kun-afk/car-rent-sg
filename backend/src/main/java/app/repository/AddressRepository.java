@@ -30,6 +30,12 @@ public interface AddressRepository extends JpaRepository<Address, Integer> {
 			@Param("street") String street,
 			@Param("rememberName") String rememberName);
 
+	Address findByProvinceAndDistrictAndWardAndStreet(
+			@Param("province") String province,
+			@Param("district") String district,
+			@Param("ward") String ward,
+			@Param("street") String street);
+
 	default boolean existsByAddressAttributes(
 			Optional<String> province,
 			Optional<String> district,

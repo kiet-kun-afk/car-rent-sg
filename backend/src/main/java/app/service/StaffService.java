@@ -15,7 +15,7 @@ public interface StaffService {
 
     public LoginResponse loginStaff(LoginDTO staffDTO) throws Exception;
 
-    public StaffResponse registerStaff(RegisterStaffDTO staffDTO) throws Exception;
+    public void registerStaff(RegisterStaffDTO staffDTO) throws Exception;
 
     public List<StaffResponse> getAll();
 

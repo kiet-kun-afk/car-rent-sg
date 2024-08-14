@@ -34,6 +34,13 @@ public class Address {
         this.rememberName = rememberName;
     }
 
+    public Address(String province, String district, String ward, String street) {
+        this.province = province;
+        this.district = district;
+        this.ward = ward;
+        this.street = street;
+    }
+
     @OneToOne(mappedBy = "address")
     private Customer customer;
 }

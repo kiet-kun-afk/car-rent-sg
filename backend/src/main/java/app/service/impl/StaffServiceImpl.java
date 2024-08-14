@@ -7,11 +7,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import app.dto.StaffDTO;
@@ -46,6 +48,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StaffServiceImpl implements StaffService {
 
+    @Value("${staff.role}")
+    private String staffRole;
+
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final StaffRepository staffRepository;
@@ -53,7 +58,7 @@ public class StaffServiceImpl implements StaffService {
     private final AddressRepository addressRepository;
     private final CitizenCardRepository citizenRepository;
     private final ValidService validService;
-    private final PasswordResetService passwordResetService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     FileService fileService;
@@ -77,7 +82,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public StaffResponse registerStaff(RegisterStaffDTO staffDTO) throws Exception {
+    public void registerStaff(RegisterStaffDTO staffDTO) throws Exception {
 
         if (staffRepository.existsByEmail(staffDTO.getEmail())) {
             throw new InvalidParamException("Email is already registered");
@@ -95,42 +100,83 @@ public class StaffServiceImpl implements StaffService {
         Staff staff = new Staff();
         staff.setEmail(staffDTO.getEmail());
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
-        staff.setPassword(UUID.randomUUID().toString());
-        staff.setRoles(getRoles(staffDTO.getRoles()));
+        staff.setPassword(passwordEncoder.encode("NV" + UUID.randomUUID().toString().replace("-", "").substring(0, 8)));
+        staff.setRoles(getRoles(staffRole));
         staff.setBirthDate(staffDTO.getBirthday());
         staff.setFullName(staffDTO.getFullname());
-        staff.setAvatarImage(fileService.upload(staffDTO.getAvatar_img()));
+        if (staffDTO.getAvatarImg() == null) {
+            staff.setAvatarImage(null);
+        } else {
+            staff.setAvatarImage(fileService.upload(staffDTO.getAvatarImg()));
+        }
+        staff.setGender(staffDTO.isGender());
         staff.setStatus(true);
+        String province = staffDTO.getProvince();
+        String district = staffDTO.getDistrict();
+        String ward = staffDTO.getWard();
+        String street = staffDTO.getStreet();
+        Address address = addressRepository.findByProvinceAndDistrictAndWardAndStreet(
+                province, district,
+                ward, street);
+        if (address == null) {
+            address = new Address(province, district, ward, street);
+        }
+        address.setStreet(street);
+        address.setDistrict(district);
+        address.setProvince(province);
+        address.setWard(ward);
+        CitizenCard citizenCard = new CitizenCard();
+        if (staffDTO.getBackSide() == null) {
+            throw new Exception("Back side citizen is required");
+        } else {
+            citizenCard.setBackImage(fileService.upload(staffDTO.getBackSide()));
+        }
+        if (staffDTO.getFrontSide() == null) {
+            throw new Exception("Front side citizen is required");
+        } else {
+            citizenCard.setFrontImage(fileService.upload(staffDTO.getFrontSide()));
+        }
+        if (citizenRepository.existsByIdCard(staffDTO.getIdCard())) {
+            throw new Exception("Id card is already exists");
+        } else {
+            citizenCard.setIdCard(staffDTO.getIdCard());
+        }
+        citizenCard.setIssueDate(staffDTO.getIssueDate());
+        citizenCard.setExpiryDate(staffDTO.getExpiryDate());
+        try {
+            address = addressRepository.save(address);
+            citizenCard = citizenRepository.save(citizenCard);
+            staff.setAddress(address);
+            staff.setCitizenCard(citizenCard);
+            staffRepository.save(staff);
+        } catch (Exception e) {
+            throw new Exception("Error when save staff and address");
+        }
 
-        staffRepository.save(staff);
-        passwordResetService.createPasswordResetToken(staff.getEmail(), "staff", "first");
-        return StaffResponse.registerStaff(staff);
     }
 
-    private Set<Role> getRoles(Set<String> rolesString) {
+    private Set<Role> getRoles(String rolesString) {
         Set<Role> roles = new HashSet<>();
         if (rolesString == null || rolesString.isEmpty()) {
             // Thêm vai trò mặc định nếu rolesString là null hoặc rỗng
-            Role defaultRole = roleRepository.findByName("STAFF_ROLE");
+            Role defaultRole = roleRepository.findByName(staffRole);
             if (defaultRole == null) {
-                defaultRole = new Role("STAFF_ROLE");
+                defaultRole = new Role(staffRole);
                 roleRepository.save(defaultRole);
             }
             roles.add(defaultRole);
         } else {
-            for (String roleName : rolesString) {
-                // Tìm vai trò trong cơ sở dữ liệu theo tên
-                Role role = roleRepository.findByName(roleName);
+            // Tìm vai trò trong cơ sở dữ liệu theo tên
+            Role role = roleRepository.findByName(rolesString);
 
-                if (role == null) {
-                    // Nếu không tìm thấy, tạo vai trò mới và lưu vào cơ sở dữ liệu
-                    role = new Role(roleName);
-                    roleRepository.save(role);
-                }
-
-                // Thêm vai trò vào tập hợp kết quả
-                roles.add(role);
+            if (role == null) {
+                // Nếu không tìm thấy, tạo vai trò mới và lưu vào cơ sở dữ liệu
+                role = new Role(rolesString);
+                roleRepository.save(role);
             }
+
+            // Thêm vai trò vào tập hợp kết quả
+            roles.add(role);
         }
         return roles;
     }
@@ -161,7 +207,7 @@ public class StaffServiceImpl implements StaffService {
         staff.setEmail(staffDTO.getEmail());
 
         staff.setGender(staffDTO.getGender());
-        staff.setRoles(getRoles(staffDTO.getRoles()));
+        staff.setRoles(getRoles(staffRole));
 
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
         staff.setPassword(staffDTO.getPassword());
@@ -189,7 +235,7 @@ public class StaffServiceImpl implements StaffService {
         staff.setEmail(staffDTO.getEmail());
         // staff.setFirstName(staffDTO.getFirstName());
         staff.setGender(staffDTO.getGender());
-        staff.setRoles(getRoles(staffDTO.getRoles()));
+        staff.setRoles(getRoles(staffRole));
         // staff.setLastName(staffDTO.getLastName());
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
         staff.setPassword(staffDTO.getPassword());

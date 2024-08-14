@@ -6,4 +6,5 @@ import app.model.cards.CitizenCard;
 
 public interface CitizenCardRepository extends JpaRepository<CitizenCard, Integer> {
 
+    boolean existsByIdCard(String idCard);
 }

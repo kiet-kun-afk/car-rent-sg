@@ -51,7 +51,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             customerRepository.save(customer);
         } else {
             customer = new Customer();
-            String rawPassword = UUID.randomUUID().toString();
+            String rawPassword = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
             customer.setUsername(name);
             customer.setEmail(email);
             customer.setPhoneNumber(name);
