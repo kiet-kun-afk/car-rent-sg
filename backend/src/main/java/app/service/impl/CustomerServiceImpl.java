@@ -211,11 +211,11 @@ public class CustomerServiceImpl implements CustomerService {
                                                                                                                         </table>
                                                                                                                         <div
                                                                                                                             style="text-align: center;">
-                                                                                                                            <a href="#"
+                                                                                                                            <a href="http://localhost:3000/carrentsg"
                                                                                                                                 style="color:#1c7ed6;font-family:'Cera Round Pro',' Proxima Nova Soft',' Proxima Nova',' Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;line-height:1.5;padding:0;text-decoration:underline"
                                                                                                                                 target="_blank"
                                                                                                                                 data-saferedirecturl="https://www.google.com/url?q=https://www.kickstarter.com/projects/fontawesome/web-awesome?ref%3Dbawnh2&amp;source=gmail&amp;ust=1718290981703000&amp;usg=AOvVaw12anzjyCvJMJVaD6XAInc2">
-                                                                                                                                <img src="https://firebasestorage.googleapis.com/v0/b/fir-test-15d04.appspot.com/o/ba99588c-d7a9-4d2d-bd56-db6d0b3c2620.png?alt=media"
+                                                                                                                                <img src="https://firebasestorage.googleapis.com/v0/b/carrentsg-30cbe.appspot.com/o/logoCarrent.png?alt=media&token=224f6d6b-844e-4c21-b2f9-b6b723ddb95e"
                                                                                                                                     alt="CarRentSG"
                                                                                                                                     style="clear:none;display:inline-block;max-width:100%;outline:0;text-decoration:none;width:200px"
                                                                                                                                     class="CToWUd"
@@ -350,7 +350,7 @@ public class CustomerServiceImpl implements CustomerService {
                                                                                                     <td>
                                                                                                         <p
                                                                                                             style="Margin:0;Margin-bottom:10px;color:#8991a5;font-family:'Cera Round Pro',' Proxima Nova Soft',' Proxima Nova',' Helvetica Neue',Helvetica,Arial,sans-serif;font-size:.9rem;font-weight:400;line-height:1.5;margin:0;margin-bottom:10px;padding:0;text-align:center">
-                                                                                                            <a href=""
+                                                                                                            <a href="http://localhost:3000/carrentsg"
                                                                                                                 style="Margin:default;color:#1c7ed6;font-family:'Cera Round Pro',' Proxima Nova Soft',' Proxima Nova',' Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;line-height:1.5;margin:default;padding:0;text-align:left;text-decoration:underline"
                                                                                                                 target="_blank"
                                                                                                                 data-saferedirecturl="https://www.google.com/url?q=https://fontawesome.com&amp;source=gmail&amp;ust=1718290981703000&amp;usg=AOvVaw1QZBtkALPGJQmy3s67vGke">

@@ -59,6 +59,7 @@ public class StaffServiceImpl implements StaffService {
     private final CitizenCardRepository citizenRepository;
     private final ValidService validService;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Autowired
     FileService fileService;
@@ -97,10 +98,12 @@ public class StaffServiceImpl implements StaffService {
             throw new InvalidParamException("Phone number is already registered");
         }
 
+        String rawPassword = "NV" + UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+
         Staff staff = new Staff();
         staff.setEmail(staffDTO.getEmail());
         staff.setPhoneNumber(staffDTO.getPhoneNumber());
-        staff.setPassword(passwordEncoder.encode("NV" + UUID.randomUUID().toString().replace("-", "").substring(0, 8)));
+        staff.setPassword(passwordEncoder.encode(rawPassword));
         staff.setRoles(getRoles(staffRole));
         staff.setBirthDate(staffDTO.getBirthday());
         staff.setFullName(staffDTO.getFullname());
@@ -149,6 +152,7 @@ public class StaffServiceImpl implements StaffService {
             staff.setAddress(address);
             staff.setCitizenCard(citizenCard);
             staffRepository.save(staff);
+            emailService.sendMail(staff.getEmail(), "THông báo mật khẩu của nhân viên", rawPassword);
         } catch (Exception e) {
             throw new Exception("Error when save staff and address");
         }
