@@ -51,7 +51,7 @@ public class BillServiceImpl implements BillService {
         bill.setContract(contract);
         bill.setPayCost(contract.getTotalRentCost() * 20 / 100);
         bill.setPayDate(LocalDateTime.now());
-        bill.setIncurredCost("Thanh toán tiền cọc cho dịch vụ thuê xe ");
+        bill.setIncurredCost(contract.getRemainCost() - contract.getTotalRentCost() + contract.getDeposit());
         bill.setPaymentMethod(contract.getWayToPay());
         bill.setDescribe("Thanh toán tiền cọc cho dịch vụ thuê xe " + contract.getCar().getCarName());
         bill.setStaff(contract.getStaff());

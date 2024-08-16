@@ -38,7 +38,7 @@ public class Bill {
 
     private String describe;
 
-    private String incurredCost;
+    private long incurredCost;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "contract_id", nullable = false)
