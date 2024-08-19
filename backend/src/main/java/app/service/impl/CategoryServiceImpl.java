@@ -21,13 +21,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryResponse> getAll() {
-
         return categoryRes.findAll().stream().map(CategoryResponse::fromCategoryResponse).toList();
     }
 
     @Override
     public CategoryResponse getOne(Integer id) {
-
         Category category = categoryRes.findById(id).orElse(null);
         return CategoryResponse.fromCategoryResponse(category);
     }
@@ -45,10 +43,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse Put(Integer id, CategoryDTO categoryDTO) {
-        Optional<Category> optionalcategory = categoryRes.findById(id);
+        Optional<Category> optionalCategory = categoryRes.findById(id);
 
-        if (optionalcategory.isPresent()) {
-            Category category = optionalcategory.get();
+        if (optionalCategory.isPresent()) {
+            Category category = optionalCategory.get();
             category.setCategoryName(categoryDTO.getCategoryName());
             categoryRes.save(category);
             return CategoryResponse.fromCategoryResponse(category);

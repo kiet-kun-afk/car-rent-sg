@@ -29,6 +29,23 @@ function CustomerCar() {
 	const navigate = useNavigate();
 	const [currentDay, setCurrentDay] = useState("");
 	const [nextDay, setNextDay] = useState("");
+	const [brands, setBrands] = useState([]);
+	const [categories, setCategories] = useState([]);
+
+	const loadFilter = async () => {
+		try {
+			const brandsResponse = await axios.get(
+				`http://localhost:8080/api/v1/brands`
+			);
+			const categoriesResponse = await axios.get(
+				`http://localhost:8080/api/v1/categories`
+			);
+			setBrands(brandsResponse.data.data);
+			setCategories(categoriesResponse.data.data);
+		} catch (err) {
+			console.error("Error fetching cars:", err);
+		}
+	};
 
 	const loadListCar = async (
 		category,
@@ -164,8 +181,9 @@ function CustomerCar() {
 	};
 
 	const [category, setCategory] = useState("");
-
+	const [selectedCategory, setSelectedCategory] = useState(null);
 	const selectCategory = (category) => {
+		setSelectedCategory(category);
 		setCategory(category);
 	};
 
@@ -237,7 +255,7 @@ function CustomerCar() {
 
 	useEffect(() => {
 		loadListCar();
-
+		loadFilter();
 		getCurrentDay();
 		getNextDay();
 		//const intervalId = setInterval(updateCurrentTime, 1000); // Update every second
@@ -513,98 +531,139 @@ function CustomerCar() {
 								<span className="ms-1">Bộ lọc</span>
 							</button>
 						</div>
+						<div>
+							<button
+								type="button"
+								className="btn btn-filter"
+								onClick={() => {
+									loadListCar();
+									setSelectedCategory(null);
+									setBrand("");
+									setMinPrice(300);
+									setMaxPrice(3000);
+									setMinSeat(2);
+									setMaxSeat(10);
+									setTransmission("");
+									setFuelType("");
+								}}
+							>
+								<span className="ms-1">Tất cả</span>
+							</button>
+						</div>
 					</div>
 				</div>
 				<div className="row m-0">
-					{cars.map((car) => (
-						<div
-							className="col-sm-3 col-md-3 col-lg-3"
-							style={{ padding: "12px 12px" }}
-						>
-							<a
-								className="car-item"
-								href="#"
-								data-id={car.registrationPlate}
-								onClick={handleCarRegistrationPlate}
+					{cars.length > 0 ? (
+						cars.map((car) => (
+							<div
+								className="col-sm-3 col-md-3 col-lg-3"
+								style={{ padding: "12px 12px" }}
 							>
-								<div className="car-item-box">
-									<div className="car-item-img">
-										<div className="car-img">
-											<img
-												alt=""
-												src={`${car.frontImage}`}
-											/>
-										</div>
-										<span className="car-note">
-											{" "}
-											<span className="c-note">
+								<a
+									className="car-item"
+									href="#"
+									data-id={car.registrationPlate}
+									onClick={handleCarRegistrationPlate}
+								>
+									<div className="car-item-box">
+										<div className="car-item-img">
+											<div className="car-img">
+												<img
+													alt=""
+													src={`${car.frontImage}`}
+												/>
+											</div>
+											<span className="car-note">
 												{" "}
-												Đặt Xe Nhanh
-												<i
-													className="fa-solid fa-bolt"
-													style={{ color: "yellow" }}
-												></i>
-											</span>{" "}
-											<span className="c-note">
-												Miễn Thế Chấp{" "}
-												<i
-													className="fa-solid fa-lock-open"
-													style={{ color: "green" }}
-												></i>
+												<span className="c-note">
+													{" "}
+													Đặt Xe Nhanh
+													<i
+														className="fa-solid fa-bolt"
+														style={{
+															color: "yellow",
+														}}
+													></i>
+												</span>{" "}
+												<span className="c-note">
+													Miễn Thế Chấp{" "}
+													<i
+														className="fa-solid fa-lock-open"
+														style={{
+															color: "green",
+														}}
+													></i>
+												</span>
 											</span>
-										</span>
-										<div className="car-avatar">
-											<img
-												alt=""
-												src="https://n1-cstg.mioto.vn/m/avatars/avatar-3.png"
-											/>
-										</div>
-										{/* <span className="car-discount">
+											<div className="car-avatar">
+												<img
+													alt=""
+													src="https://n1-cstg.mioto.vn/m/avatars/avatar-3.png"
+												/>
+											</div>
+											{/* <span className="car-discount">
 											Giảm 10%
 										</span> */}
-									</div>
+										</div>
 
-									<div className="car-item-detail">
-										<div className="c-detail-type">
-											<span className="type-item">
-												{car.transmission}
-											</span>
-											<span className="type-item-1">
-												{car.fuelType}
-											</span>
-										</div>
-										<div className="c-detail-name">
-											<p>{car.carName}</p>
-											{/* <i className="fa-solid fa-shield-halved" style={{ color: "green" }}></i> */}
-										</div>
-										<div className="c-detail-address">
-											<i
-												className="fa-solid fa-location-dot"
-												style={{ color: "red" }}
-											></i>
-											<p>{car.branchName}</p>
-										</div>
-										<div className="c-detail-line"></div>
-										<div className="c-detail-price">
-											<div className="price-info">
-												<i className="fa-solid fa-person-walking-luggage"></i>
-												<span className="num-trip"></span>
-											</div>
-											<div className="price-warp">
-												<span className="price-special">
-													{" "}
-													{formatVND(
-														car.rentCost
-													)}{" "}
-													VNĐ
+										<div className="car-item-detail">
+											<div className="c-detail-type">
+												<span className="type-item">
+													{car.transmission}
+												</span>
+												<span className="type-item-1">
+													{car.fuelType}
 												</span>
 											</div>
+											<div className="c-detail-name">
+												<p>{car.carName}</p>
+												{/* <i className="fa-solid fa-shield-halved" style={{ color: "green" }}></i> */}
+											</div>
+											<div className="c-detail-address">
+												<i
+													className="fa-solid fa-location-dot"
+													style={{ color: "red" }}
+												></i>
+												<p>{car.branchName}</p>
+											</div>
+											<div className="c-detail-line"></div>
+											<div className="c-detail-price">
+												<div className="price-info">
+													<i className="fa-solid fa-person-walking-luggage"></i>
+													<span className="num-trip"></span>
+												</div>
+												<div className="price-warp">
+													<span className="price-special">
+														{" "}
+														{formatVND(
+															car.rentCost
+														)}{" "}
+														VNĐ
+													</span>
+												</div>
+											</div>
 										</div>
 									</div>
+								</a>
+							</div>
+						))
+					) : (
+						<div className="d-flex justify-content-center">
+							<div>
+								<img
+									src="https://www.mioto.vn/static/media/empty-mycar.e023e681.svg"
+									alt=""
+									srcset=""
+								/>
+								<div>
+									<p>
+										Không có xe phù hợp với tìm kiếm của
+										bạn, vui lòng thử lại
+									</p>
 								</div>
-							</a>
+							</div>
 						</div>
-					))}
+					)}
 				</div>
 
 				{/* Modal filterDay */}
@@ -715,129 +774,44 @@ function CustomerCar() {
 								<div className="form-item">
 									<div className="content">
 										<div className="row m-0">
-											<div className="col-sm-3 mt-1 mb-1">
-												<div
-													className="card card-style"
-													style={{ width: "8rem" }}
-													onClick={() =>
-														selectCategory("Mini")
-													}
-												>
-													<img
-														src={sedan4}
-														className="img-fluid card-img-top m-auto"
+											{categories.map((category) => (
+												<div className="col-sm-3 mt-1 mb-1">
+													<div
+														className={`card card-style ${
+															selectedCategory ===
+															category.categoryName
+																? "card-clicked"
+																: ""
+														}`}
 														style={{
-															width: "70px",
-															height: "auto",
+															width: "8rem",
 														}}
-													/>
-													<div className="card-body p-0">
-														<p className="card-text mb-3">
-															Mini
-														</p>
+														onClick={() =>
+															selectCategory(
+																category.categoryName
+															)
+														}
+													>
+														<img
+															src={
+																category.categoryImage
+															}
+															className="img-fluid card-img-top m-auto"
+															style={{
+																width: "70px",
+																height: "auto",
+															}}
+														/>
+														<div className="card-body p-0">
+															<p className="card-text mb-3">
+																{
+																	category.categoryName
+																}
+															</p>
+														</div>
 													</div>
 												</div>
-											</div>
-											<div className="col-sm-3 mt-1 mb-1">
-												<div
-													className="card card-style"
-													style={{ width: "8rem" }}
-													onClick={() =>
-														selectCategory(
-															"CUV Gầm cao"
-														)
-													}
-												>
-													<img
-														src={cuv5}
-														className="img-fluid card-img-top m-auto"
-														style={{
-															width: "70px",
-															height: "auto",
-														}}
-													/>
-													<div className="card-body p-0">
-														<p className="card-text mb-3">
-															CUV Gầm cao
-														</p>
-													</div>
-												</div>
-											</div>
-											<div className="col-sm-3 mt-1 mb-1">
-												<div
-													className="card card-style"
-													style={{ width: "8rem" }}
-													onClick={() =>
-														selectCategory(
-															"SUV Gầm thấp"
-														)
-													}
-												>
-													<img
-														src={suv7}
-														className="img-fluid card-img-top m-auto"
-														style={{
-															width: "70px",
-															height: "auto",
-														}}
-													/>
-													<div className="card-body p-0">
-														<p className="card-text mb-3">
-															SUV Gầm thấp
-														</p>
-													</div>
-												</div>
-											</div>
-											<div className="col-sm-3 mt-1 mb-1">
-												<div
-													className="card card-style"
-													style={{ width: "8rem" }}
-													onClick={() =>
-														selectCategory(
-															"Bán tải"
-														)
-													}
-												>
-													<img
-														src={truck}
-														className="img-fluid card-img-top m-auto"
-														style={{
-															width: "70px",
-															height: "auto",
-														}}
-													/>
-													<div className="card-body p-0">
-														<p className="card-text mb-3">
-															Bán tải
-														</p>
-													</div>
-												</div>
-											</div>
-											<div className="col-sm-3 mt-1 mb-1">
-												<div
-													className="card card-style"
-													style={{ width: "8rem" }}
-													onClick={() =>
-														selectCategory(
-															"Minivan"
-														)
-													}
-												>
-													<img
-														src={minivan}
-														className="img-fluid card-img-top m-auto"
-														style={{
-															width: "70px",
-															height: "auto",
-														}}
-													/>
-													<div className="card-body p-0">
-														<p className="card-text mb-3">
-															Minivan
-														</p>
-													</div>
-												</div>
-											</div>
+											))}
 										</div>
 									</div>
 								</div>
@@ -856,7 +830,7 @@ function CustomerCar() {
 								</button>
 								<button
 									type="button"
-									className="btn btn-primary w-100"
+									className="btn btn-primary"
 									onClick={() => filterCategory()}
 								>
 									Áp dụng
@@ -921,494 +895,47 @@ function CustomerCar() {
 														</label>
 													</div>
 												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand(
-																"vinfast"
-															)
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="vinfast"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="vinfast"
+												{brands.map((brand) => (
+													<div className="custom-radio-brand mb-3">
+														<div
+															className="form-check"
+															onClick={() =>
+																selectBrand(
+																	brand.brandName
+																)
+															}
 														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Vinfast.png"
-																alt="Vinfast"
+															<input
+																className="form-check-input"
+																type="radio"
+																name="flexRadioDefault"
+																id={`${brand.brandName}`}
 															/>
-															<p>Vinfast</p>
-														</label>
+															<label
+																className="form-check-label"
+																htmlFor={`${brand.brandName}`}
+															>
+																<img
+																	loading="lazy"
+																	src={`${brand.brandImage}`}
+																	alt={`${brand.brandName}`}
+																/>
+																<p>
+																	{
+																		brand.brandName
+																	}
+																</p>
+																<p>
+																	(
+																	{
+																		brand.carsCount
+																	}{" "}
+																	xe)
+																</p>
+															</label>
+														</div>
 													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand("audi")
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="audi"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="audi"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Audi.png"
-																alt="Audi"
-															/>
-															<p>Audi</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand(
-																"chevrolet"
-															)
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="chevrolet"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="chevrolet"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Chevrolet.png"
-																alt="Chevrolet"
-															/>
-															<p>Chevrolet</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand("bmw")
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="bmw"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="bmw"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/BMW.png"
-																alt="BMW"
-															/>
-															<p>BMW</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand("ford")
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="ford"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="ford"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Ford.png"
-																alt="Ford"
-															/>
-															<p>Ford</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand("honda")
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="honda"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="honda"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Honda.png"
-																alt="Honda"
-															/>
-															<p>Honda</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand(
-																"hyundai"
-															)
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="hyundai"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="hyundai"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Hyundai.png"
-																alt="Hyundai"
-															/>
-															<p>Hyundai</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand("kia")
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="kia"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="kia"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Kia.png"
-																alt="Kia"
-															/>
-															<p>Kia</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand("lexus")
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="lexus"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="lexus"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Lexus.png"
-																alt="Lexus"
-															/>
-															<p>Lexus</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand("mazda")
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="mazda"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="mazda"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Mazda.png"
-																alt="Mazda"
-															/>
-															<p>Mazda</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand(
-																"mercedes"
-															)
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="mercedes"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="mercedes"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Mercedes.png"
-																alt="Mercedes"
-															/>
-															<p>Mercedes</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand(
-																"mitsubishi"
-															)
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="mitsubishi"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="mitsubishi"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Mitsubishi.png"
-																alt="Mitsubishi"
-															/>
-															<p>Mitsubishi</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand(
-																"morris"
-															)
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="morris"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="morris"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Morris-Garages.png"
-																alt="Morris Garages"
-															/>
-															<p>
-																Morris Garages
-															</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand(
-																"nissan"
-															)
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="nissan"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="nissan"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Nissan.png"
-																alt="Nissan"
-															/>
-															<p>Nissan</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand(
-																"suzuki"
-															)
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="suzuki"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="suzuki"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Suzuki.png"
-																alt="Suzuki"
-															/>
-															<p>Suzuki</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand(
-																"toyota"
-															)
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="toyota"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="toyota"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Toyota.png"
-																alt="Toyota"
-															/>
-															<p>Toyota</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand("volk")
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="volk"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="volk"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Volkswagen.png"
-																alt="Volkswagen"
-															/>
-															<p>Volkswagen</p>
-														</label>
-													</div>
-												</div>
-												<div className="custom-radio-brand mb-3">
-													<div
-														className="form-check"
-														onClick={() =>
-															selectBrand("baic")
-														}
-													>
-														<input
-															className="form-check-input"
-															type="radio"
-															name="flexRadioDefault"
-															id="baic"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="baic"
-														>
-															<img
-																loading="lazy"
-																src="https://n1-cstg.mioto.vn/m/vehicle-makes/Baic.png"
-																alt="Baic"
-															/>
-															<p>Baic</p>
-														</label>
-													</div>
-												</div>
+												))}
 											</div>
 										</div>
 									</div>
@@ -1822,7 +1349,7 @@ function CustomerCar() {
 														className="form-check"
 														onClick={() =>
 															selectFuelType(
-																"diesel"
+																"dầu diesel"
 															)
 														}
 													>

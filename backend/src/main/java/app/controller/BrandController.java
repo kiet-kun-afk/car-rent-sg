@@ -41,7 +41,6 @@ public class BrandController {
                     .data(e.getMessage())
                     .build());
         }
-
     }
 
     @GetMapping("/{id}")

@@ -20,12 +20,13 @@ public class BrandResponse {
 
     private String countryOrigin;
 
+    private int carsCount;
+
     public BrandResponse(Brand brand) {
         this.brandId = brand.getBrandId();
         this.brandImage = brand.getBrandImage();
         this.brandName = brand.getBrandName();
         this.countryOrigin = brand.getCountryOrigin();
-
     }
 
     public static BrandResponse fromBrandResponse(Brand brand) {

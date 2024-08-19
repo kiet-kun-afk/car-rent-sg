@@ -1,5 +1,9 @@
 package app.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,4 +31,8 @@ public class Brand {
 
     @Column(name = "country_origin", nullable = false)
     private String countryOrigin;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "brand")
+    private List<Car> cars;
 }
