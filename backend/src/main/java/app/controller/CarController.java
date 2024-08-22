@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -261,17 +262,12 @@ public class CarController {
         try {
             LocalDateTime start = formatterService.stringToDateTime(startDate);
             LocalDateTime end = formatterService.stringToDateTime(endDate);
-            List<CarResponse> cars = carService
-                    .filterCar(start, end, brandName, countryOrigin, transmission, fuelType, categoryNames,
-                            minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
-            // Page<CarResponse> cars = carService
-            // .filterCarPage(start, end,
-            // brandName, countryOrigin, transmission, fuelType, categoryNames,
-            // minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0),
-            // pageSize.orElse(20));
-            //         .filterCarPage(start, end,
-            //                 brandName, countryOrigin, transmission, fuelType, categoryNames,
+            // List<CarResponse> cars = carService
+            //         .filterCar(start, end, brandName, countryOrigin, transmission, fuelType, categoryNames,
             //                 minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
+            Page<CarResponse> cars = carService
+                    .filterCarPage(start, end, brandName, countryOrigin, transmission, fuelType, categoryNames,
+                            minCost, maxCost, minSeat, maxSeat, sortBy, pageNumber.orElse(0), pageSize.orElse(20));
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Filter car successfully")

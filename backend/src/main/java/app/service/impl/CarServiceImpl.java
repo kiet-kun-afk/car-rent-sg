@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.PageImpl;
 
 import app.dto.CarDTO;
 import app.exception.DataNotFoundException;
@@ -329,36 +328,34 @@ public class CarServiceImpl implements CarService {
 				.and(CarSpecifications.hasFuelType(fuelType))
 				.and(CarSpecifications.hasRentCost(minCost, maxCost))
 				.and(CarSpecifications.hasNumberOfSeat(minSeat, maxSeat)));
-		Sort sort;
-		if (sortBy == null || sortBy.isEmpty()) {
-			sort = Sort.by(Sort.Direction.DESC, "createdAt");
-		} else if (sortBy.equals("price_asc")) {
-			sort = Sort.by(Sort.Direction.ASC, "rentCost");
-		} else if (sortBy.equals("price_desc")) {
-			sort = Sort.by(Sort.Direction.DESC, "rentCost");
-		} else if (sortBy.equals("name")) {
-			sort = Sort.by("carName");
-		} else {
-			sort = Sort.by(Sort.Direction.DESC, "createdAt");
-			// default
-		}
-		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-		Page<Car> page = carres.findAll(specification, pageable);
-		List<Car> cars = page.getContent();
+		Sort sort = switch (Optional.ofNullable(sortBy).orElse("updatedAt")) {
+			case "price_asc" -> Sort.by(Sort.Direction.ASC, "rentCost");
+			case "price_desc" -> Sort.by(Sort.Direction.DESC, "rentCost");
+			case "name" -> Sort.by("carName");
+			default -> Sort.by(Sort.Direction.DESC, "createdAt");
+		};
 
-		List<Car> carsWithoutOverlappingContracts = cars.stream()
+		// Lấy toàn bộ danh sách các xe mà không phân trang
+		List<Car> allCars = carres.findAll(specification, sort);
+
+		// Lọc các xe không bị chồng chéo hợp đồng
+		List<Car> carsWithoutOverlappingContracts = allCars.stream()
 				.filter(car -> contractService.isContractValidForCar(car,
-						startDate == null ? LocalDateTime.now() : startDate,
-						endDate == null ? LocalDateTime.now() : endDate))
+						Optional.ofNullable(startDate).orElse(LocalDateTime.now()),
+						Optional.ofNullable(endDate).orElse(LocalDateTime.now())))
 				.collect(Collectors.toList());
 
-		// pagination
-		int start = (int) pageable.getOffset();
-		int end = Math.min((start + pageable.getPageSize()), carsWithoutOverlappingContracts.size());
-		List<CarResponse> filteredAndPagedCars = carsWithoutOverlappingContracts.subList(start, end).stream()
+		// Tạo đối tượng Pageable
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+		// Tạo danh sách phân trang từ danh sách đã lọc
+		List<CarResponse> filteredAndPagedCars = carsWithoutOverlappingContracts.stream()
+				.skip(pageable.getOffset())
+				.limit(pageable.getPageSize())
 				.map(CarResponse::fromCarResponse)
 				.collect(Collectors.toList());
 
+		// Tạo đối tượng PageImpl với danh sách đã phân trang và tổng số lượng phần tử trong danh sách đã lọc
 		return new PageImpl<>(filteredAndPagedCars, pageable, carsWithoutOverlappingContracts.size());
 	}
 

@@ -20,11 +20,6 @@ import "../../style/styleIndex.css";
 import "../../style/styleCar.css";
 
 function CustomerCar() {
-	const sedan4 = "https://n1-cstg.mioto.vn/m/vehicle-types/4-mini-v2.png";
-	const cuv5 = "https://n1-cstg.mioto.vn/m/vehicle-types/5-suv-v2.png";
-	const suv7 = "https://n1-cstg.mioto.vn/m/vehicle-types/7-suv-v2.png";
-	const truck = "https://n1-cstg.mioto.vn/m/vehicle-types/pickup-v2.png";
-	const minivan = "https://n1-cstg.mioto.vn/m/vehicle-types/7-minivan-v2.png";
 	const [cars, setCars] = useState([]);
 	const navigate = useNavigate();
 	const [currentDay, setCurrentDay] = useState("");
@@ -47,7 +42,11 @@ function CustomerCar() {
 		}
 	};
 
+	const [pageNumber, setPageNumber] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
+
 	const loadListCar = async (
+		pageNumber,
 		category,
 		brand,
 		transmission,
@@ -57,6 +56,7 @@ function CustomerCar() {
 		minPrice,
 		maxPrice
 	) => {
+		const currentPage = pageNumber ? pageNumber : 0;
 		const categoryR = category ? category : "";
 		const brandR = brand ? brand : "";
 		const transmissionR = transmission ? transmission : "";
@@ -69,21 +69,11 @@ function CustomerCar() {
 		const end = formatDate(date.endDate);
 		try {
 			const result = await axios.get(
-				`http://localhost:8080/api/v1/cars/filter-car?brandName=${brandR}&transmission=${transmissionR}&fuelType=${fuelTypeR}&minCost=${minCost}&maxCost=${maxCost}&minSeat=${minSeatR}&maxSeat=${maxSeatR}&categoryNames=${categoryR}&startDate=${start}&endDate=${end}`
+				`http://localhost:8080/api/v1/cars/filter-car?pageNumber=${currentPage}&brandName=${brandR}&transmission=${transmissionR}&fuelType=${fuelTypeR}&minCost=${minCost}&maxCost=${maxCost}&minSeat=${minSeatR}&maxSeat=${maxSeatR}&categoryNames=${categoryR}&startDate=${start}&endDate=${end}`
 			);
-			setCars(result.data.data);
-			console.log("--------------------------------------");
-			console.log("->" + categoryR + "<-");
-			console.log("->" + brandR + "<-");
-			console.log("->" + transmissionR + "<-");
-			console.log("->" + fuelTypeR + "<-");
-			console.log("->" + minSeatR + "<-");
-			console.log("->" + maxSeatR + "<-");
-			console.log("->" + minCost + "<-");
-			console.log("->" + maxCost + "<-");
-			console.log("->" + start + "<-");
-			console.log("->" + end + "<-");
-			console.log("--------------------------------------");
+			setCars(result.data.data.content);
+			setTotalPages(result.data.data.totalPages);
+			console.log(result.data.data);
 		} catch (error) {
 			console.error("Error fetching cars:", error);
 		}
@@ -166,6 +156,7 @@ function CustomerCar() {
 	const filterDate = () => {
 		if (date.startDate && date.endDate) {
 			loadListCar(
+				0,
 				category,
 				brand,
 				transmission,
@@ -189,6 +180,7 @@ function CustomerCar() {
 
 	const filterCategory = () => {
 		loadListCar(
+			0,
 			category,
 			brand,
 			transmission,
@@ -208,6 +200,7 @@ function CustomerCar() {
 
 	const filterBrand = () => {
 		loadListCar(
+			0,
 			category,
 			brand,
 			transmission,
@@ -225,6 +218,7 @@ function CustomerCar() {
 	};
 	const filterTransmission = () => {
 		loadListCar(
+			0,
 			category,
 			brand,
 			transmission,
@@ -242,6 +236,21 @@ function CustomerCar() {
 
 	const filterAdvance = () => {
 		loadListCar(
+			0,
+			category,
+			brand,
+			transmission,
+			fuelType,
+			minSeat,
+			maxSeat,
+			minPrice,
+			maxPrice
+		);
+	};
+
+	const handleChangePage = (currentPage) => {
+		loadListCar(
+			currentPage,
 			category,
 			brand,
 			transmission,
@@ -664,6 +673,27 @@ function CustomerCar() {
 							</div>
 						</div>
 					)}
+					<div className="row m-0">
+						{Array.from({ length: totalPages }, (_, index) => (
+							<div
+								key={index}
+								className="col-sm-1 col-md-1 col-lg-1"
+							>
+								<button
+									type="button"
+									className={`btn btn-pagination ${
+										pageNumber === index ? "active" : ""
+									}`}
+									onClick={() => {
+										setPageNumber(index);
+										handleChangePage(index);
+									}}
+								>
+									{index + 1}
+								</button>
+							</div>
+						))}
+					</div>
 				</div>
 
 				{/* Modal filterDay */}
