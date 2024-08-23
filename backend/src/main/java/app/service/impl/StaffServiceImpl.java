@@ -152,7 +152,7 @@ public class StaffServiceImpl implements StaffService {
             staff.setAddress(address);
             staff.setCitizenCard(citizenCard);
             staffRepository.save(staff);
-            emailService.sendMail(staff.getEmail(), "THông báo mật khẩu của nhân viên", rawPassword);
+            emailService.sendMail(staff.getEmail(), "Thông báo mật khẩu của nhân viên", rawPassword);
         } catch (Exception e) {
             throw new Exception("Error when save staff and address");
         }
