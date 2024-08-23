@@ -2,6 +2,7 @@ package app.service.impl;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -374,6 +375,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public List<ContractResponse> getAllContract() {
         List<Contract> contracts = contractRepository.findAll();
+        contracts.sort(Comparator.comparing(Contract::getCreateDate).reversed());
         return contracts.stream().map(ContractResponse::fromContract).toList();
     }
 
