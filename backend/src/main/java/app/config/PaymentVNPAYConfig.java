@@ -20,8 +20,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class PaymentVNPAYConfig {
 
-    @Value("${url.backend}")
-    private static String urlBackend;
+    @Value("${url.customer}")
+    private static String urlBackend = "http://localhost:3000";
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_ReturnUrl = urlBackend + "/user/paymentsuccessVnpay";

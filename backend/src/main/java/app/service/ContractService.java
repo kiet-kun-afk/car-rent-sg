@@ -16,7 +16,7 @@ public interface ContractService {
 
     public void confirmContract(Integer contractId) throws Exception;
 
-    public void completePayContract(Integer contractId, long deposit) throws Exception;
+    public void completePayContract(Integer contractId, long deposit, String wayTopay, String type) throws Exception;
 
     public List<ContractResponse> getAllContract();
 

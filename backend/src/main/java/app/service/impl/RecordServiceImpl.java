@@ -95,7 +95,8 @@ public class RecordServiceImpl implements RecordService {
         returnRecord.setAddress(recordDTO.getAddress());
         returnRecord.setInterior(recordDTO.getInterior());
         returnRecord.setExterior(recordDTO.getExterior());
-        returnRepository.save(returnRecord);
+        // returnRepository.save(returnRecord);
+        saveReturn(returnRepository.save(returnRecord).getReturnId(), returnRecord.getRemainingAmount());
         deliveryRepository.save(deliveryRecord);
         contractRepository.save(contract);
         return RecordResponse.fromReturnRecord(returnRecord);

@@ -51,12 +51,16 @@ function PaymentMethod() {
   const handlePayment = async () => {
     let endpoint = "";
     let payload = new URLSearchParams();
+    let queryParams = new URLSearchParams(window.location.search);
+    let amount = queryParams.get("amount");
+    let type = queryParams.get("type");
+    let contractId = contractDetails.contractId;
     payload.append("contractId", contractDetails.contractId);
 
     if (paymentMethod === "momo") {
-      endpoint = `http://localhost:8080/api/v1/payments/momo`;
+      endpoint = `http://localhost:8080/api/v1/payments/momo/${contractId}?amount=${amount}&type=${type}`;
     } else if (paymentMethod === "vnpay") {
-      endpoint = `http://localhost:8080/api/v1/payments/vnpay`;
+      endpoint = `http://localhost:8080/api/v1/payments/vnpay/${contractId}?amount=${amount}&type=${type}`;
     } else {
       alert("Please select a payment method");
       return;

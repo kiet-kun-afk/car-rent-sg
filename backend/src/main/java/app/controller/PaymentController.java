@@ -48,6 +48,8 @@ public class PaymentController {
     private final ContractService contractService;
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentController.class);
 
+    private String wayToPay;
+
     /* Index Payment funtion */
     @GetMapping("/{contractId}")
     public ResponseEntity<ResponseObject> index(@PathVariable("contractId") Integer contractId) {
@@ -62,13 +64,14 @@ public class PaymentController {
     }
 
     /* Pay with MOMO */
-    @PostMapping("/momo")
-    public ResponseEntity<Map<String, String>> createMoMoOrder(@RequestParam Integer contractId) {
-        ContractResponse contractResponses = contractService.findByContractId(contractId);
+    @PostMapping("/momo/{id}")
+    public ResponseEntity<Map<String, String>> createMoMoOrder(@PathVariable Integer id,
+            @RequestParam("amount") long amount, @RequestParam("type") String type) {
+        ContractResponse contractResponses = contractService.findByContractId(id);
         // contractService.UpdateStatusPayment(contractId, true);
-        long amount = (contractResponses.getTotalRentCost() * 20 / 100);
+        wayToPay = "Chuyển khoản MOMO";
         try {
-            contractService.completePayContract(contractId, amount);
+            contractService.completePayContract(id, amount, wayToPay, type);
         } catch (Exception e) {
             LOGGER.error("Thanh toán tiền cọc thất bại", e);
         }
@@ -105,19 +108,19 @@ public class PaymentController {
     }
 
     /* Pay with VNPAY */
-    @PostMapping("/vnpay")
-    public ResponseEntity<Map<String, String>> createVnpayOrder(@RequestParam Integer contractId) throws Exception {
-        ContractResponse contractResponses = contractService.findByContractId(contractId);
-
-        String vnp_Version = "2.1.0";
-        String vnp_Command = "pay";
-        String orderType = "other";
-        long amount = (contractResponses.getTotalRentCost() * 20 / 100);
+    @PostMapping("/vnpay/{id}")
+    public ResponseEntity<Map<String, String>> createVnpayOrder(@PathVariable Integer id,
+            @RequestParam("amount") long amount, @RequestParam("type") String type)
+            throws Exception {
+        wayToPay = "Chuyển khoản VNPAY";
         try {
-            contractService.completePayContract(contractId, amount);
+            contractService.completePayContract(id, amount, wayToPay, type);
         } catch (Exception e) {
             LOGGER.error("Thanh toán tiền cọc thất bại", e);
         }
+        String vnp_Version = "2.1.0";
+        String vnp_Command = "pay";
+        String orderType = "other";
         String bankCode = "NCB";
 
         String vnp_TxnRef = PaymentVNPAYConfig.getRandomNumber(8);
@@ -129,7 +132,7 @@ public class PaymentController {
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(amount));
+        vnp_Params.put("vnp_Amount", String.valueOf(amount * 100));
         vnp_Params.put("vnp_CurrCode", "VND");
         vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_BankCode", bankCode);
@@ -174,49 +177,6 @@ public class PaymentController {
         response.put("status", "OK");
         response.put("message", "Thanh toán thành công");
         response.put("paymentUrl", paymentUrl);
-        return ResponseEntity.ok(response);
-    }
-
-    // new pay remainCost
-    @PostMapping("/momo-remain-cost")
-    public ResponseEntity<Map<String, String>> createMoMoOrderRemainCost(@RequestParam Integer contractId) {
-        ContractResponse contractResponses = contractService.findByContractId(contractId);
-        long amount = (contractResponses.getRemainBill());
-        contractService.UpdateStatusPayment(contractId, true);
-        // try {
-        // contractService.completePayContract(contractId, amount);
-        // } catch (Exception e) {
-        // LOGGER.error("Thanh toán tiền cọc thất bại", e);
-        // }
-        LogUtils.init();
-        String requestId = String.valueOf(System.currentTimeMillis());
-        String orderId = String.valueOf(System.currentTimeMillis());
-        LOGGER.info("Amount: " + amount);
-        String orderInfo = contractResponses.getCarName() + contractResponses.getRentCost();
-        String returnURL = urlCustomer + "/user/paymentsuccessMomo";
-        String notifyURL = "https://google.com.vn";
-
-        Environment environment = Environment.selectEnv("dev");
-        PaymentResponse captureWalletMoMoResponse = null;
-        try {
-            captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId,
-                    Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
-        } catch (Exception e) {
-            LOGGER.error("Error while processing MoMo payment", e);
-        }
-
-        Map<String, String> response = new HashMap<>();
-        if (captureWalletMoMoResponse != null && captureWalletMoMoResponse.getPayUrl() != null) {
-
-            LOGGER.info("Pay URL: " + captureWalletMoMoResponse.getPayUrl());
-            response.put("status", "OK");
-            response.put("message", "Thanh toán thành công");
-            response.put("paymentUrl", captureWalletMoMoResponse.getPayUrl());
-        } else {
-            response.put("status", "FAILED");
-            response.put("message", "Thanh toán thất bại");
-        }
-
         return ResponseEntity.ok(response);
     }
 
