@@ -18,6 +18,7 @@ import Register from "./Login/register";
 
 import "../../style/styleIndex.css";
 import "../../style/styleCar.css";
+import Pagination from "../pagination";
 
 function CustomerCar() {
 	const [cars, setCars] = useState([]);
@@ -673,27 +674,12 @@ function CustomerCar() {
 							</div>
 						</div>
 					)}
-					<div className="row m-0">
-						{Array.from({ length: totalPages }, (_, index) => (
-							<div
-								key={index}
-								className="col-sm-1 col-md-1 col-lg-1"
-							>
-								<button
-									type="button"
-									className={`btn btn-pagination ${
-										pageNumber === index ? "active" : ""
-									}`}
-									onClick={() => {
-										setPageNumber(index);
-										handleChangePage(index);
-									}}
-								>
-									{index + 1}
-								</button>
-							</div>
-						))}
-					</div>
+					<Pagination
+						totalPages={totalPages}
+						pageNumber={pageNumber}
+						setPageNumber={setPageNumber}
+						handleChangePage={handleChangePage}
+					/>
 				</div>
 
 				{/* Modal filterDay */}
