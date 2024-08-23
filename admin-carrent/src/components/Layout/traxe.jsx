@@ -93,6 +93,8 @@ function TraXe() {
         console.error("Failed to create return record", error);
         ToastComponent("err", "Lưu biên bản trả xe thất bại!");
       }
+    } else {
+      console.log("Failed to create return record, login");
     }
   };
 
@@ -111,9 +113,8 @@ function TraXe() {
     const year = date.getFullYear();
 
     // Định dạng lại thành dd/MM/yyyy
-    const formattedDate = `${day < 10 ? "0" + day : day}/${
-      month < 10 ? "0" + month : month
-    }/${year}`;
+    const formattedDate = `${day < 10 ? "0" + day : day}/${month < 10 ? "0" + month : month
+      }/${year}`;
 
     return formattedDate;
   };

@@ -121,7 +121,7 @@ public class ContractController {
     public ResponseEntity<ResponseObject> completeContract(@PathVariable("contractId") Integer contractId,
             @RequestParam("deposit") long deposit) {
         try {
-            contractService.completePayContract(contractId, deposit);
+            contractService.completePayContract(contractId, deposit, "Chưa cập nhật", "Chưa cập nhật");
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(200)
                     .message("Complete contract successfully")

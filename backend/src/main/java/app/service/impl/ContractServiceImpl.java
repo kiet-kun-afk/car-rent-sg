@@ -339,17 +339,36 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void completePayContract(Integer contractId, long deposit) throws Exception {
+    public void completePayContract(Integer contractId, long deposit, String wayToPay, String type) throws Exception {
         if (deposit <= 0) {
             throw new InvalidParamException("Deposit must be positive");
         }
-        try {
-            Contract contract = contractRepository.findByContractIdAndConfirmed(contractId);
-            contract.setDeposit(deposit);
-            contractRepository.save(contract);
-        } catch (Exception e) {
-            throw new DataNotFoundException("The contract has not been confirmed or something is wrong");
+        if (type.equalsIgnoreCase("deposit")) {
+            try {
+                Contract contract = contractRepository.findByContractIdAndConfirmed(contractId);
+                contract.setDeposit(deposit);
+                contract.setWayToPay(wayToPay);
+                contractRepository.save(contract);
+            } catch (Exception e) {
+                throw new DataNotFoundException("The contract has not been confirmed or something is wrong");
+            }
+        } else if (type.equalsIgnoreCase("remain")) {
+            try {
+                Contract contract = contractRepository.findByContractIdAndConfirmed(contractId);
+                contract.setStatusPayment(true);
+                contract.setRemainCost(0);
+                contractRepository.save(contract);
+                Bill bill = contract.getBill();
+                bill.setPaymentStatus(true);
+                bill.setPaymentMethod(wayToPay);
+                bill.setRemainCost(0);
+                billRepository.save(bill);
+            } catch (Exception e) {
+                throw new DataNotFoundException("The contract has not been confirmed or something is wrong");
+            }
+
         }
+
     }
 
     @Override

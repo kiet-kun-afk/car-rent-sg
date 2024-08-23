@@ -65,6 +65,8 @@ public class ContractResponse {
 
     private long remainBill;
 
+    private long payCost;
+
     public ContractResponse(Contract contract) {
         this.contractId = contract.getContractId();
         this.createDate = contract.getCreateDate();
@@ -110,6 +112,8 @@ public class ContractResponse {
         this.remainCost = contract.getRemainCost();
 
         this.remainBill = contract.getBill() == null ? 0 : contract.getBill().getRemainCost();
+
+        this.payCost = contract.getBill() == null ? 0 : contract.getBill().getPayCost();
     }
 
     public static ContractResponse fromContract(Contract contract) {

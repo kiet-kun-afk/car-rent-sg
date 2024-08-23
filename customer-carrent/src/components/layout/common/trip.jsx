@@ -58,9 +58,8 @@ function InforCustomer() {
     const year = date.getFullYear();
 
     // Định dạng lại thành dd/MM/yyyy
-    const formattedDate = `${day < 10 ? "0" + day : day}/${
-      month < 10 ? "0" + month : month
-    }/${year}`;
+    const formattedDate = `${day < 10 ? "0" + day : day}/${month < 10 ? "0" + month : month
+      }/${year}`;
 
     return formattedDate;
   };
@@ -79,14 +78,16 @@ function InforCustomer() {
     const formattedPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return `${formattedPart}`;
   }
-  const handlePaymentClick = (contractId) => {
+  const deposit = "deposit";
+  const remain = "remain";
+  const handlePaymentClick = (contractId, amount) => {
     // Redirect to the payment page with the carId
-    navigate(`/carrentsg/payment/${contractId}`);
+    navigate(`/carrentsg/payment/${contractId}?amount=${amount}&type=${deposit}`);
   };
 
-  const handlePayRemain = (contractId) => {
+  const handlePayRemain = (contractId, amount) => {
     // Redirect to the payment page with the carId
-    navigate(`/carrentsg/payment/${contractId}`);
+    navigate(`/carrentsg/payment/${contractId}?amount=${amount}&type=${remain}`);
   };
 
   return (
@@ -105,18 +106,18 @@ function InforCustomer() {
                 contract.deposit < 1 ? (
                   <a
                     className="btn btn-success"
-                    onClick={() => handlePaymentClick(contract.contractId)}
+                    onClick={() => handlePaymentClick(contract.contractId, contract.payCost)}
                   >
                     <i class="fa-solid fa-cart-shopping"></i> Thanh toán
                   </a>
                 ) : (
                   <div>
                     {contract.remainBill == 0 ? (
-                      <span class="text-success fs-5 fw-2">Đã Cọc</span>
+                      <span class="text-success fs-5 fw-2">Đã thanh toán</span>
                     ) : (
                       <button
                         class="btn btn-primary"
-                        onClick={() => handlePayRemain(contract.contractId)}
+                        onClick={() => handlePayRemain(contract.contractId, contract.remainCost)}
                       >
                         Thanh toán số tiền còn lại
                       </button>
