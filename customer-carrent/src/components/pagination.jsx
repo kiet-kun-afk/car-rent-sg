@@ -45,13 +45,13 @@ const Pagination = ({
 	const pages = generatePagination();
 
 	return (
-		<div className="row m-0">
+		<div className="row justify-content-center m-0">
 			{pages.map((page, index) => (
-				<div key={index} className="col-sm-1 col-md-1 col-lg-1">
+				<div key={index} className="col-sm-1 col-md-1 col-lg-1 m-auto">
 					<button
 						type="button"
-						className={`btn btn-pagination ${
-							pageNumber === page - 1 ? "active" : ""
+						className={`btn btn-outline${
+							pageNumber === page - 1 ? "-success active" : "-secondary"
 						}`}
 						onClick={() => {
 							if (page !== "...") {

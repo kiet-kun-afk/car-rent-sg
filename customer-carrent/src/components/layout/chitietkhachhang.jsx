@@ -571,7 +571,7 @@ function DetailCustomer() {
                       <input
                         type="date"
                         className="form-control"
-                        value={dob || "1900-01-01"}
+                        value={dob || "2000-01-01"}
                         onChange={onDobChange}
                       />
                     </div>

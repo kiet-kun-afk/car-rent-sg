@@ -19,6 +19,7 @@ function registerClick() {
 
 function Register() {
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
   const [customer, setCustomer] = useState({
     email: "",
@@ -33,32 +34,94 @@ function Register() {
     setCustomer({ ...customer, [e.target.name]: e.target.value });
   };
 
+  const validate = () => {
+    let formErrors = {};
+
+    // Validate email
+    if (!email) {
+      formErrors.email = "Email không được để trống";
+    } else if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+      formErrors.email = "Email không hợp lệ";
+    }
+
+    // Validate phone number (example for a 10-digit number)
+    if (!phoneNumber) {
+      formErrors.phoneNumber = "Số điện thoại không được để trống";
+    } else if (!/^\d{10}$/.test(phoneNumber)) {
+      formErrors.phoneNumber = "Số điện thoại không hợp lệ";
+    }
+
+    // Validate full name
+    if (!fullName) {
+      formErrors.fullName = "Họ và tên không được để trống";
+    } else if (fullName.length < 2) {
+      formErrors.fullName = "Họ và tên phải có ít nhất 2 ký tự";
+    }
+
+    // Validate password
+    if (!password) {
+      formErrors.password = "Mật khẩu không được để trống";
+    } else if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,18}$/.test(
+        password
+      )
+    ) {
+      formErrors.password =
+        "Mật khẩu phải chứa ít nhất 1 ký tự hoa, 1 ký tự thường, 1 ký tự số, 1 ký tự đặc biệt và độ dài từ 6 đến 18 ký tự";
+    }
+
+    // Validate rePassword
+    if (!rePassword) {
+      formErrors.rePassword = "Vui lòng xác nhận mật khẩu";
+    } else if (rePassword !== password) {
+      formErrors.rePassword = "Mật khẩu xác nhận không khớp";
+    }
+
+    setErrors(formErrors);
+
+    // Return true if no errors
+    return Object.keys(formErrors).length === 0;
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+  };
+
+  const handleGithubLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/github";
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("phoneNumber", phoneNumber);
-      formData.append("fullName", fullName);
-      formData.append("password", password);
-      formData.append("rePassword", rePassword);
+    if (validate()) {
+      try {
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("phoneNumber", phoneNumber);
+        formData.append("fullName", fullName);
+        formData.append("password", password);
+        formData.append("rePassword", rePassword);
 
-      const res = await axios.post(
-        "http://localhost:8080/api/v1/customer/register",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log(res.data);
+        const res = await axios.post(
+          "http://localhost:8080/api/v1/customer/register",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log(res.data);
 
-      ToastComponent("success", "Đăng ký thành công !");
-      window.location.reload();
-    } catch (error) {
-      ToastComponent("err", "Đăng ký thất bại !");
-      console.log(error);
+        ToastComponent("success", "Đăng ký thành công !");
+        window.location.reload();
+      } catch (error) {
+        ToastComponent("err", "Đăng ký thất bại !");
+        console.log(error);
+      }
+      console.log("Form is valid. Submitting...");
+    } else {
+      console.log("Form contains errors.");
     }
   };
 
@@ -104,11 +167,12 @@ function Register() {
                           <i className="fa-solid fa-phone"></i> Số điện thoại
                         </label>
                       </div>
-                      {/* <errors className="text-danger" path="username" /> */}
-                      <div className="form-error ${errorMessageU==null?'d-lg-none':'' }">
-                        {/* <span className="error-item1">
-												<p>${errorMessageU}</p>
-											</span>*/}
+                      <div className="form-error {errors.phoneNumber==null?'d-lg-none':'' }">
+                        <span className="error-item1">
+                          <p>
+                            {errors.phoneNumber}
+                          </p>
+                        </span>
                       </div>
                     </div>
                     {/* <div className="row">
@@ -141,11 +205,10 @@ function Register() {
                           <i className="fa-solid fa-envelope"></i> Email
                         </label>
                       </div>
-                      {/* <errors className="text-danger" path="email" /> */}
-                      <div className="form-error ${errorMessageE==null?'d-lg-none':'' }">
-                        {/* <span className="error-item1">
-												<p>${errorMessageE}</p>
-											</span>*/}
+                      <div className="form-error {errors.email==null?'d-lg-none':'' }">
+                        <span className="error-item1">
+                          <p>{errors.email}</p>
+                        </span>
                       </div>
                     </div>
                     <div>
@@ -163,11 +226,10 @@ function Register() {
                           <i className="fa-solid fa-user"></i> Họ và tên
                         </label>
                       </div>
-                      {/* <errors className="text-danger" path="phonenumber" /> */}
-                      <div className="form-error ${errorMessageS==null?'d-lg-none':'' }">
-                        {/* <span className="error-item1">
-												<p>${errorMessageS}</p>
-											</span>*/}
+                      <div className="form-error {errors.fullName==null?'d-lg-none':'' }">
+                        <span className="error-item1">
+                          <p>{errors.fullName}</p>
+                        </span>
                       </div>
                     </div>
                     <div>
@@ -185,7 +247,11 @@ function Register() {
                           <i className="fa-solid fa-lock"></i> Mật Khẩu
                         </label>
                       </div>
-                      {/* <errors className="text-danger" path="password" /> */}
+                      <div className="form-error {errors.password==null?'d-lg-none':'' }">
+                        <span className="error-item1">
+                          <p>{errors.password}</p>
+                        </span>
+                      </div>
                     </div>
                     <div>
                       <div className="input-field">
@@ -203,10 +269,10 @@ function Register() {
                           Khẩu
                         </label>
                       </div>
-                      <div className="form-error ${errorMessageP==null?'d-lg-none':'' }">
-                        {/* <span className="error-item1">
-												<p>${errorMessageP}</p>
-											</span>								 */}
+                      <div className="form-error {errors.rePassword==null?'d-lg-none':'' }">
+                        <span className="error-item1">
+                          <p>{errors.rePassword}</p>
+                        </span>
                       </div>
                     </div>
                     <div className="form-check">
@@ -218,13 +284,7 @@ function Register() {
                           className="form-check-input"
                         />
                         <span className="form-check-label">
-                          Tôi đồng ý với chính sách của CarR.{" "}
-                          <a
-                            href="https://www.mioto.vn/privacy"
-                            style={{ color: "#198754" }}
-                          >
-                            Chi tiết
-                          </a>
+                          Tôi đồng ý với chính sách của CarRentSG.{" "}
                         </span>
                       </div>
                     </div>
@@ -239,13 +299,19 @@ function Register() {
                     </div>
                     <div className="form-suggest-row">
                       <div className="suggest-item">
-                        <a className="btn btn-outline-success">
+                        <a
+                          onClick={handleGoogleLogin}
+                          className="btn btn-outline-success"
+                        >
                           <i className="fa-brands fa-google"></i> Google
                         </a>
                       </div>
                       <div className="suggest-item">
-                        <a className="btn btn-outline-success">
-                          <i className="fa-brands fa-facebook"></i> Facebook
+                        <a
+                          onClick={handleGithubLogin}
+                          className="btn btn-outline-success"
+                        >
+                          <i className="fa-brands fa-google"></i> Github
                         </a>
                       </div>
                     </div>

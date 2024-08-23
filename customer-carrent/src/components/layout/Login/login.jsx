@@ -103,7 +103,7 @@ function Login() {
 										/>
 										<label htmlFor="un">
 											<i className="fa-solid fa-user"></i>{" "}
-											Số điện thoại hoặc email
+											Số điện thoại
 										</label>
 									</div>
 									<div className="input-field">
