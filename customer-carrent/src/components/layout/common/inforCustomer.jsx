@@ -13,6 +13,13 @@ function InforCustomer() {
   const [idGPLX, setidGPLX] = useState("");
   const [gplxFront, setGPLXFront] = useState("");
   const [gplxBack, setGPLXBack] = useState("");
+  const [issueDate, setissueDate] = useState("");
+  const [expiryDate, setexpiryDate] = useState("");
+  const [category, setCategory] = useState("");
+
+  const [error, setError] = useState('');
+
+
   const [profileGPLXFront, setProfileGPLXFront] = useState("");
   const [profileGPLXBack, setProfileGPLXBack] = useState("");
 
@@ -21,6 +28,11 @@ function InforCustomer() {
 
   const customerAccount = localStorage.getItem("token");
   //console.log(idGPLX)
+
+  const onSoGPLXChange = (e) => {
+    validateGPLX(e.target.value);
+    setidGPLX(e.target.value);
+  };
 
   const onPictureGPLXFrontChange = (e) => {
     setProfileGPLXFront(driverlincense ? driverlincense.frontImage : "");
@@ -48,6 +60,27 @@ function InforCustomer() {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const onissueChange = (e) => {
+    const date = new Date(e.target.value);
+    const formattedDate = date.toISOString().split("T")[0]; // Chuyển đổi thành chuỗi định dạng YYYY-MM-DD
+    setissueDate(formattedDate);
+    console.log(date);
+    console.log(formattedDate);
+  };
+
+  const onexpiryChange = (e) => {
+    const date = new Date(e.target.value);
+    const formattedDate = date.toISOString().split("T")[0]; // Chuyển đổi thành chuỗi định dạng YYYY-MM-DD
+    setexpiryDate(formattedDate);
+    console.log(date);
+    console.log(formattedDate);
+  };
+
+  const onCategoryChange = (e) => {
+    setCategory(e.target.value);
+    console.log(e.target.value);
   };
 
   const errRef = useRef(null);
@@ -86,17 +119,27 @@ function InforCustomer() {
     }
   };
 
-  const onSoGPLXChange = (e) => {
-    setidGPLX(e.target.value);
-  };
+  const validateGPLX = (value) => {
+    // Định dạng số GPLX ô tô với 12 hoặc 9 chữ số
+    const regex = /^(?:\d{12}|\d{9})$/;
+
+    if (!regex.test(value)) {
+      setError('Số GPLX không hợp lệ. Vui lòng nhập 9 hoặc 12 chữ số.');
+    } else {
+      setError(''); // Xóa lỗi nếu định dạng đúng
+    }
+  };  
 
   const handleUpdateGPLX = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
+    if (!error && idGPLX) {
+      const formData = new FormData();
     formData.append("idCard", idGPLX);
     formData.append("frontImage", gplxFront);
-    console.log("here: " + idGPLX);
-    console.log(gplxFront);
+    formData.append("backImage", gplxBack);
+    formData.append("issueDate", issueDate);
+    formData.append("expiryDate", expiryDate);
+    formData.append("category", category);
     if (customerAccount) {
       try {
         const response = await axiosConfig.post(
@@ -117,6 +160,8 @@ function InforCustomer() {
         console.log(error);
       }
     }
+    }
+    
   };
 
   useEffect(() => {
@@ -461,6 +506,7 @@ function InforCustomer() {
                           />
                         </div>
                       </div>
+                      {error && <div className="text-danger mt-2">{error}</div>}
                     </div>
 
                     {/* Tên - Hạng GPLX */}
@@ -498,7 +544,7 @@ function InforCustomer() {
                           </div>
                           <div className="">
                             <div className="wrap-text">
-                              <select id="licenseType" className="form-select">
+                              <select id="licenseType" className="form-select" onChange={onCategoryChange}>
                                 <option value="">Chọn hạng</option>
                                 <option value="B1">B1</option>
                                 <option value="B2">B2</option>
@@ -525,9 +571,10 @@ function InforCustomer() {
                           <div className="">
                             <div className="wrap-text">
                               <input
-                                defaultValue="2024-01-01"
                                 className="form-control"
                                 type="date"
+                                value={driverlincense ? driverlincense.issueDate : issueDate || "2024-01-01"}
+                                onChange={onissueChange}
                               />
                             </div>
                           </div>
@@ -544,9 +591,10 @@ function InforCustomer() {
                           <div className="">
                             <div className="wrap-text">
                               <input
-                                defaultValue="2024-01-01"
                                 className="form-control"
                                 type="date"
+                                value={driverlincense ? driverlincense.expiryDate : expiryDate || "2024-01-01"}
+                                onChange={onexpiryChange}
                               />
                             </div>
                           </div>

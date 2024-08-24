@@ -56,7 +56,7 @@ function Mainboard() {
     }
   }, []);
 
-  if (user) {
+  if (!user) {
     return navigate("/admin/login");
   }
 

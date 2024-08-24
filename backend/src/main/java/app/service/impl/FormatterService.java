@@ -96,7 +96,7 @@ public class FormatterService {
             LocalDate today = LocalDate.now();
             return date.isAfter(today);
         } catch (Exception e) {
-            throw new InvalidParamException("Need to check format");
+            throw new InvalidParamException("Vui lòng chọn ngày bắt đầu/kết thúc");
         }
     }
 
@@ -105,7 +105,7 @@ public class FormatterService {
             LocalDateTime today = LocalDateTime.now();
             return date.isAfter(today);
         } catch (Exception e) {
-            throw new InvalidParamException("Need to check format");
+            throw new InvalidParamException("Vui lòng chọn ngày bắt đầu/kết thúc");
         }
     }
 
@@ -114,7 +114,7 @@ public class FormatterService {
             LocalDateTime today = LocalDateTime.now();
             return date.isBefore(today);
         } catch (Exception e) {
-            throw new InvalidParamException("Need to check format");
+            throw new InvalidParamException("Vui lòng chọn ngày bắt đầu/kết thúc");
         }
     }
 
@@ -122,7 +122,7 @@ public class FormatterService {
         try {
             return startDate.isBefore(endDate);
         } catch (Exception e) {
-            throw new InvalidParamException("Need to check format");
+            throw new InvalidParamException("Vui lòng chọn ngày bắt đầu/kết thúc");
         }
     }
 
@@ -130,7 +130,7 @@ public class FormatterService {
         try {
             return startDate.isBefore(endDate);
         } catch (Exception e) {
-            throw new InvalidParamException("Need to check format");
+            throw new InvalidParamException("Vui lòng chọn ngày bắt đầu/kết thúc");
         }
     }
 
@@ -138,7 +138,7 @@ public class FormatterService {
         try {
             return dateTime.toLocalDate();
         } catch (Exception e) {
-            throw new InvalidParamException("Need to check format, yyyy-MM-dd HH:mm:ss");
+            throw new InvalidParamException("Vui lòng chọn ngày bắt đầu/kết thúc, yyyy-MM-dd HH:mm:ss");
         }
     }
 
@@ -146,7 +146,7 @@ public class FormatterService {
         try {
             return dateTime.toLocalTime();
         } catch (Exception e) {
-            throw new InvalidParamException("Need to check format, yyyy-MM-dd HH:mm:ss");
+            throw new InvalidParamException("Vui lòng chọn ngày bắt đầu/kết thúc, yyyy-MM-dd HH:mm:ss");
         }
     }
 
@@ -154,7 +154,8 @@ public class FormatterService {
         try {
             return LocalDateTime.of(date, time);
         } catch (Exception e) {
-            throw new InvalidParamException("Need to check format, date is yyyy-MM-dd, time is HH:mm:ss");
+            throw new InvalidParamException(
+                    "Vui lòng chọn ngày bắt đầu/kết thúc, date is yyyy-MM-dd, time is HH:mm:ss");
         }
     }
 
