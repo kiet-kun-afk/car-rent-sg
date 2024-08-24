@@ -270,7 +270,7 @@ function CustomerCar() {
     getNextDay();
     //const intervalId = setInterval(updateCurrentTime, 1000); // Update every second
     //return () => clearInterval(intervalId); // Cleanup on unmount
-  }, []);
+  }, [category]);
 
   const handleCarRegistrationPlate = (e) => {
     const registrationPlate = e.currentTarget.getAttribute("data-id");
@@ -783,6 +783,7 @@ function CustomerCar() {
                   data-bs-dismiss="modal"
                   onClick={() => {
                     setCategory("");
+                    setSelectedCategory(null);
                     filterCategory();
                   }}
                 >
@@ -791,6 +792,7 @@ function CustomerCar() {
                 <button
                   type="button"
                   className="btn btn-primary"
+                  data-bs-dismiss="modal"
                   onClick={() => filterCategory()}
                 >
                   Áp dụng
@@ -1259,21 +1261,6 @@ function CustomerCar() {
                 </div>
               </div>
               <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-outline-dark"
-                  data-bs-dismiss="modal"
-                  onClick={() => {
-                    setMinPrice(300);
-                    setMaxPrice(3000);
-                    setMinSeat(2);
-                    setMaxSeat(10);
-                    setFuelType("");
-                    filterAdvance();
-                  }}
-                >
-                  Xóa
-                </button>
                 <button
                   type="button"
                   className="btn btn-primary"

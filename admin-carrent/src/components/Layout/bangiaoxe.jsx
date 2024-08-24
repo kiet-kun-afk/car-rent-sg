@@ -6,6 +6,7 @@ import ToastComponent from "../../assets/toasty";
 import "react-datepicker/dist/react-datepicker.css";
 
 function GiaoXe() {
+	const navigate = useNavigate();
 	const [selectedDate, setSelectedDate] = useState(null);
 	const [nowDate, setNowDate] = useState("");
 	const chooseDate = (date) => {
@@ -43,12 +44,16 @@ function GiaoXe() {
 
 	const [records, setRecords] = useState([]);
 	const loadListRecords = async () => {
-		const result = await axios.get(
-			"http://localhost:8080/api/v1/records/list-delivery-record-not-return-yet"
-		);
-		console.log(result.data.data);
+		try {
+			const result = await axios.get(
+				"http://localhost:8080/api/v1/records/list-delivery-record-not-return-yet"
+			);
+			console.log(result.data.data);
 
-		setRecords(result.data.data);
+			setRecords(result.data.data);
+		} catch (error) {
+			navigate("/admin/login");
+		}
 	};
 
 	const getRecord = (e) => {

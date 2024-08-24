@@ -83,6 +83,17 @@ p{
 	justify-content: center;
 	margin: 50px 0px 24px;
 }
+.form-btn-reset{
+	display: flex;
+	justify-content: center;
+}
+.form-btn-reset button{
+	width: 150px;
+	height: 40px;
+	font-size: 16px;
+	padding: 0;
+	border: none;
+}
 .form-btn button{
 	width: 72px;
 	height: 72px;

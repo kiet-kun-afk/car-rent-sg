@@ -43,8 +43,9 @@ const App = () => {
 	}, [location, navigate]);
 
 	return (
-		<AuthProvider>
+		<>
 			<Routes>
+				<Route path="/carrentsg/forgot" element={<CusForgot />} />
 				<Route
 					path="/reset-password/:token"
 					element={<ResetPassword />}
@@ -55,7 +56,6 @@ const App = () => {
 				/>
 				<Route path="/carrentsg/login" element={<CusLogin />} />
 				<Route path="/carrentsg/register" element={<CusRegis />} />
-				<Route path="/carrentsg/forgot" element={<CusForgot />} />
 				<Route
 					path="/carrentsg/confirmotp"
 					element={<CusConfirmOTP />}
@@ -66,47 +66,57 @@ const App = () => {
 				/>
 				<Route path="/carrentsg" element={<CusIndex />} />
 				<Route path="/carrentsg/car" element={<CusProduct />} />
-				<Route
-					path="/carrentsg/car/:id"
-					element={<CusDetailProduct />}
-				/>
-				<Route
-					path="/carrentsg/payment/:contractId"
-					element={<CusDetailCustomerPayment />}
-				/>
-				<Route
-					path="/user/paymentsuccessMomo"
-					element={<PaymentSuccessMomo />}
-				/>
-				<Route
-					path="/user/paymentsuccessVnpay"
-					element={<PaymentSuccessVnpay />}
-				/>
-				<Route
-					path="/user/paymentsuccessMomo"
-					element={<PaymentSuccessMomo />}
-				/>
-				<Route
-					path="/user/paymentsuccessVnpay"
-					element={<PaymentSuccessVnpay />}
-				/>
-				<Route
-					path="/carrentsg/customer"
-					element={
-						<PrivateRoute>
-							<CusDetailCustomer />
-						</PrivateRoute>
-					}
-				>
-					<Route path="infor" element={<CusDetailCustomerInfor />} />
-					<Route path="trip" element={<CusDetailCustomerTrip />} />
-					<Route
-						path="changepass"
-						element={<CusDetailCustomerChangePass />}
-					/>
-				</Route>
 			</Routes>
-		</AuthProvider>
+			<AuthProvider>
+				<Routes>
+					<Route
+						path="/carrentsg/car/:id"
+						element={<CusDetailProduct />}
+					/>
+					<Route
+						path="/carrentsg/payment/:contractId"
+						element={<CusDetailCustomerPayment />}
+					/>
+					<Route
+						path="/user/paymentsuccessMomo"
+						element={<PaymentSuccessMomo />}
+					/>
+					<Route
+						path="/user/paymentsuccessVnpay"
+						element={<PaymentSuccessVnpay />}
+					/>
+					<Route
+						path="/user/paymentsuccessMomo"
+						element={<PaymentSuccessMomo />}
+					/>
+					<Route
+						path="/user/paymentsuccessVnpay"
+						element={<PaymentSuccessVnpay />}
+					/>
+					<Route
+						path="/carrentsg/customer"
+						element={
+							<PrivateRoute>
+								<CusDetailCustomer />
+							</PrivateRoute>
+						}
+					>
+						<Route
+							path="infor"
+							element={<CusDetailCustomerInfor />}
+						/>
+						<Route
+							path="trip"
+							element={<CusDetailCustomerTrip />}
+						/>
+						<Route
+							path="changepass"
+							element={<CusDetailCustomerChangePass />}
+						/>
+					</Route>
+				</Routes>
+			</AuthProvider>
+		</>
 	);
 };
 

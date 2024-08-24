@@ -36,6 +36,10 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
         }
         driverLicense.setIdCard(idCard);
         driverLicense.setFrontImage(fileService.upload(cardDTO.getFrontImage()));
+        driverLicense.setBackImage(fileService.upload(cardDTO.getBackImage()));
+        driverLicense.setIssueDate(cardDTO.getIssueDate());
+        driverLicense.setExpiryDate(cardDTO.getExpiryDate());
+        driverLicense.setCategory(cardDTO.getCategory());
         customer.setDriverLicense(driverLicenseRepository.save(driverLicense));
         customerRepository.save(customer);
         return driverLicense;
@@ -49,6 +53,7 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
         }
         return driverLicense;
     }
+
     @Override
     public CardResponse getYourDriverLicense() throws Exception {
         DriverLicense driverLicense = customerService.getAuth().getDriverLicense();
