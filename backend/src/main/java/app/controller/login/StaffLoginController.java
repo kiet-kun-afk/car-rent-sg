@@ -13,7 +13,6 @@ import app.dto.login.RegisterStaffDTO;
 import app.jwt.JWTAuthResponse;
 import app.response.LoginResponse;
 import app.response.ResponseObject;
-import app.response.StaffResponse;
 import app.service.StaffService;
 import app.service.impl.PasswordResetService;
 import jakarta.validation.Valid;

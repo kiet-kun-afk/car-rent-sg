@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 import "../../../style/styleForgotpass.css";
+import ToastComponent from "../../../assets/toasty";
 
 function ForgotPass() {
+	const navigate = useNavigate();
 	const [email, setEmail] = useState("");
 
 	const handleSubmit = async (e) => {
@@ -13,8 +15,15 @@ function ForgotPass() {
 			const response = await axios.post(
 				`http://localhost:8080/api/v1/customer/forgot-password?email=${email}`
 			);
+			ToastComponent(
+				"success",
+				"Vui lòng kiểm tra email để đổi lại mật khẩu."
+			);
+			setTimeout(() => {
+				navigate("/carrentsg");
+			}, 2000);
 		} catch (error) {
-			alert(error);
+			ToastComponent("err", "Có lỗi !!!");
 		}
 	};
 
