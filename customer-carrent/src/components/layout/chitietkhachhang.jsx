@@ -52,15 +52,64 @@ function DetailCustomer() {
 
   const onPictureChange = (e) => {
     const file = e.target.files[0];
-    setAvatar(file);
-    console.log(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePicture(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+  
+    // Kiểm tra kích thước ảnh
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+  
+    img.onload = () => {
+      let width = img.width;
+      let height = img.height;
+  
+      // Kiểm tra nếu ảnh lớn hơn 300x350px
+      const maxWidth = 300;
+      const maxHeight = 350;
+  
+      if (width > maxWidth || height > maxHeight) {
+        // Tính toán kích thước mới giữ nguyên tỷ lệ
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+  
+        // Tạo canvas để resize ảnh
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+  
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+  
+        // Chuyển canvas thành base64
+        canvas.toBlob((blob) => {
+          const resizedFile = new File([blob], file.name, { type: file.type });
+          setAvatar(resizedFile);
+  
+          // Đọc ảnh đã resize và cập nhật state
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setProfilePicture(reader.result);
+          };
+          reader.readAsDataURL(resizedFile);
+        }, file.type);
+      } else {
+        // Nếu ảnh đã có kích thước nhỏ hơn hoặc bằng 300x350px, không cần resize
+        setAvatar(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProfilePicture(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
   };
 
   const onPictureGPLXChange = (e) => {
@@ -899,10 +948,12 @@ function DetailCustomer() {
                         </div>
                         {profilePicture ? (
                           <>
-                            <img
-                              src={profilePicture}
-                              className="img-fluid rounded mx-auto d-block"
-                            />
+                            <div className="avatar-container mx-auto ">
+                              <img
+                                src={profilePicture}
+                                className="img-fluid rounded d-block"
+                              />
+                            </div>
                             <div className="input-field mt-3">
                               <button
                                 type="submit"
