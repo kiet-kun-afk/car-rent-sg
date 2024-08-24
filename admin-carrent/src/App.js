@@ -21,7 +21,8 @@ import BieuDo from './components/Layout/bieudo';
 import NhanVien from './components/Layout/nhanvien';
 import GiaoXe from './components/Layout/bangiaoxe';
 import TraXe from './components/Layout/traxe';
-import Error from './components/error';
+import DoiMatKhau from './components/Layout/changepassnv';
+
 
 
 const router = createBrowserRouter([
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/traxe",
         element: <TraXe/>,
+      },
+      {
+        path: "/admin/doimatkhau",
+        element: <DoiMatKhau/>,
       }
     ]
   },

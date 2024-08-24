@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import app.dto.StaffDTO;
+import app.dto.login.ChangePasswordDTO;
 import app.dto.login.LoginDTO;
 import app.dto.login.RegisterStaffDTO;
 import app.exception.DataNotFoundException;
@@ -276,6 +277,25 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public StaffResponse getCurrentStaff() throws Exception {
         return StaffResponse.fromStaff(getAuth());
+    }
+
+    @Override
+    public void ChangePassNV(ChangePasswordDTO changePasswordDTO) throws Exception {
+        Staff staff = getAuth();
+        String oldPass = changePasswordDTO.getOldPassword();
+        if (!passwordEncoder.matches(oldPass, staff.getPassword())) {
+            throw new InvalidParamException("Old password is not match");
+        }
+        String newPass = changePasswordDTO.getNewPassword();
+        if (!validService.validatePassword(newPass)) {
+            throw new InvalidParamException("Invalid password");
+        }
+        String confirmPass = changePasswordDTO.getConfirmNewPassword();
+        if (!newPass.equals(confirmPass)) {
+            throw new InvalidParamException("Re-enter the password does not match");
+        }
+        staff.setPassword(passwordEncoder.encode(newPass));
+        staffRepository.save(staff);
     }
 
 }

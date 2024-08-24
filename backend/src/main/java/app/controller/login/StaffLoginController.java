@@ -3,11 +3,13 @@ package app.controller.login;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import org.springframework.web.bind.annotation.*;
 
+import app.dto.login.ChangePasswordDTO;
 import app.dto.login.LoginDTO;
 import app.dto.login.RegisterStaffDTO;
 import app.jwt.JWTAuthResponse;
@@ -109,6 +111,33 @@ public class StaffLoginController {
             return ResponseEntity.ok("Password has been reset successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/change-password")
+    public ResponseEntity<ResponseObject> changePassword(
+            @Valid @ModelAttribute ChangePasswordDTO changePasswordDTO,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message("Change password failed, validation")
+                    .data(errors)
+                    .build());
+        }
+        try {
+            staffService.ChangePassNV(changePasswordDTO);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(200)
+                    .message("Change password successfully")
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .status(400)
+                    .message(e.getMessage())
+                    .build());
         }
     }
 }

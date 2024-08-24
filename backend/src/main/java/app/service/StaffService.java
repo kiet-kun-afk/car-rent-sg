@@ -3,6 +3,7 @@ package app.service;
 import java.util.List;
 
 import app.dto.StaffDTO;
+import app.dto.login.ChangePasswordDTO;
 import app.dto.login.LoginDTO;
 import app.dto.login.RegisterStaffDTO;
 import app.model.Staff;
@@ -28,5 +29,7 @@ public interface StaffService {
     public void Delete(String email) throws Exception;
 
     public StaffResponse getCurrentStaff() throws Exception;
+
+    public void ChangePassNV(ChangePasswordDTO changePasswordDTO) throws Exception;
 
 }
