@@ -27,6 +27,7 @@ function Mainboard() {
       setUser(response.data.data);
     } catch (error) {
       console.error("Failed to fetch user", error);
+      navigate("/admin/login");
     }
   };
 
@@ -35,7 +36,6 @@ function Mainboard() {
     const result = await axios.get(
       "http://localhost:8080/api/v1/records/list-delivery-record-not-return-yet"
     );
-    console.log(result.data.data);
 
     setRecords(result.data.data);
   };
@@ -55,6 +55,10 @@ function Mainboard() {
       loadListRecords();
     }
   }, []);
+
+  if (user) {
+    return navigate("/admin/login");
+  }
 
   return (
     <div id="mainboard" className="mainboard">
@@ -131,7 +135,7 @@ function Mainboard() {
               <li>
                 <Link to="/admin/bieudo">
                   <i className="bx bx-line-chart"></i>
-                  <span className="text">Theo dỗi giao dịch</span>
+                  <span className="text">Theo dõi giao dịch</span>
                 </Link>
               </li>
               <li>

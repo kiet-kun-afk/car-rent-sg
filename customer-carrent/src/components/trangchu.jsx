@@ -59,7 +59,7 @@ function CustomerIndex() {
 				<div className="body-banner">
 					<div className="c-container">
 						<div className="body-background">
-							<h1>CarrentSG - Bên Bạn Đến Mọi Hành Trình</h1>
+							<h1>CarRentSG - Bên Bạn Đến Mọi Hành Trình</h1>
 							<div className="white-line"></div>
 							<h6>
 								Trải nghiệm sự khác biệt từ{" "}
@@ -443,7 +443,7 @@ function CustomerIndex() {
 										src="https://www.mioto.vn/static/media/thue_xe_co_tai_xe.a6f7dc54.svg"
 									/>
 								</div>
-								<h5>Lái Xe An Toàn Cùng CarRentSG</h5>
+								<h5>Lái Xe An Toàn</h5>
 								<p>
 									Chuyến đi trên CarRentSG được bảo vệ với Gói
 									bảo hiểm thuê xe tự lái từ MIC & VNI. <br />{" "}
@@ -524,48 +524,6 @@ function CustomerIndex() {
 					</div>
 				</div>
 
-				<div className="service-background">
-					<div className="c-container">
-						<h1>Dịch Vụ Của CarR</h1>
-						<div className="service-container">
-							<div className="service-item-left">
-								<div className="service-item-img">
-									<img alt="" src="../img/service-bg-1.png" />
-									<div className="service-content">
-										<h3>
-											Xe đã sẵn sàng. <br /> Bắt đầu hành
-											trình ngay!
-										</h3>
-										<p>
-											Tự tay cầm lái chiếc xe mà bạn yêu
-											thích <br /> cho hành trình thêm
-											phấn khởi.
-										</p>
-										<a className="btn btn-success btn-service">
-											Thuê xe tự lái
-										</a>
-									</div>
-								</div>
-							</div>
-							<div className="service-item-right">
-								<div className="service-item-img">
-									<img alt="" src="../img/service-bg-2.png" />
-									<div className="service-content-right">
-										<h3>Tài xế của bạn đã đến!</h3>
-										<p>
-											Chuyến đi thêm thú vị <br /> cùng
-											các bác tài 5* trên CarR.
-										</p>
-										<a className="btn btn-success btn-service">
-											Thuê xe có tài xế
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
 				<div className="tutor-background">
 					<div className="c-container">
 						<h1>Hướng Dẫn Thuê Xe</h1>
@@ -580,9 +538,7 @@ function CustomerIndex() {
 								</div>
 								<div className="tutor-item-content">
 									<h5 className="content-text">01</h5>
-									<h5>
-										Đặt xe trên <br /> web CarR
-									</h5>
+									<h5>Đặt xe</h5>
 								</div>
 							</div>
 							<div className="tutor-item">
@@ -591,7 +547,7 @@ function CustomerIndex() {
 								</div>
 								<div className="tutor-item-content">
 									<h5 className="content-text">02</h5>
-									<h5>Nhận Xe</h5>
+									<h5>Nhận xe</h5>
 								</div>
 							</div>
 							<div className="tutor-item">
@@ -612,31 +568,9 @@ function CustomerIndex() {
 								<div className="tutor-item-content">
 									<h5 className="content-text">04</h5>
 									<h5>
-										Trả xe&kết thúc <br /> chuyến đi
+										Trả xe & kết thúc <br /> chuyến đi
 									</h5>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div className="insurance-background">
-					<div className="c-container">
-						<h1>Hành Trình Của Bạn Luôn Được Bảo Vệ</h1>
-					</div>
-					<div className="c-container">
-						<div className="insurance-container">
-							<div className="insurance-item">
-								<img alt="" src="../img/mic.jpg" />
-							</div>
-							<div className="insurance-item">
-								<img alt="" src="../img/vni.jpg" />
-							</div>
-							<div className="insurance-item">
-								<img alt="" src="../img/pvi.jpg" />
-							</div>
-							<div className="insurance-item">
-								<img alt="" src="../img/global-care.jpg" />
 							</div>
 						</div>
 					</div>

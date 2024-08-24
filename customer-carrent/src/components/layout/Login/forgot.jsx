@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 import "../../../style/styleForgotpass.css";
 import ToastComponent from "../../../assets/toasty";
 import { ToastContainer } from "react-toastify";
@@ -33,9 +33,12 @@ function ForgotPass() {
         const response = await axios.post(
           `http://localhost:8080/api/v1/customer/forgot-password?email=${email}`
         );
-        ToastComponent("success", "Gửi thành công!");
+        ToastComponent("success", "Gửi thành công, kiểm tra email!");
+        setTimeout(() => {
+          window.close();
+        }, 4000);
       } catch (error) {
-        alert(error);
+        ToastComponent("error", "Vui lòng kiểm tra email.");
       }
       console.log("Form is valid. Submitting...");
     } else {
@@ -60,7 +63,7 @@ function ForgotPass() {
                   <div class="forgot-title">
                     <h1>Nhập Email</h1>
                     <h5 className="mt-4">
-                      Email được dùng để đăng ký tài khoản.
+                      Hạn yêu cầu đổi mật khẩu mới là 2 tiếng.
                     </h5>
                   </div>
                   <div class="item-form">
