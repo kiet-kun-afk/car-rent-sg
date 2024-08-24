@@ -25,9 +25,6 @@ function DetailCustomer() {
   const [gender, setGender] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
 
-  const [gplx, setGPLX] = useState("");
-  const [profileGPLX, setProfileGPLX] = useState("");
-
   const onFullNameChange = (e) => {
     setFullName(e.target.value);
   };
@@ -36,6 +33,8 @@ function DetailCustomer() {
     const date = new Date(e.target.value);
     const formattedDate = date.toISOString().split("T")[0]; // Chuyển đổi thành chuỗi định dạng YYYY-MM-DD
     setDob(formattedDate);
+    console.log(date);
+    console.log(formattedDate);
   };
 
   const onGenderChange = (e) => {
@@ -44,10 +43,12 @@ function DetailCustomer() {
 
   const onPhoneChange = (e) => {
     setPhoneNumber(e.target.value);
+    validatePhone(e.target.value);
   };
 
   const onEmailChange = (e) => {
     setEmail(e.target.value);
+    validateEmail(e.target.value)
   };
 
   const onPictureChange = (e) => {
@@ -112,18 +113,6 @@ function DetailCustomer() {
     };
   };
 
-  const onPictureGPLXChange = (e) => {
-    const file = e.target.files[0];
-    setGPLX(file);
-    console.log(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileGPLX(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const updateInfor = async (e) => {
     e.preventDefault();
@@ -156,60 +145,93 @@ function DetailCustomer() {
     }
   };
 
+  const [errorPhone, setErrorPhone] = useState('');
+  const validatePhone = (value) => {
+    // Định dạng số GPLX ô tô với 12 hoặc 9 chữ số
+    const regex = /^(0\d{9})$/;
+
+    if (!regex.test(value)) {
+      setErrorPhone('Số điện thoại không hợp lệ');
+    } else if(!value){
+      setErrorPhone('Vui lòng nhập số điện thoại');
+    } else {
+      setErrorPhone(''); // Xóa lỗi nếu định dạng đúng
+    }
+  };  
+
   const updatePhone = async (e) => {
     e.preventDefault();
-    try {
-      if (customerAccount) {
-        const res = await axiosConfig.put(
-          `http://localhost:8080/api/v1/customers/update-phone-number`,
-          null,
-          {
-            params: {
-              phoneNumber: phoneNumber,
-            },
-          }
+    if (!errorPhone && phoneNumber) {
+      try {
+        if (customerAccount) {
+          const res = await axiosConfig.put(
+            `http://localhost:8080/api/v1/customers/update-phone-number`,
+            null,
+            {
+              params: {
+                phoneNumber: phoneNumber,
+              },
+            }
+          );
+        }
+  
+        ToastComponent(
+          "success",
+          "Cập nhật số điện thoại thành công. Vui lòng đăng nhập lại!"
         );
+        setTimeout(() => {
+          handleLogout();
+        }, 4000);
+      } catch (error) {
+        console.log(error);
       }
-
-      ToastComponent(
-        "success",
-        "Cập nhật số điện thoại thành công. Vui lòng đăng nhập lại!"
-      );
-      setTimeout(() => {
-        handleLogout();
-      }, 4000);
-    } catch (error) {
-      ToastComponent("err", "Vui lòng kiểm tra lại số điện thoại !");
-      console.log(error);
     }
+    
   };
+
+  const [errorEmail, setErrorEmail] = useState('');
+  const validateEmail = (value) => {
+    // Định dạng số GPLX ô tô với 12 hoặc 9 chữ số
+    const regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+
+    if (!regex.test(value)) {
+      setErrorEmail('Email không hợp lệ');
+    } else if(!value){
+      setErrorEmail('Vui lòng nhập Email');
+    } else {
+      setErrorEmail(''); // Xóa lỗi nếu định dạng đúng
+    }
+  }; 
 
   const updateEmail = async (e) => {
     e.preventDefault();
-    try {
-      if (customerAccount) {
-        const res = await axiosConfig.put(
-          `http://localhost:8080/api/v1/customers/update-email`,
-          null,
-          {
-            params: {
-              email: email,
-            },
-          }
+    if (!errorEmail && email) {
+      try {
+        if (customerAccount) {
+          const res = await axiosConfig.put(
+            `http://localhost:8080/api/v1/customers/update-email`,
+            null,
+            {
+              params: {
+                email: email,
+              },
+            }
+          );
+        }
+  
+        ToastComponent(
+          "success",
+          "Cập nhật email thành công. Vui lòng đăng nhập lại!"
         );
+        setTimeout(() => {
+          handleLogout();
+        }, 4000);
+      } catch (error) {
+        //ToastComponent("err", "Vui lòng kiểm tra lại email !");
+        console.log(error);
       }
-
-      ToastComponent(
-        "success",
-        "Cập nhật số email thành công. Vui lòng đăng nhập lại!"
-      );
-      setTimeout(() => {
-        handleLogout();
-      }, 4000);
-    } catch (error) {
-      ToastComponent("err", "Vui lòng kiểm tra lại email !");
-      console.log(error);
     }
+    
   };
 
   const updateImage = async (e) => {
@@ -686,6 +708,7 @@ function DetailCustomer() {
                         onChange={onPhoneChange}
                       />
                     </div>
+                    {errorPhone && <div className="text-danger mt-2">{errorPhone}</div>}
                     <div className="input-field mt-3">
                       <button
                         type="submit"
@@ -737,6 +760,7 @@ function DetailCustomer() {
                         onChange={onEmailChange}
                       />
                     </div>
+                    {errorEmail && <div className="text-danger mt-2">{errorEmail}</div>}
                     <div className="input-field mt-3">
                       <button
                         type="submit"
@@ -954,72 +978,6 @@ function DetailCustomer() {
                                 className="img-fluid rounded d-block"
                               />
                             </div>
-                            <div className="input-field mt-3">
-                              <button
-                                type="submit"
-                                className="btn-submit"
-                                onClick={updateImage}
-                              >
-                                Cập nhật
-                              </button>
-                            </div>
-                          </>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Modal Image GPLX */}
-      <div
-        className="modal fade"
-        id="updateGPLX"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content text-center">
-            <div className="modal-body p-0">
-              <div className="d-flex flex-row-reverse p-2">
-                <button
-                  type="button"
-                  className="btn"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <i className="fa-regular fa-circle-xmark fa-xl"></i>
-                </button>
-              </div>
-              <div className="form-item">
-                <div className="input-box">
-                  <div className="content-item">
-                    <div className="content-title">
-                      <h4>Cập nhật ảnh GPLX</h4>
-                    </div>
-                    <div className="content-item address-list">
-                      <div className="content">
-                        <div className="fileContainer">
-                          <button className="chooseFile">Chọn ảnh</button>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={onPictureGPLXChange}
-                          />
-                        </div>
-                        {profileGPLX ? (
-                          <>
-                            <img
-                              src={profileGPLX}
-                              className="img-fluid rounded mx-auto d-block"
-                            />
                             <div className="input-field mt-3">
                               <button
                                 type="submit"

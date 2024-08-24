@@ -6,9 +6,8 @@ import {
 	RouterProvider,
 	Navigate,
 } from "react-router-dom";
-
 import Login from "./components/login";
-
+import DoiMatKhau from './components/Layout/changepassnv';
 import Mainboard from "./components/mainboard";
 import TrangChu from "./components/Layout/trangchu";
 import Xe from "./components/Layout/xe";
@@ -75,6 +74,10 @@ const router = createBrowserRouter([
 				path: "/admin/traxe",
 				element: <TraXe />,
 			},
+      {
+        path: "/admin/doimatkhau",
+        element: <DoiMatKhau/>,
+      }
 		],
 	},
 ]);

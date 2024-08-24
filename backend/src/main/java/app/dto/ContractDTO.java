@@ -14,10 +14,10 @@ public class ContractDTO {
 
     private Integer contractId;
 
-    @Future(message = "Star date must be future date")
+    @Future(message = "Ngày bắt đầu phải lớn hơn ngày hiện tại và bé hơn ngày trả xe")
     private LocalDateTime startDate;
 
-    @Future(message = "End date must be future date")
+    @Future(message = "Ngày trả xe phải lớn hơn ngày bắt đầu")
     private LocalDateTime endDate;
 
     private long deposit = 0;

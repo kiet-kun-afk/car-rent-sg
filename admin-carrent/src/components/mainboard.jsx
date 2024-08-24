@@ -56,7 +56,7 @@ function Mainboard() {
     }
   }, []);
 
-  if (user) {
+  if (!user) {
     return navigate("/admin/login");
   }
 
@@ -154,10 +154,10 @@ function Mainboard() {
             <p id="line" className="line"></p>
           </li>
           <li>
-            <a href="#">
+            <Link to="/admin/doimatkhau">
               <i className="bx bxs-cog"></i>
-              <span className="text">Cài Đặt</span>
-            </a>
+              <span className="text">Đổi Mật Khẩu</span>
+            </Link>
           </li>
           <li>
             <a className="logout" onClick={handleLogout}>
