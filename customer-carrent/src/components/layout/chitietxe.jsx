@@ -7,20 +7,6 @@ import Register from "./Login/register";
 
 import ToastComponent from "../../assets/toasty";
 
-import mapImg from "../images/map-v2.png";
-import dashcamImg from "../images/dash_camera-v2.png";
-import reverImg from "../images/reverse_camera-v2.png";
-import camImg from "../images/360_camera-v2.png";
-import gpsImg from "../images/gps-v2.png";
-import usaImg from "../images/usb-v2.png";
-import tpmsImg from "../images/tpms-v2.png";
-import imsenImg from "../images/impact_sensor-v2.png";
-import headupImg from "../images/head_up-v2.png";
-import sptireImg from "../images/spare_tire-v2.png";
-import dvdImg from "../images/dvd-v2.png";
-import etcImg from "../images/etc-v2.png";
-import blImg from "../images/bluetooth-v2.png";
-import aribImg from "../images/airbags-v2.png";
 import cccdImg from "../images/gplx_cccd.png";
 import gplxImg from "../images/gplx_passport.png";
 import { useAuth } from "../../config/AuthContext";

@@ -66,13 +66,13 @@ const App = () => {
 				/>
 				<Route path="/carrentsg" element={<CusIndex />} />
 				<Route path="/carrentsg/car" element={<CusProduct />} />
-				<Route
-					path="/carrentsg/car/:id"
-					element={<CusDetailProduct />}
-				/>
 			</Routes>
 			<AuthProvider>
 				<Routes>
+					<Route
+						path="/carrentsg/car/:id"
+						element={<CusDetailProduct />}
+					/>
 					<Route
 						path="/carrentsg/payment/:contractId"
 						element={<CusDetailCustomerPayment />}
