@@ -140,7 +140,10 @@ function Login() {
 									</div>
 									<div className="form-suggest-right">
 										<span className="suggest-item">
-											<a href="/carrentsg/forgot">
+											<a
+												href="/carrentsg/forgot"
+												target="_blank"
+											>
 												Quên mật khẩu ?
 											</a>
 										</span>

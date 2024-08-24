@@ -11,7 +11,6 @@ function ForgotPass() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			console.log(email);
 			const response = await axios.post(
 				`http://localhost:8080/api/v1/customer/forgot-password?email=${email}`
 			);
@@ -20,7 +19,7 @@ function ForgotPass() {
 				"Vui lòng kiểm tra email để đổi lại mật khẩu."
 			);
 			setTimeout(() => {
-				navigate("/carrentsg");
+				window.close();
 			}, 2000);
 		} catch (error) {
 			ToastComponent("err", "Có lỗi !!!");
