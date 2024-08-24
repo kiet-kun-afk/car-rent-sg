@@ -143,7 +143,8 @@ function Login() {
 									</div>
 									<div className="form-suggest-right">
 										<span className="suggest-item">
-											<a href={`/carrentsg/forgot?lng=${i18n.language}`}>
+											<a href={`/carrentsg/forgot?lng=${i18n.language}`}
+												target="_blank">
 												{t('forgot_password_login')}
 											</a>
 										</span>

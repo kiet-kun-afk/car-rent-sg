@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 
 import Header from "./layout/common/header";
@@ -15,6 +16,14 @@ import "../style/styleCar.css";
 
 function CustomerIndex() {
 	const { t, i18n } = useTranslation();
+	const location = useLocation();
+	useEffect(() => {
+		const queryParams = new URLSearchParams(location.search);
+		const language = queryParams.get('lng');
+		if (language) {
+			i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
+		}
+	}, [location, i18n]);
 	const [cars, setCars] = useState([]);
 
 	const loadListCar = async () => {
@@ -65,11 +74,11 @@ function CustomerIndex() {
 							<h1>{t('bannerTitle')}</h1>
 							<div className="white-line"></div>
 							<h6>
-								Trải nghiệm sự khác biệt từ{" "}
+								{t('bannerSubtitlePart1')}
 								<span style={{ color: "#009966" }}>
-									hơn 2000
-								</span>{" "}
-								xe gia đình đời mới khắp Việt Nam
+									{t('bannerHighlight')}
+								</span>
+								{t('bannerSubtitlePart2')}
 							</h6>
 						</div>
 					</div>
@@ -77,7 +86,7 @@ function CustomerIndex() {
 
 				<div className="car-background">
 					<div className="c-container">
-						<h1>Xe Dành Cho Bạn</h1>
+						<h1>{t('yourComponentTitle')}</h1>
 					</div>
 					<div className="c-container">
 						<div className="row">
@@ -105,7 +114,7 @@ function CustomerIndex() {
 													{" "}
 													<span className="c-note">
 														{" "}
-														Đặt Xe Nhanh
+														{t('quickBooking')}
 														<i
 															className="fa-solid fa-bolt"
 															style={{
@@ -114,7 +123,7 @@ function CustomerIndex() {
 														></i>
 													</span>{" "}
 													<span className="c-note">
-														Miễn Thế Chấp{" "}
+														{t('mortgageFree')}
 														<i
 															className="fa-solid fa-lock-open"
 															style={{
@@ -179,7 +188,7 @@ function CustomerIndex() {
 				{/* <!-- Outstanding Citys --> */}
 				<div className="city-background">
 					<div className="c-container">
-						<h1>Địa Điểm Nổi Bật</h1>
+						<h1>{t('highlightedPlaces')}</h1>
 					</div>
 					<div className="c-container">
 						<div id="outstancity" className="carousel slide">
@@ -199,7 +208,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/1/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/HoChiMinh_v2.jpg"
 														/>
 													</div>
-													<p>TP. HỒ CHÍ MINH</p>
+													<p>{t('cities.hoChiMinh')}</p>
 												</a>
 											</div>
 										</div>
@@ -216,7 +225,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/1/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/HaNoi_v2.jpg"
 														/>
 													</div>
-													<p>HÀ NỘI</p>
+													<p>{t('cities.haNoi')}</p>
 												</a>
 											</div>
 										</div>
@@ -233,7 +242,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/DaLat_v2.jpg"
 														/>
 													</div>
-													<p>ĐÀ LẠT</p>
+													<p>{t('cities.daLat')}</p>
 												</a>
 											</div>
 										</div>
@@ -250,7 +259,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/VungTau_v2.jpg"
 														/>
 													</div>
-													<p>VŨNG TÀU</p>
+													<p>{t('cities.vungTau')}</p>
 												</a>
 											</div>
 										</div>
@@ -271,7 +280,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/1/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/DaNang_v2.jpg"
 														/>
 													</div>
-													<p>ĐÀ NẴNG</p>
+													<p>{t('cities.daNang')}</p>
 												</a>
 											</div>
 										</div>
@@ -288,7 +297,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/QuyNhon_v2.jpg"
 														/>
 													</div>
-													<p>QUY NHƠN</p>
+													<p>{t('cities.quyNhon')}</p>
 												</a>
 											</div>
 										</div>
@@ -305,7 +314,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/NhaTrang_v2.jpg"
 														/>
 													</div>
-													<p>NHA TRANG</p>
+													<p>{t('cities.nhaTrang')}</p>
 												</a>
 											</div>
 										</div>
@@ -322,7 +331,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/1/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/BinhDuong_v2.jpg"
 														/>
 													</div>
-													<p>BÌNH DƯƠNG</p>
+													<p>{t('cities.binhDuong')}</p>
 												</a>
 											</div>
 										</div>
@@ -343,7 +352,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/1/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/CanTho_v2.jpg"
 														/>
 													</div>
-													<p>CẦN THƠ</p>
+													<p>{t('cities.canTho')}</p>
 												</a>
 											</div>
 										</div>
@@ -360,7 +369,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/PhuQuoc_v2.jpg"
 														/>
 													</div>
-													<p>PHÚ QUỐC</p>
+													<p>{t('cities.phuQuoc')}</p>
 												</a>
 											</div>
 										</div>
@@ -377,7 +386,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/HaiPhong_v2.jpg"
 														/>
 													</div>
-													<p>HẢI PHÒNG</p>
+													<p>{t('cities.haiPhong')}</p>
 												</a>
 											</div>
 										</div>
@@ -394,7 +403,7 @@ function CustomerIndex() {
 															src="https://n1-cstg.mioto.vn/1/cho_thue_xe_tu_lai_tphcm/hcm/p/m/cities_v2/HoChiMinh_v2.jpg"
 														/>
 													</div>
-													<p>TP. HỒ CHÍ MINH</p>
+													<p>{t('cities.hoChiMinh')}</p>
 												</a>
 											</div>
 										</div>
@@ -433,11 +442,8 @@ function CustomerIndex() {
 
 				<div className="advantage-background">
 					<div className="c-container">
-						<h1>Ưu Điểm Của CarRentSG</h1>
-						<h4>
-							Những tính năng giúp bạn dễ dàng hơn khi thuê xe
-							trên CarRentSG
-						</h4>
+						<h1>{t('advantagesTitle')}</h1>
+						<h4>{t('advantagesSubtitle')}</h4>
 						<div className="advan-container">
 							<div className="advan-item">
 								<div className="advan-item-img">
@@ -446,14 +452,8 @@ function CustomerIndex() {
 										src="https://www.mioto.vn/static/media/thue_xe_co_tai_xe.a6f7dc54.svg"
 									/>
 								</div>
-								<h5>Lái Xe An Toàn Cùng CarRentSG</h5>
-								<p>
-									Chuyến đi trên CarRentSG được bảo vệ với Gói
-									bảo hiểm thuê xe tự lái từ MIC & VNI. <br />{" "}
-									Khách thuê sẽ chỉ bồi thường tối đa
-									2,000,000VNĐ trong trường hợp có sự cố ngoài
-									ý muốn.
-								</p>
+								<h5>{t('advantage1Title')}</h5>
+								<p>{t('advantage1Desc')}</p>
 							</div>
 							<div className="advan-item">
 								<div className="advan-item-img">
@@ -462,13 +462,8 @@ function CustomerIndex() {
 										src="https://www.mioto.vn/static/media/dich_vu_thue_xe_tu_lai_hanoi.f177339e.svg"
 									/>
 								</div>
-								<h5>An Tâm Đặt Xe</h5>
-								<p>
-									Không tính phí huỷ chuyến trong vòng 1h sau
-									khi đặt cọc. Hoàn cọc và bồi thường 100% nếu
-									chủ xe huỷ chuyến trong vòng 7 ngày trước
-									chuyến đi.
-								</p>
+								<h5>{t('advantage2Title')}</h5>
+								<p>{t('advantage2Desc')}</p>
 							</div>
 							<div className="advan-item">
 								<div className="advan-item-img">
@@ -477,12 +472,8 @@ function CustomerIndex() {
 										src="https://www.mioto.vn/static/media/cho_thue_xe_tu_lai_tphcm.1e7cb1c7.svg"
 									/>
 								</div>
-								<h5>Thủ Tục Đơn Giản</h5>
-								<p>
-									Chỉ cần có CCCD gắn chip (Hoặc Passport) &
-									Giấy phép lái xe là bạn đã đủ điều kiện thuê
-									xe trên CarRentSG.
-								</p>
+								<h5>{t('advantage3Title')}</h5>
+								<p>{t('advantage3Desc')}</p>
 							</div>
 							<div className="advan-item">
 								<div className="advan-item-img">
@@ -491,11 +482,8 @@ function CustomerIndex() {
 										src="https://www.mioto.vn/static/media/cho_thue_xe_tu_lai_hanoi.735438af.svg"
 									/>
 								</div>
-								<h5>Thanh Toán Dễ Dàng</h5>
-								<p>
-									Đa dạng hình thức thanh toán: ATM, thẻ Visa
-									& Ví điện tử (Momo, VnPay, ZaloPay).
-								</p>
+								<h5>{t('advantage4Title')}</h5>
+								<p>{t('advantage4Desc')}</p>
 							</div>
 							<div className="advan-item">
 								<div className="advan-item-img">
@@ -504,11 +492,8 @@ function CustomerIndex() {
 										src="https://www.mioto.vn/static/media/thue_xe_tu_lai_gia_re_hcm.ffd1319e.svg"
 									/>
 								</div>
-								<h5>Giao Xe Tận Nơi</h5>
-								<p>
-									Bạn có thể lựa chọn giao xe tận nhà/sân
-									bay... Phí tiết kiệm chỉ từ 15k/km.
-								</p>
+								<h5>{t('advantage5Title')}</h5>
+								<p>{t('advantage5Desc')}</p>
 							</div>
 							<div className="advan-item">
 								<div className="advan-item-img">
@@ -517,11 +502,8 @@ function CustomerIndex() {
 										src="https://www.mioto.vn/static/media/thue_xe_tu_lai_gia_re_hanoi.4035317e.svg"
 									/>
 								</div>
-								<h5>Đa Dạng Dòng Xe</h5>
-								<p>
-									Hơn 100 dòng xe cho bạn tuỳ ý lựa chọn:
-									Mini, Sedan, CUV, SUV, MPV, Bán tải.
-								</p>
+								<h5>{t('advantage6Title')}</h5>
+								<p>{t('advantage6Desc')}</p>
 							</div>
 						</div>
 					</div>
@@ -529,24 +511,15 @@ function CustomerIndex() {
 
 				<div className="service-background">
 					<div className="c-container">
-						<h1>Dịch Vụ Của CarR</h1>
+						<h1>{t('servicesTitle')}</h1>
 						<div className="service-container">
 							<div className="service-item-left">
 								<div className="service-item-img">
 									<img alt="" src="../img/service-bg-1.png" />
 									<div className="service-content">
-										<h3>
-											Xe đã sẵn sàng. <br /> Bắt đầu hành
-											trình ngay!
-										</h3>
-										<p>
-											Tự tay cầm lái chiếc xe mà bạn yêu
-											thích <br /> cho hành trình thêm
-											phấn khởi.
-										</p>
-										<a className="btn btn-success btn-service">
-											Thuê xe tự lái
-										</a>
+										<h3>{t('service1Title')}</h3>
+										<p>{t('service1Desc')}</p>
+										<a className="btn btn-success btn-service">{t('service1Btn')}</a>
 									</div>
 								</div>
 							</div>
@@ -554,14 +527,9 @@ function CustomerIndex() {
 								<div className="service-item-img">
 									<img alt="" src="../img/service-bg-2.png" />
 									<div className="service-content-right">
-										<h3>Tài xế của bạn đã đến!</h3>
-										<p>
-											Chuyến đi thêm thú vị <br /> cùng
-											các bác tài 5* trên CarR.
-										</p>
-										<a className="btn btn-success btn-service">
-											Thuê xe có tài xế
-										</a>
+										<h3>{t('service2Title')}</h3>
+										<p>{t('service2Desc')}</p>
+										<a className="btn btn-success btn-service">{t('service2Btn')}</a>
 									</div>
 								</div>
 							</div>
@@ -571,11 +539,8 @@ function CustomerIndex() {
 
 				<div className="tutor-background">
 					<div className="c-container">
-						<h1>Hướng Dẫn Thuê Xe</h1>
-						<h4>
-							Chỉ với 4 bước đơn giản để trải nghiệm thuê xe với
-							CarR một cách nhanh chóng
-						</h4>
+						<h1>{t('tutorTitle')}</h1>
+						<h4>{t('tutorSubtitle')}</h4>
 						<div className="tutor-container">
 							<div className="tutor-item">
 								<div className="tutor-item-img">
@@ -583,9 +548,7 @@ function CustomerIndex() {
 								</div>
 								<div className="tutor-item-content">
 									<h5 className="content-text">01</h5>
-									<h5>
-										Đặt xe trên <br /> web CarR
-									</h5>
+									<h5>{t('tutorStep1')}</h5>
 								</div>
 							</div>
 							<div className="tutor-item">
@@ -594,7 +557,7 @@ function CustomerIndex() {
 								</div>
 								<div className="tutor-item-content">
 									<h5 className="content-text">02</h5>
-									<h5>Nhận Xe</h5>
+									<h5>{t('tutorStep2')}</h5>
 								</div>
 							</div>
 							<div className="tutor-item">
@@ -603,9 +566,7 @@ function CustomerIndex() {
 								</div>
 								<div className="tutor-item-content">
 									<h5 className="content-text">03</h5>
-									<h5>
-										Bắt đầu <br /> hành trình
-									</h5>
+									<h5>{t('tutorStep3')}</h5>
 								</div>
 							</div>
 							<div className="tutor-item">
@@ -614,9 +575,7 @@ function CustomerIndex() {
 								</div>
 								<div className="tutor-item-content">
 									<h5 className="content-text">04</h5>
-									<h5>
-										Trả xe&kết thúc <br /> chuyến đi
-									</h5>
+									<h5>{t('tutorStep4')}</h5>
 								</div>
 							</div>
 						</div>
@@ -625,7 +584,7 @@ function CustomerIndex() {
 
 				<div className="insurance-background">
 					<div className="c-container">
-						<h1>Hành Trình Của Bạn Luôn Được Bảo Vệ</h1>
+						<h1>{t('insuranceTitle')}</h1>
 					</div>
 					<div className="c-container">
 						<div className="insurance-container">

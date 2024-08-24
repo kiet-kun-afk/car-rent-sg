@@ -5,11 +5,42 @@ import { useTranslation } from 'react-i18next';
 import axios from "axios";
 import "../../../style/styleForgotpass.css";
 import ToastComponent from "../../../assets/toasty";
+import { ToastContainer } from "react-toastify";
 function ResetPass() {
 	const { token } = useParams(); // Lấy token từ path parameters
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const { t } = useTranslation();
+
+	const [errors, setErrors] = useState({});
+
+	const validate = () => {
+		let formErrors = {};
+
+		// Validate password
+		if (!password) {
+			formErrors.password = t('registerValid.password1');
+		} else if (
+			!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,18}$/.test(
+				password
+			)
+		) {
+			formErrors.password =
+				t('registerValid.password2')
+		}
+
+		// Validate rePassword
+		if (!confirmPassword) {
+			formErrors.confirmPassword = t('changePass.confirmNewPassword1');
+		} else if (confirmPassword !== password) {
+			formErrors.confirmPassword = t('changePass.confirmNewPassword2');
+		}
+
+		setErrors(formErrors);
+
+		// Return true if no errors
+		return Object.keys(formErrors).length === 0;
+	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();

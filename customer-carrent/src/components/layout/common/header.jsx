@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosConfig from "../../../config/axiosConfig";
-import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-
 
 
 import "bootstrap/dist/js/bootstrap.min.js";
-
-import iconCarrent from "../../images/logoCarrent.png";
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import iconUser from "../../images/avatar-4.png";
 
 function Header() {
@@ -21,6 +18,8 @@ function Header() {
       i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
     }
   }, [location, i18n]);
+  const iconCarrent =
+    "https://firebasestorage.googleapis.com/v0/b/carrentsg-30cbe.appspot.com/o/logoCarrent.png?alt=media&token=224f6d6b-844e-4c21-b2f9-b6b723ddb95e";
   const navigate = useNavigate();
   const [customer, setCustomer] = useState(null);
 
@@ -63,9 +62,7 @@ function Header() {
         </button>
       </section>
       <div className="c-container">
-
         <div className="header-menu">
-
           <nav
             className="navbar navbar-expand-lg p-0"
             style={{ width: "1280px" }}
@@ -105,7 +102,9 @@ function Header() {
                   {customer !== null ? (
                     <>
                       <li className="nav-item">
-                        <a href="#">{t("Chuyến Của Tôi")}</a>
+                        <a href={`/carrentsg/customer/trip?lng=${i18n.language}`}>
+                          {t("Chuyến Của Tôi")}
+                        </a>
                       </li>
                       <li className="nav-item">
                         <div className="nav-link vertical-line"></div>
@@ -116,7 +115,8 @@ function Header() {
                             <i
                               className="fa-regular fa-bell"
                               style={{
-                                fontSize: "1.3rem",
+                                fontSize:
+                                  "1.3rem",
                               }}
                             ></i>
                           </div>
@@ -125,7 +125,8 @@ function Header() {
                               <img
                                 loading="lazy"
                                 src={
-                                  customer.avatarImage == null
+                                  customer.avatarImage ==
+                                    null
                                     ? iconUser
                                     : customer.avatarImage
                                 }
@@ -134,7 +135,9 @@ function Header() {
                             </div>
                           </a>
                           <a href={`/carrentsg/customer/infor?lng=${i18n.language}`}>
-                            <span className="name">{customer.fullName}</span>
+                            <span className="name">
+                              {customer.fullName}
+                            </span>
                           </a>
                         </div>
                       </li>
@@ -150,7 +153,8 @@ function Header() {
                           data-bs-toggle="modal"
                           data-bs-target="#regisWindow"
                         >
-                          {t("Đăng Ký")}                        </a>
+                          {t("Đăng Ký")}
+                        </a>
                       </li>
                       <li className="nav-item">
                         <button
