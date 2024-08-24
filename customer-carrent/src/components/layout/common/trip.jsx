@@ -2,12 +2,24 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import axiosConfig from "../../../config/axiosConfig";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+
+
 
 import bgTrip from "../../images/empty-trip.png";
 import avatarCar from "../../images/advan2.png";
 
 function InforCustomer() {
-  const [customer, setCustomer] = useState(null);
+  const { t, i18n } = useTranslation();
+  const location = useLocation();
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const language = queryParams.get('lng');
+    if (language) {
+      i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
+    }
+  }, [location, i18n]); const [customer, setCustomer] = useState(null);
   const customerAccount = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -93,33 +105,33 @@ function InforCustomer() {
   return (
     <>
       <div className="content-title">
-        <h1>Chuyến của tôi</h1>
+        <h1>{t('my_trip')}</h1>
       </div>
       {contracts.length ? (
         contracts.map((contract) => (
           <div className="content-item user-profile">
             <div className="title">
               <div className="title-edit ps-4">
-                <h5>Thông tin đơn thuê xe</h5>
+                <h5>{t('car_rental_info')}</h5>
               </div>
               {contract.staffId ? (
                 contract.deposit < 1 ? (
                   <a
-                    className="btn btn-success"
+                    className="btn btn-primary"
                     onClick={() => handlePaymentClick(contract.contractId, contract.payCost)}
                   >
-                    <i class="fa-solid fa-cart-shopping"></i> Thanh toán
+                    <i class="fa-solid fa-cart-shopping"></i> {t('pay')}
                   </a>
                 ) : (
                   <div>
                     {contract.remainBill == 0 ? (
-                      <span class="text-success fs-5 fw-2">Đã thanh toán</span>
+                      <span class="text-success fs-5 fw-2">{t('complete')}</span>
                     ) : (
                       <button
                         class="btn btn-primary"
                         onClick={() => handlePayRemain(contract.contractId, contract.remainCost)}
                       >
-                        Thanh toán số tiền còn lại
+                        {t('remainPayment')}
                       </button>
                     )}
                   </div>
@@ -127,10 +139,10 @@ function InforCustomer() {
               ) : (
                 <div>
                   <a className="btn btn-danger m-2">
-                    <i class="fa-solid fa-xmark"></i> Hủy chuyến
+                    <i class="fa-solid fa-xmark"></i> {t('cancel_trip')}
                   </a>
                   <a className="btn btn-success m-2">
-                    <i class="fa-solid fa-gear"></i> Thay đổi chuyến
+                    <i class="fa-solid fa-gear"></i> {t('change_trip')}
                   </a>
                 </div>
               )}
@@ -145,40 +157,40 @@ function InforCustomer() {
                   />
                 </div>
                 <h6>{contract.carName}</h6>
-                <p className="note">Ngày: {formatDate(contract.createDate)}</p>
+                <p className="note">{t('start_date')}: {formatDate(contract.createDate)}</p>
               </div>
               <div className="info-user">
                 <div className="info-box">
                   <div className="info-box__item">
-                    <p>Người thuê xe</p>
+                    <p>{t('renter')}</p>
                     <p className="main">{contract.customerName}</p>
                   </div>
                   <div className="info-box__item">
-                    <p>Ngày bắt đầu</p>
+                    <p>{t('start_date')}</p>
                     <p className="main">{formatDate(contract.startDate)}</p>
                   </div>
                   <div className="info-box__item">
-                    <p>Ngày kết thúc</p>
+                    <p>{t('end_date')}</p>
                     <p className="main">{formatDate(contract.endDate)}</p>
                   </div>
                   <div className="info-box__item">
-                    <p>Đơn giá thuê</p>
+                    <p>{t('rent_price')}</p>
                     <p className="main">{formatVND(contract.rentCost)} VND</p>
                   </div>
                   <div className="info-box__item">
-                    <p>Tổng tiền</p>
+                    <p>{t('total_cost')}</p>
                     <p className="main">
                       {formatVND(contract.totalRentCost)} VND
                     </p>
                   </div>
                   <div className="info-box__item">
-                    <p>Tiền cọc</p>
+                    <p>{t('deposit')}</p>
                     <p className="main">
                       {formatVND(contract.totalRentCost * 0.2)} VND
                     </p>
                   </div>
                   <div className="info-box__item">
-                    <p>Thanh toán sau</p>
+                    <p>{t('pay_later')}</p>
                     <p className="main">
                       {formatVND(
                         contract.remainBill == 0
@@ -198,7 +210,7 @@ function InforCustomer() {
         <div content-item>
           <div className="empty-container">
             <img src={bgTrip} loading="lazy" />
-            <p>Bạn chưa có chuyến</p>
+            <p>{t('no_trip')}</p>
           </div>
         </div>
       )}

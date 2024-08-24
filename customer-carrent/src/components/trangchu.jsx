@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from 'react-i18next';
+
 
 import Header from "./layout/common/header";
 import Footer from "./layout/common/footer";
@@ -12,6 +14,7 @@ import Register from "./layout/Login/register";
 import "../style/styleCar.css";
 
 function CustomerIndex() {
+	const { t, i18n } = useTranslation();
 	const [cars, setCars] = useState([]);
 
 	const loadListCar = async () => {
@@ -59,7 +62,7 @@ function CustomerIndex() {
 				<div className="body-banner">
 					<div className="c-container">
 						<div className="body-background">
-							<h1>CarrentSG - Bên Bạn Đến Mọi Hành Trình</h1>
+							<h1>{t('bannerTitle')}</h1>
 							<div className="white-line"></div>
 							<h6>
 								Trải nghiệm sự khác biệt từ{" "}

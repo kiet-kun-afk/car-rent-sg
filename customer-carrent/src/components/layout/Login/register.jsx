@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
 import ToastComponent from "../../../assets/toasty";
 
@@ -18,6 +19,8 @@ function registerClick() {
 }
 
 function Register() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
 
@@ -39,42 +42,42 @@ function Register() {
 
     // Validate email
     if (!email) {
-      formErrors.email = "Email không được để trống";
+      formErrors.email = t('registerValid.email1');
     } else if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
-      formErrors.email = "Email không hợp lệ";
+      formErrors.email = t('registerValid.email2');
     }
 
     // Validate phone number (example for a 10-digit number)
     if (!phoneNumber) {
-      formErrors.phoneNumber = "Số điện thoại không được để trống";
+      formErrors.phoneNumber = t('registerValid.phone1');
     } else if (!/^\d{10}$/.test(phoneNumber)) {
-      formErrors.phoneNumber = "Số điện thoại không hợp lệ";
+      formErrors.phoneNumber = t('registerValid.phone2');
     }
 
     // Validate full name
     if (!fullName) {
-      formErrors.fullName = "Họ và tên không được để trống";
+      formErrors.fullName = t('registerValid.fullName1');
     } else if (fullName.length < 2) {
-      formErrors.fullName = "Họ và tên phải có ít nhất 2 ký tự";
+      formErrors.fullName = t('registerValid.fullName2');
     }
 
     // Validate password
     if (!password) {
-      formErrors.password = "Mật khẩu không được để trống";
+      formErrors.password = t('registerValid.password1');
     } else if (
       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,18}$/.test(
         password
       )
     ) {
       formErrors.password =
-        "Mật khẩu phải chứa ít nhất 1 ký tự hoa, 1 ký tự thường, 1 ký tự số, 1 ký tự đặc biệt và độ dài từ 6 đến 18 ký tự";
+        t('registerValid.password2');
     }
 
     // Validate rePassword
     if (!rePassword) {
-      formErrors.rePassword = "Vui lòng xác nhận mật khẩu";
+      formErrors.rePassword = t('registerValid.confirmPassword1');
     } else if (rePassword !== password) {
-      formErrors.rePassword = "Mật khẩu xác nhận không khớp";
+      formErrors.rePassword = t('registerValid.confirmPassword2');
     }
 
     setErrors(formErrors);
@@ -148,7 +151,7 @@ function Register() {
             </div>
             <div className="form-item">
               <div className="input-box">
-                <h5 className="item-title">Đăng ký</h5>
+                <h5 className="item-title">{t('register')}</h5>
                 <form onSubmit={handleRegister}>
                   <div className="item-form">
                     <div>
@@ -164,7 +167,7 @@ function Register() {
                           autoComplete="off"
                         />
                         <label htmlFor="sdt">
-                          <i className="fa-solid fa-phone"></i> Số điện thoại
+                          <i className="fa-solid fa-phone"></i> {t('phone_number')}
                         </label>
                       </div>
                       <div className="form-error {errors.phoneNumber==null?'d-lg-none':'' }">
@@ -202,7 +205,7 @@ function Register() {
                           autoComplete="off"
                         />
                         <label htmlFor="email">
-                          <i className="fa-solid fa-envelope"></i> Email
+                          <i className="fa-solid fa-envelope"></i>{t('email')}
                         </label>
                       </div>
                       <div className="form-error {errors.email==null?'d-lg-none':'' }">
@@ -223,7 +226,7 @@ function Register() {
                           required
                         />
                         <label htmlFor="fullName">
-                          <i className="fa-solid fa-user"></i> Họ và tên
+                          <i className="fa-solid fa-user"></i> {t('full_name')}
                         </label>
                       </div>
                       <div className="form-error {errors.fullName==null?'d-lg-none':'' }">
@@ -244,7 +247,7 @@ function Register() {
                           required
                         />
                         <label htmlFor="password">
-                          <i className="fa-solid fa-lock"></i> Mật Khẩu
+                          <i className="fa-solid fa-lock"></i> {t('password')}
                         </label>
                       </div>
                       <div className="form-error {errors.password==null?'d-lg-none':'' }">
@@ -265,8 +268,7 @@ function Register() {
                           required
                         />
                         <label htmlFor="rePassword">
-                          <i className="fa-solid fa-unlock"></i> Xác nhận mật
-                          Khẩu
+                          <i className="fa-solid fa-unlock"></i> {t('confirm_password')}
                         </label>
                       </div>
                       <div className="form-error {errors.rePassword==null?'d-lg-none':'' }">
@@ -284,7 +286,7 @@ function Register() {
                           className="form-check-input"
                         />
                         <span className="form-check-label">
-                          Tôi đồng ý với chính sách của CarRentSG.{" "}
+                          {t('terms_agreement')}{" "}
                         </span>
                       </div>
                     </div>
@@ -294,7 +296,7 @@ function Register() {
                         id="register-submit"
                         disabled
                       >
-                        Đăng ký
+                        {t('register_button')}
                       </button>
                     </div>
                     <div className="form-suggest-row">

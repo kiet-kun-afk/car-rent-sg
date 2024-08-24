@@ -1,8 +1,12 @@
 import axios from "axios";
 import axiosConfig from "../../../config/axiosConfig";
-import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
+
+import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import ToastComponent from "../../../assets/toasty";
+import { useLocation } from 'react-router-dom';
+
 
 function Changepassword() {
   const [oldPassword, setOldPassword] = useState(null);
@@ -11,32 +15,42 @@ function Changepassword() {
   const customerAccount = localStorage.getItem("token");
   const [errors, setErrors] = useState({});
   const [errorPass, setErrorPass] = useState(false);
+  const { t, i18n } = useTranslation();
+  const location = useLocation();
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const language = queryParams.get('lng');
+    if (language) {
+      i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
+    }
+  }, [location, i18n]);
 
   const validate = () => {
     let formErrors = {};
 
+
     // Validate reNewPassword
     if (!oldPassword) {
-      formErrors.oldPassword = "Vui lòng nhập mật khẩu hiện tại";
+      formErrors.oldPassword = t('changePass.oldPasswordRequired'); // Sử dụng i18n để lấy chuỗi thông báo
     }
 
     // Validate newPassword
     if (!newPassword) {
-      formErrors.newPassword = "Mật khẩu mới không được để trống";
+      formErrors.newPassword = t('changePass.newPasswordRequired');
     } else if (
       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,18}$/.test(
         newPassword
       )
     ) {
       formErrors.newPassword =
-        "Mật khẩu phải chứa ít nhất 1 ký tự hoa, 1 ký tự thường, 1 ký tự số, 1 ký tự đặc biệt và độ dài từ 6 đến 18 ký tự";
+        t('changePass.newPassword');
     }
 
     // Validate reNewPassword
     if (!confirmNewPassword) {
-      formErrors.confirmNewPassword = "Vui lòng xác nhận mật khẩu";
+      formErrors.confirmNewPassword = t('changePass.confirmNewPassword1');
     } else if (confirmNewPassword !== newPassword) {
-      formErrors.confirmNewPassword = "Mật khẩu xác nhận không khớp";
+      formErrors.confirmNewPassword = t('changePass.confirmNewPassword2');
     }
 
     setErrors(formErrors);
@@ -66,13 +80,13 @@ function Changepassword() {
             }
           );
         }
-        ToastComponent("success", "Đổi mật khẩu thành công !");
+        ToastComponent("success", t('changePass.successful'));
         setTimeout(() => {
           window.location.href = "/carrentsg/customer/infor";
         }, 4000);
       } catch (error) {
         setErrorPass(true);
-        setCheckOld("Mật khẩu cũ không trùng khớp");
+        setCheckOld(t('changePass.checkOld'));
         console.log(error);
       }
       console.log("Form is valid. Submitting...");
@@ -96,18 +110,18 @@ function Changepassword() {
   return (
     <>
       <div className="content-title">
-        <h4>Đổi mật khẩu</h4>
-        <p>Vui lòng nhập mật khẩu hiện tại của bạn để thay đổi mật khẩu</p>
+        <h4>{t("Đổi mật khẩu")}</h4>
+        <p>{t("Vui lòng nhập mật khẩu hiện tại của bạn để thay đổi mật khẩu")}</p>
       </div>
       <div className="content-item change-pw">
         <div className="title">
-          <h5>Nhập mật khẩu</h5>
+          <h5>{t("Nhập mật khẩu")}</h5>
         </div>
         <div className="content">
           <div className="custom-input">
             <div className="wrap-info">
               <div className="title-status">
-                <p>Mật khẩu hiện tại</p>
+                <p>{t("Mật khẩu hiện tại")}</p>
               </div>
               <div className="desc "></div>
             </div>
@@ -204,7 +218,7 @@ function Changepassword() {
           <div className="custom-input">
             <div className="wrap-info">
               <div className="title-status">
-                <p>Mật khẩu mới</p>
+                <p>{t("Mật khẩu mới")}</p>
               </div>
               <div className="desc "></div>
             </div>
@@ -299,7 +313,7 @@ function Changepassword() {
           <div className="custom-input">
             <div className="wrap-info">
               <div className="title-status">
-                <p>Xác nhận mật khẩu mới</p>
+                <p>{t("Xác nhận mật khẩu mới")}</p>
               </div>
               <div className="desc "></div>
             </div>
@@ -392,7 +406,7 @@ function Changepassword() {
           </div>
           <div className="apply-button">
             <a className="btn btn--m btn-success" onClick={handleChangepass}>
-              Xác nhận
+              {t("Xác nhận")}
             </a>
           </div>
         </div>

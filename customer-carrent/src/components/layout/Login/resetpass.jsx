@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
+
 import axios from "axios";
 import "../../../style/styleForgotpass.css";
 import ToastComponent from "../../../assets/toasty";
@@ -7,12 +9,13 @@ function ResetPass() {
 	const { token } = useParams(); // Lấy token từ path parameters
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const { t } = useTranslation();
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
 		if (password !== confirmPassword) {
-			ToastComponent("err", "Xác nhận mật khẩu không đúng!");
+			ToastComponent("err", t('resetValidate.confirmPassErr'));
 			return;
 		}
 
@@ -28,12 +31,12 @@ function ResetPass() {
 				}
 			);
 
-			ToastComponent("success", "Đổi mật khẩu thành công!");
+			ToastComponent("success", t('resetValidate.successful'));
 			setTimeout(() => {
 				window.location.href = "/carrentsg";
 			}, 4000);
 		} catch (error) {
-			ToastComponent("err", "Đổi mật thất bại!");
+			ToastComponent("err", t('resetValidate.failed'));
 		}
 	};
 	return (
@@ -42,14 +45,14 @@ function ResetPass() {
 				<div class="forgot-form">
 					<form onSubmit={handleSubmit}>
 						<div class="form-item">
-							<h5 class="item-title">Nhập Mật Khẩu Mới</h5>
+							<h5 className="item-title">{t('enter_new_password')}</h5>
 							<div class="item-form">
 								<div class="mb-0">
 									<input
 										name="newpw"
 										type="password"
 										class="form-control"
-										placeholder="Mật Khẩu Mới"
+										placeholder={t('enter_new_password')}
 										value={password}
 										onChange={(e) =>
 											setPassword(e.target.value)
@@ -67,8 +70,7 @@ function ResetPass() {
 										name="confirmpw"
 										type="password"
 										class="form-control"
-										placeholder="Xác Nhận "
-										value={confirmPassword}
+										placeholder={t('confirm_password')} value={confirmPassword}
 										onChange={(e) =>
 											setConfirmPassword(e.target.value)
 										}

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosConfig from "../../../config/axiosConfig";
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+
+
 
 import "bootstrap/dist/js/bootstrap.min.js";
 
@@ -8,6 +12,15 @@ import iconCarrent from "../../images/logoCarrent.png";
 import iconUser from "../../images/avatar-4.png";
 
 function Header() {
+  const { t, i18n } = useTranslation();
+  const location = useLocation();
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const language = queryParams.get('lng');
+    if (language) {
+      i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
+    }
+  }, [location, i18n]);
   const navigate = useNavigate();
   const [customer, setCustomer] = useState(null);
 
@@ -36,11 +49,23 @@ function Header() {
       fetchCustomer();
     }
   }, []);
-
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
   return (
     <div className="c-header">
+      <section className="d-flex justify-content-end me-5 pe-4">
+        <button class="btn m-0 p-1" onClick={() => changeLanguage('en')}>
+          <img src="https://thietbidoandoi.com/wp-content/uploads/2022/04/co-anh.png" alt="" srcset="" style={{ width: "20px" }} />
+        </button>
+        <button class="btn m-0 p-1" onClick={() => changeLanguage('vi')}>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/1599px-Flag_of_Vietnam.svg.png" alt="" srcset="" style={{ width: "20px" }} />
+        </button>
+      </section>
       <div className="c-container">
+
         <div className="header-menu">
+
           <nav
             className="navbar navbar-expand-lg p-0"
             style={{ width: "1280px" }}
@@ -68,10 +93,10 @@ function Header() {
               >
                 <ul className="navbar-nav align-items-center m-0 ">
                   <li className="nav-item">
-                    <a href="/carrentsg">Trang Chủ</a>
+                    <a href={`/carrentsg?lng=${i18n.language}`}>{t("index")}</a>
                   </li>
                   <li className="nav-item">
-                    <a href="/carrentsg/car">Xe Cho Thuê</a>
+                    <a href={`/carrentsg/car?lng=${i18n.language}`}>{t("Xe Cho Thuê")}</a>
                   </li>
                   {/* <li className="nav-item">
 										<a href="#">Về CarrentSG</a>
@@ -80,7 +105,7 @@ function Header() {
                   {customer !== null ? (
                     <>
                       <li className="nav-item">
-                        <a href="#">Chuyến Của Tôi</a>
+                        <a href="#">{t("Chuyến Của Tôi")}</a>
                       </li>
                       <li className="nav-item">
                         <div className="nav-link vertical-line"></div>
@@ -95,7 +120,7 @@ function Header() {
                               }}
                             ></i>
                           </div>
-                          <a href="/carrentsg/customer/infor">
+                          <a href={`/carrentsg/customer/infor?lng=${i18n.language}`}>
                             <div className="profile-avatar">
                               <img
                                 loading="lazy"
@@ -108,7 +133,7 @@ function Header() {
                               />
                             </div>
                           </a>
-                          <a href="/carrentsg/customer/infor">
+                          <a href={`/carrentsg/customer/infor?lng=${i18n.language}`}>
                             <span className="name">{customer.fullName}</span>
                           </a>
                         </div>
@@ -121,21 +146,20 @@ function Header() {
                       </li>
                       <li className="nav-item">
                         <a
-                          href="/carrentsg/register"
+                          href={`/carrentsg/register?lng=${i18n.language}`}
                           data-bs-toggle="modal"
                           data-bs-target="#regisWindow"
                         >
-                          Đăng Ký
-                        </a>
+                          {t("Đăng Ký")}                        </a>
                       </li>
                       <li className="nav-item">
                         <button
                           className="btn btn-outline-success"
-                          href="/carrentsg/login"
+                          href={`/carrentsg/login?lng=${i18n.language}`}
                           data-bs-toggle="modal"
                           data-bs-target="#loginWindow"
                         >
-                          Đăng Nhập
+                          {t("Đăng Nhập")}
                         </button>
                       </li>
                     </>

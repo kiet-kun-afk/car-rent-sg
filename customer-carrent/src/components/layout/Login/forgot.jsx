@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+
 import axios from "axios";
 
 import "../../../style/styleForgotpass.css";
 
 function ForgotPass() {
 	const [email, setEmail] = useState("");
-
+	const { t, i18n } = useTranslation();
+	const location = useLocation();
+	useEffect(() => {
+		const queryParams = new URLSearchParams(location.search);
+		const language = queryParams.get('lng');
+		if (language) {
+			i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
+		}
+	}, [location, i18n]);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
@@ -24,7 +35,7 @@ function ForgotPass() {
 				<div class="d-flex" style={{ width: "1250px" }}>
 					<div class="page-item">
 						<div class="page-title me-auto p-2">
-							<h1>QUÊN MẬT KHẨU</h1>
+							<h1>{t('forgot_password')}</h1>
 						</div>
 					</div>
 
@@ -33,11 +44,8 @@ function ForgotPass() {
 							<form onSubmit={handleSubmit}>
 								<div class="form-item">
 									<div class="forgot-title">
-										<h1>Nhập Email</h1>
-										<h5>
-											Email được dùng để đăng ký tài
-											khoản.
-										</h5>
+										<h1>{t('enter_email')}</h1>
+										<h5>{t('email_instructions')}</h5>
 									</div>
 									<div class="item-form">
 										<div class="mb-3">

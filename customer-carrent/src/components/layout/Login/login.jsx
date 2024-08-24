@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import { useTranslation } from 'react-i18next';
+
 import axios from "axios";
 
 import ToastComponent from "../../../assets/toasty";
@@ -7,6 +9,8 @@ import "../../../style/styleLogin.css";
 import { display } from "@mui/system";
 
 function Login() {
+	const { t, i18n } = useTranslation();
+
 	// const [emailOrPhoneNumber, setEmailOrPhoneNumber] = useState("");
 	// const [password, setPassword] = useState("");
 	const [passwordShown, setPasswordShown] = useState(false);
@@ -88,7 +92,7 @@ function Login() {
 						</div>
 						<div className="form-item">
 							<div className="input-box">
-								<h5 className="item-title">Đăng nhập</h5>
+								<h5 className="item-title">{t('login')}</h5>
 								<form onSubmit={handleLogin}>
 									<div className="input-field">
 										<input
@@ -103,7 +107,7 @@ function Login() {
 										/>
 										<label htmlFor="un">
 											<i className="fa-solid fa-user"></i>{" "}
-											Số điện thoại
+											{t('email_or_phone')}
 										</label>
 									</div>
 									<div className="input-field">
@@ -122,7 +126,7 @@ function Login() {
 										/>
 										<label htmlFor="pw">
 											<i className="fa-solid fa-lock"></i>{" "}
-											Mật Khẩu
+											{t('password')}
 										</label>
 									</div>
 									<div
@@ -134,14 +138,13 @@ function Login() {
 											id="err-message"
 										>
 											<i className="fa-solid fa-circle-info"></i>{" "}
-											Tài khoản hoặc mật khẩu chưa chính
-											xác.
+											{t('incorrect_credentials')}
 										</p>
 									</div>
 									<div className="form-suggest-right">
 										<span className="suggest-item">
-											<a href="/carrentsg/forgot">
-												Quên mật khẩu ?
+											<a href={`/carrentsg/forgot?lng=${i18n.language}`}>
+												{t('forgot_password_login')}
 											</a>
 										</span>
 									</div>
@@ -150,14 +153,16 @@ function Login() {
 											type="submit"
 											className="btn-submit"
 										>
-											Đăng nhập
+											{t('login_button')}
 										</button>
 									</div>
 								</form>
 								<div className="form-suggest">
 									<span className="suggest-item">
-										Bạn chưa là thành viên?{" "}
-										<a href="">Đăng ký ngay</a>
+										{t('not_a_member')}{" "}
+										<a href="/carrentsg/register"
+											data-bs-toggle="modal"
+											data-bs-target="#regisWindow">{t('register_now')}</a>
 									</span>
 								</div>
 								<div className="form-suggest-row">
@@ -167,7 +172,7 @@ function Login() {
 											className="btn btn-outline-success"
 										>
 											<i className="fa-brands fa-google"></i>{" "}
-											Google
+											{t('login_with')} {t('google')}
 										</a>
 									</div>
 									<div className="suggest-item">
@@ -176,7 +181,7 @@ function Login() {
 											className="btn btn-outline-success"
 										>
 											<i className="fa-brands fa-google"></i>{" "}
-											Github
+											{t('login_with')} {t('github')}
 										</a>
 									</div>
 								</div>
