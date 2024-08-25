@@ -94,12 +94,12 @@ function InforCustomer() {
   const remain = "remain";
   const handlePaymentClick = (contractId, amount) => {
     // Redirect to the payment page with the carId
-    navigate(`/carrentsg/payment/${contractId}?amount=${amount}&type=${deposit}`);
+    navigate(`/carrentsg/payment/${contractId}?amount=${amount}&type=${deposit}&lng=${i18n.language}`);
   };
 
   const handlePayRemain = (contractId, amount) => {
     // Redirect to the payment page with the carId
-    navigate(`/carrentsg/payment/${contractId}?amount=${amount}&type=${remain}`);
+    navigate(`/carrentsg/payment/${contractId}?amount=${amount}&type=${remain}&lng=${i18n.language}`);
   };
 
   return (

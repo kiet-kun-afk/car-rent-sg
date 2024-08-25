@@ -170,6 +170,10 @@
     "updateAva": "Cập nhật ảnh đại diện",
     "selectAva": "Chọn ảnh",
     "sign_out_quest": "Bạn chắc chắn muốn đăng xuất?",
+    "carDetail": {
+        "carValidSuccess": "Bạn đã đặt xe thành công !",
+        "carValidFailure": "Không thể tạo hợp đồng"
+    },
     "features": "Đặc điểm",
     "documents": "Giấy tờ thuê xe",
     "location": "Vị trí xe",
@@ -249,6 +253,48 @@
     "odorFeeTitle": "Phí khử mùi",
     "odorFee": "300 000đ",
     "odorFeeDescription": "Phụ phí phát sinh khi xe hoàn trả bị ám mùi khó chịu (mùi thuốc lá, thực phẩm nặng mùi...).",
+    "typeCar": "Loại xe",
+    "carBrand": "Hãng xe",
+    "filter": "Bộ lọc",
+    "all": "Tất cả",
+    "modal": {
+        "title": "Thời gian",
+        "apply": "Áp dụng",
+        "rentalDays": "Số ngày thuê:",
+        "day": "ngày"
+    },
+    "modal1": {
+        "vehicleType": "Loại xe",
+        "apply": "Áp dụng",
+        "clear": "Xóa"
+    },
+    "modal2": {
+        "brand": "Hãng xe",
+        "all": "Tất cả",
+        "apply": "Áp dụng"
+    },
+    "modal3": {
+        "transmission": "Truyền động",
+        "all": "Tất cả",
+        "automatic": "Số tự động",
+        "manual": "Số sàn",
+        "apply": "Áp dụng"
+    },
+    "modal4": {
+        "advancedFilter": "Bộ lọc nâng cao",
+        "priceRange": "Mức giá",
+        "minPrice": "Giá thấp nhất",
+        "maxPrice": "Giá cao nhất",
+        "seats": "Số chỗ",
+        "minSeats": "Tối thiểu",
+        "maxSeats": "Tối đa",
+        "fuelType": "Nhiên liệu",
+        "all": "Tất cả",
+        "electric": "Điện",
+        "gasoline": "Xăng",
+        "diesel": "Dầu Diesel",
+        "apply": "Áp dụng"
+    },
     "quickBooking": "Đặt Xe Nhanh",
     "mortgageFree": "Miễn Thế Chấp",
     "discount": "Giảm 10%",
@@ -282,6 +328,12 @@
     "loading": "Loading...",
     "rating": "Rating",
     "trips": "Trips",
+    "receive": "Nhận xe",
+    "return": "Trả xe",
+    "rentUnitPrice": "Đơn giá thuê:",
+    "currency": "VND",
+    "rentalDays": "Số ngày thuê",
+    "days": "Ngày",
     "pickupLocation": "Địa điểm nhận xe",
     "insuranceFee": "Phí bảo hiểm",
     "totalCost": "Tổng giá trị",

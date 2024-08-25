@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
@@ -21,6 +23,15 @@ import "../../style/styleCar.css";
 import Pagination from "../pagination";
 
 function CustomerCar() {
+  const { t, i18n } = useTranslation();
+  const location = useLocation();
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const language = queryParams.get('lng');
+    if (language) {
+      i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
+    }
+  }, [location, i18n]);
   const [cars, setCars] = useState([]);
   const navigate = useNavigate();
   const [currentDay, setCurrentDay] = useState("");
@@ -305,7 +316,7 @@ function CustomerCar() {
         <div className="row m-0">
           <div className="d-flex justify-content-center grid gap-5 mt-3 mb-3 text-body-secondary">
             <span>
-              <i className="fa-solid fa-location-dot fs-5"></i> Hồ Chí Minh
+              <i className="fa-solid fa-location-dot fs-5"></i> {t('cities.hoChiMinh')}
             </span>
 
             <div className="timeCursor">
@@ -357,7 +368,7 @@ function CustomerCar() {
                     strokeLinejoin="round"
                   ></path>
                 </svg>
-                <span className="ms-1">Loại xe</span>
+                <span className="ms-1">{t('typeCar')}</span>
               </button>
             </div>
 
@@ -401,7 +412,7 @@ function CustomerCar() {
                     strokeLinejoin="round"
                   ></path>
                 </svg>
-                <span className="ms-1">Hãng xe</span>
+                <span className="ms-1">{t('carBrand')}</span>
               </button>
             </div>
 
@@ -435,7 +446,7 @@ function CustomerCar() {
                     strokeLinecap="round"
                   ></path>
                 </svg>
-                <span className="ms-1">Truyền Động</span>
+                <span className="ms-1">{t('transmission')}</span>
               </button>
             </div>
 
@@ -509,7 +520,7 @@ function CustomerCar() {
                     strokeLinejoin="round"
                   ></path>
                 </svg>
-                <span className="ms-1">Bộ lọc</span>
+                <span className="ms-1">{t('filter')}</span>
               </button>
             </div>
             <div>
@@ -528,7 +539,7 @@ function CustomerCar() {
                   setFuelType("");
                 }}
               >
-                <span className="ms-1">Tất cả</span>
+                <span className="ms-1">{t('all')}</span>
               </button>
             </div>
           </div>
@@ -555,7 +566,7 @@ function CustomerCar() {
                         {" "}
                         <span className="c-note">
                           {" "}
-                          Đặt Xe Nhanh
+                          {t('quickBooking')}
                           <i
                             className="fa-solid fa-bolt"
                             style={{
@@ -564,7 +575,7 @@ function CustomerCar() {
                           ></i>
                         </span>{" "}
                         <span className="c-note">
-                          Miễn Thế Chấp{" "}
+                          {t('mortgageFree')}{" "}
                           <i
                             className="fa-solid fa-lock-open"
                             style={{
@@ -628,7 +639,7 @@ function CustomerCar() {
                 />
                 <div>
                   <p>
-                    Không có xe phù hợp với tìm kiếm của bạn, vui lòng thử lại
+                    {(t('noCar'))}
                   </p>
                 </div>
               </div>
@@ -654,7 +665,7 @@ function CustomerCar() {
         >
           <div
             className="modal-dialog modal-dialog-centered"
-            style={{ minWidth: "600px" }}
+            style={{ minWidth: '600px' }}
           >
             <div className="modal-content text-center p-0">
               <div className="modal-header flex-column m-0">
@@ -666,7 +677,7 @@ function CustomerCar() {
                 ></button>
                 <div className="row justify-content-center m-0">
                   <h1 className="modal-title fs-3" id="exampleModalLabel">
-                    Thời gian
+                    {t('modal.title')}
                   </h1>
                 </div>
               </div>
@@ -688,11 +699,14 @@ function CustomerCar() {
                         )} - ${formatVietnameseDate(date.endDate)}`}
                       </span>
                       <span>
-                        Số ngày thuê: &nbsp;
+                        {t('modal.rentalDays')} &nbsp;
                         <strong>
-                          {`${getDaysDifference(date.startDate, date.endDate)}`}
-                        </strong>{" "}
-                        ngày
+                          {`${getDaysDifference(
+                            date.startDate,
+                            date.endDate
+                          )}`}
+                        </strong>{' '}
+                        {t('modal.day')}
                       </span>
                     </div>
                   </div>
@@ -704,7 +718,7 @@ function CustomerCar() {
                   className="btn btn-primary w-100"
                   onClick={() => filterDate()}
                 >
-                  Áp dụng
+                  {t('modal.apply')}
                 </button>
               </div>
             </div>
@@ -721,7 +735,7 @@ function CustomerCar() {
         >
           <div
             className="modal-dialog modal-dialog-centered"
-            style={{ minWidth: "600px" }}
+            style={{ minWidth: '600px' }}
           >
             <div className="modal-content text-center p-0">
               <div className="modal-header flex-column m-0">
@@ -733,7 +747,7 @@ function CustomerCar() {
                 ></button>
                 <div className="row justify-content-center m-0">
                   <h1 className="modal-title fs-3" id="exampleModalLabel">
-                    Loại xe
+                    {t('modal1.vehicleType')}
                   </h1>
                 </div>
               </div>
@@ -742,26 +756,23 @@ function CustomerCar() {
                   <div className="content">
                     <div className="row m-0">
                       {categories.map((category) => (
-                        <div className="col-sm-3 mt-1 mb-1">
+                        <div className="col-sm-3 mt-1 mb-1" key={category.categoryName}>
                           <div
-                            className={`card card-style ${
-                              selectedCategory === category.categoryName
-                                ? "card-clicked"
-                                : ""
-                            }`}
+                            className={`card card-style ${selectedCategory === category.categoryName
+                              ? 'card-clicked'
+                              : ''
+                              }`}
                             style={{
-                              width: "8rem",
+                              width: '8rem',
                             }}
-                            onClick={() =>
-                              selectCategory(category.categoryName)
-                            }
+                            onClick={() => selectCategory(category.categoryName)}
                           >
                             <img
                               src={category.categoryImage}
                               className="img-fluid card-img-top m-auto"
                               style={{
-                                width: "70px",
-                                height: "auto",
+                                width: '70px',
+                                height: 'auto',
                               }}
                             />
                             <div className="card-body p-0">
@@ -782,12 +793,12 @@ function CustomerCar() {
                   className="btn btn-outline-dark"
                   data-bs-dismiss="modal"
                   onClick={() => {
-                    setCategory("");
+                    setCategory('');
                     setSelectedCategory(null);
                     filterCategory();
                   }}
                 >
-                  Xóa
+                  {t('modal1.clear')}
                 </button>
                 <button
                   type="button"
@@ -795,7 +806,7 @@ function CustomerCar() {
                   data-bs-dismiss="modal"
                   onClick={() => filterCategory()}
                 >
-                  Áp dụng
+                  {t('modal1.apply')}
                 </button>
               </div>
             </div>
@@ -812,7 +823,7 @@ function CustomerCar() {
         >
           <div
             className="modal-dialog modal-dialog-centered"
-            style={{ minWidth: "600px" }}
+            style={{ minWidth: '600px' }}
           >
             <div className="modal-content text-center p-0">
               <div className="modal-header flex-column m-0">
@@ -824,7 +835,7 @@ function CustomerCar() {
                 ></button>
                 <div className="row justify-content-center m-0">
                   <h1 className="modal-title fs-3" id="exampleModalLabel">
-                    Hãng xe
+                    {t('modal2.brand')}
                   </h1>
                 </div>
               </div>
@@ -836,9 +847,7 @@ function CustomerCar() {
                         <div className="custom-radio-brand mb-3">
                           <div
                             className="form-check"
-                            onClick={() => {
-                              selectBrand("");
-                            }}
+                            onClick={() => selectBrand('')}
                           >
                             <input
                               className="form-check-input"
@@ -846,16 +855,13 @@ function CustomerCar() {
                               name="flexRadioDefault"
                               id="rdoAll"
                             />
-                            <label
-                              className="form-check-label"
-                              htmlFor="rdoAll"
-                            >
-                              <p>Tất cả</p>
+                            <label className="form-check-label" htmlFor="rdoAll">
+                              <p>{t('modal2.all')}</p>
                             </label>
                           </div>
                         </div>
                         {brands.map((brand) => (
-                          <div className="custom-radio-brand mb-3">
+                          <div className="custom-radio-brand mb-3" key={brand.brandName}>
                             <div
                               className="form-check"
                               onClick={() => selectBrand(brand.brandName)}
@@ -892,7 +898,7 @@ function CustomerCar() {
                   className="btn btn-primary w-100"
                   onClick={() => filterBrand()}
                 >
-                  Áp dụng
+                  {t('modal2.apply')}
                 </button>
               </div>
             </div>
@@ -918,7 +924,7 @@ function CustomerCar() {
                 ></button>
                 <div className="row justify-content-center m-0">
                   <h1 className="modal-title fs-3" id="exampleModalLabel">
-                    Truyền động
+                    {t('modal3.transmission')}
                   </h1>
                 </div>
               </div>
@@ -930,7 +936,7 @@ function CustomerCar() {
                         <div className="custom-radio-brand mb-3">
                           <div
                             className="form-check"
-                            onClick={() => selectTransmission("")}
+                            onClick={() => selectTransmission('')}
                           >
                             <input
                               className="form-check-input"
@@ -942,14 +948,14 @@ function CustomerCar() {
                               className="form-check-label"
                               htmlFor="all-transmission"
                             >
-                              <p>Tất cả</p>
+                              <p>{t('modal3.all')}</p>
                             </label>
                           </div>
                         </div>
                         <div className="custom-radio-brand mb-3">
                           <div
                             className="form-check"
-                            onClick={() => selectTransmission("số tự động")}
+                            onClick={() => selectTransmission('số tự động')}
                           >
                             <input
                               className="form-check-input"
@@ -957,18 +963,15 @@ function CustomerCar() {
                               name="flexRadioDefault"
                               id="auto-trans"
                             />
-                            <label
-                              className="form-check-label"
-                              htmlFor="auto-trans"
-                            >
-                              <p>Số tự động</p>
+                            <label className="form-check-label" htmlFor="auto-trans">
+                              <p>{t('modal3.automatic')}</p>
                             </label>
                           </div>
                         </div>
                         <div className="custom-radio-brand mb-3">
                           <div
                             className="form-check"
-                            onClick={() => selectTransmission("số sàn")}
+                            onClick={() => selectTransmission('số sàn')}
                           >
                             <input
                               className="form-check-input"
@@ -976,11 +979,8 @@ function CustomerCar() {
                               name="flexRadioDefault"
                               id="handle"
                             />
-                            <label
-                              className="form-check-label"
-                              htmlFor="handle"
-                            >
-                              <p>Số sàn</p>
+                            <label className="form-check-label" htmlFor="handle">
+                              <p>{t('modal3.manual')}</p>
                             </label>
                           </div>
                         </div>
@@ -995,7 +995,7 @@ function CustomerCar() {
                   className="btn btn-primary w-100"
                   onClick={() => filterTransmission()}
                 >
-                  Áp dụng
+                  {t('modal3.apply')}
                 </button>
               </div>
             </div>
@@ -1024,78 +1024,37 @@ function CustomerCar() {
                 ></button>
                 <div className="row justify-content-center m-0">
                   <h1 className="modal-title fs-3" id="exampleModalLabel">
-                    Bộ lọc nâng cao
+                    {t('modal4.advancedFilter')}
                   </h1>
                 </div>
               </div>
               <div className="modal-body p-0">
                 <div className="form-item">
                   <div className="content">
-                    {/* Mức giá */}
+                    {/* Price Range */}
                     <div className="row m-0 pb-3">
-                      {/* <div className="price-range-slider">
-                        <h3>Mức giá</h3>
-                        <Slider
-                          range
-                          min={300}
-                          max={3000}
-                          defaultValue={[300, 3000]}
-                          onChange={handleChangePrice}
-                          trackStyle={[{ backgroundColor: "green" }]}
-                          handleStyle={[
-                            { borderColor: "green" },
-                            { borderColor: "green" },
-                          ]}
-                          railStyle={{ backgroundColor: "#e0e0e0" }}
-                        />
-                        <div className="price-inputs">
-                          <div className="price-input">
-                            <label>Giá thấp nhất</label>
-                            <input
-                              type="text"
-                              value={`${minPrice}K`}
-                              readOnly
-                            />
-                          </div>
-                          <div className="separator">-</div>
-                          <div className="price-input">
-                            <label>Giá cao nhất</label>
-                            <input
-                              type="text"
-                              value={`${maxPrice}K`}
-                              readOnly
-                            />
-                          </div>
-                        </div>
-                      </div> */}
-                      <h6 className="text-start">Mức giá</h6>
+                      <h6 className="text-start">{t('modal4.priceRange')}</h6>
                       <Slider
                         range
                         min={300}
                         max={3000}
                         defaultValue={[300, 3000]}
                         onChange={handleChangePrice}
-                        trackStyle={[
-                          {
-                            backgroundColor: "green",
-                          },
-                        ]}
+                        trackStyle={[{ backgroundColor: "green" }]}
                         handleStyle={[
                           { borderColor: "green" },
                           { borderColor: "green" },
                         ]}
-                        railStyle={{
-                          backgroundColor: "#e0e0e0",
-                        }}
+                        railStyle={{ backgroundColor: "#e0e0e0" }}
                       />
                       <div className="col-sm-5 p-0">
                         <div className="mt-3">
-                          <label for="priceMin" class="form-label">
-                            Giá thấp nhất
+                          <label htmlFor="priceMin" className="form-label">
+                            {t('modal4.minPrice')}
                           </label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="priceMin"
                             value={`${minPrice}K`}
                             readOnly
@@ -1109,12 +1068,12 @@ function CustomerCar() {
                       </div>
                       <div className="col-sm-5 p-0">
                         <div className="mt-3">
-                          <label for="priceMax" class="form-label">
-                            Giá cao nhất
+                          <label htmlFor="priceMax" className="form-label">
+                            {t('modal4.maxPrice')}
                           </label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="priceMax"
                             value={`${maxPrice}K`}
                             readOnly
@@ -1123,36 +1082,30 @@ function CustomerCar() {
                       </div>
                     </div>
 
-                    {/* Số chỗ */}
+                    {/* Seats */}
                     <div className="row m-0 pb-3">
-                      <h6 className="text-start">Số chỗ</h6>
+                      <h6 className="text-start">{t('modal4.seats')}</h6>
                       <Slider
                         range
                         min={2}
                         max={10}
                         defaultValue={[2, 10]}
                         onChange={handleChangeSeat}
-                        trackStyle={[
-                          {
-                            backgroundColor: "green",
-                          },
-                        ]}
+                        trackStyle={[{ backgroundColor: "green" }]}
                         handleStyle={[
                           { borderColor: "green" },
                           { borderColor: "green" },
                         ]}
-                        railStyle={{
-                          backgroundColor: "#e0e0e0",
-                        }}
+                        railStyle={{ backgroundColor: "#e0e0e0" }}
                       />
                       <div className="col-sm-5 p-0">
                         <div className="mt-3">
-                          <label for="minSeat" class="form-label">
-                            Tối thiểu
+                          <label htmlFor="minSeat" className="form-label">
+                            {t('modal4.minSeats')}
                           </label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="minSeat"
                             value={`${minSeat} chỗ`}
                             readOnly
@@ -1166,12 +1119,12 @@ function CustomerCar() {
                       </div>
                       <div className="col-sm-5 p-0">
                         <div className="mt-3">
-                          <label for="maxSeat" class="form-label">
-                            Tối đa
+                          <label htmlFor="maxSeat" className="form-label">
+                            {t('modal4.maxSeats')}
                           </label>
                           <input
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="maxSeat"
                             value={`${maxSeat} chỗ`}
                             readOnly
@@ -1180,14 +1133,14 @@ function CustomerCar() {
                       </div>
                     </div>
 
-                    {/* Nhiên liệu */}
+                    {/* Fuel Type */}
                     <div className="row m-0 pb-3">
-                      <h6 className="text-start">Nhiên liệu</h6>
-                      <div class="d-flex flex-wrap p-0 mt-2 mb-2">
+                      <h6 className="text-start">{t('modal4.fuelType')}</h6>
+                      <div className="d-flex flex-wrap p-0 mt-2 mb-2">
                         <div className="custom-radio-fuel">
                           <div
                             className="form-check"
-                            onClick={() => selectFuelType("")}
+                            onClick={() => selectFuelType('')}
                           >
                             <input
                               className="form-check-input"
@@ -1196,14 +1149,14 @@ function CustomerCar() {
                               id="all"
                             />
                             <label className="form-check-label" htmlFor="all">
-                              <p>Tất cả</p>
+                              <p>{t('modal4.all')}</p>
                             </label>
                           </div>
                         </div>
                         <div className="custom-radio-fuel">
                           <div
                             className="form-check"
-                            onClick={() => selectFuelType("điện")}
+                            onClick={() => selectFuelType('điện')}
                           >
                             <input
                               className="form-check-input"
@@ -1211,18 +1164,15 @@ function CustomerCar() {
                               name="form-check-input"
                               id="electro"
                             />
-                            <label
-                              className="form-check-label"
-                              htmlFor="electro"
-                            >
-                              <p>Điện</p>
+                            <label className="form-check-label" htmlFor="electro">
+                              <p>{t('modal4.electric')}</p>
                             </label>
                           </div>
                         </div>
                         <div className="custom-radio-fuel">
                           <div
                             className="form-check"
-                            onClick={() => selectFuelType("xăng")}
+                            onClick={() => selectFuelType('xăng')}
                           >
                             <input
                               className="form-check-input"
@@ -1231,14 +1181,14 @@ function CustomerCar() {
                               id="fuel"
                             />
                             <label className="form-check-label" htmlFor="fuel">
-                              <p>Xăng</p>
+                              <p>{t('modal4.gasoline')}</p>
                             </label>
                           </div>
                         </div>
                         <div className="custom-radio-fuel">
                           <div
                             className="form-check"
-                            onClick={() => selectFuelType("dầu diesel")}
+                            onClick={() => selectFuelType('dầu diesel')}
                           >
                             <input
                               className="form-check-input"
@@ -1246,17 +1196,13 @@ function CustomerCar() {
                               name="form-check-input"
                               id="diesel"
                             />
-                            <label
-                              className="form-check-label"
-                              htmlFor="diesel"
-                            >
-                              <p>Dầu Diesel</p>
+                            <label className="form-check-label" htmlFor="diesel">
+                              <p>{t('modal4.diesel')}</p>
                             </label>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="row m-0"></div>
                   </div>
                 </div>
               </div>
@@ -1268,7 +1214,7 @@ function CustomerCar() {
                     filterAdvance();
                   }}
                 >
-                  Áp dụng
+                  {t('modal4.apply')}
                 </button>
               </div>
             </div>

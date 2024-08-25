@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, Outlet, Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+
 
 import axiosConfig from "../../config/axiosConfig";
 import { ToastContainer } from "react-toastify";
@@ -12,6 +15,16 @@ import Footer from "./common/footer";
 import "../../style/styleDetailCustomer.css";
 
 function DetailCustomer() {
+  const { t, i18n } = useTranslation();
+  const location = useLocation();
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const language = queryParams.get('lng');
+    if (language) {
+      i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
+    }
+  }, [location, i18n]);
+
   const navigate = useNavigate();
   const errRef = useRef(null);
   const [customer, setCustomer] = useState(null);
@@ -625,10 +638,10 @@ function DetailCustomer() {
               </div>
               <div className="form-item">
                 <div className="input-box">
-                  <h4 className="text-center mb-3">Cập nhật thông tin</h4>
+                  <h4 className="text-center mb-3">{t("update_info")}</h4>
                   <form>
                     <div className="mb-3">
-                      <label className="form-label">Họ và tên</label>
+                      <label className="form-label">{t('full_name')}</label>
                       <input
                         type="text"
                         className="form-control"
@@ -637,7 +650,7 @@ function DetailCustomer() {
                       />
                     </div>
                     <div className="mb-3">
-                      <label className="form-label">Ngày sinh</label>
+                      <label className="form-label">{t('birth_date')}</label>
                       <input
                         type="date"
                         className="form-control"
@@ -646,14 +659,14 @@ function DetailCustomer() {
                       />
                     </div>
                     <div className="mb-3">
-                      <label className="form-label">Giới tính</label>
+                      <label className="form-label">{t('gender')}</label>
                       <select
                         className="form-select"
                         value={gender}
                         onChange={onGenderChange}
                       >
-                        <option value={true}>Nam</option>
-                        <option value={false}>Nữ</option>
+                        <option value={true}>{t('male')}</option>
+                        <option value={false}>{t('female')}</option>
                       </select>
                     </div>
                     <div className="input-field mt-3">
@@ -696,10 +709,10 @@ function DetailCustomer() {
               </div>
               <div className="form-item">
                 <div className="input-box">
-                  <h4 className="text-center mb-3">Cập nhật số điện thoại</h4>
+                  <h4 className="text-center mb-3">{t("update_phone")}</h4>
                   <form>
                     <div className="mb-3">
-                      <label className="form-label">Số điện thoại</label>
+                      <label className="form-label">{t("phone_number")}</label>
                       <input
                         type="text"
                         className="form-control"
@@ -817,7 +830,7 @@ function DetailCustomer() {
                                 }
                                 type="text"
                                 className="form-control"
-                                placeholder="Nhập tên cho địa chỉ của bạn"
+                                placeholder={t('address_placeholder')}
                                 required
                               />
                             </div>
@@ -1025,12 +1038,12 @@ function DetailCustomer() {
                 <div className="input-box">
                   <div className="content-item">
                     <div className="content-title">
-                      <h4>Đăng xuất</h4>
+                      <h4>{t("sign_out")}</h4>
                     </div>
                     <div className="content-item address-list">
                       <div className="content">
                         <div className="address-type m-3">
-                          <p>Bạn chắc chắn muốn đăng xuất?</p>
+                          <p>{t("sign_out_quest")}</p>
                         </div>
                         <div className="input-field mt-3">
                           <button
@@ -1038,7 +1051,7 @@ function DetailCustomer() {
                             className="btn-submit"
                             onClick={handleLogout}
                           >
-                            Đăng xuất
+                            {t("sign_out")}
                           </button>
                         </div>
                       </div>
