@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { format } from "date-fns";
@@ -7,6 +10,15 @@ import Footer from "./common/footer";
 import PaymentMethodAccordion from "./PaymentMethodAccordion";
 
 function PaymentMethod() {
+  const { t, i18n } = useTranslation();
+  const location = useLocation();
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const language = queryParams.get('lng');
+    if (language) {
+      i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
+    }
+  }, [location, i18n]);
   function formatVND(value) {
     // Check if value is a number
     if (typeof value !== "number") {
@@ -104,7 +116,7 @@ function PaymentMethod() {
       <Header />
       {contractDetails ? (
         <div className="container-sm border-2">
-          <h1 className="mb-5 mt-2 text-center">Chọn Phương Thức Thanh Toán</h1>
+          <h1 className="mb-5 mt-2 text-center">{t('choosePaymentMethod')}</h1>
           <div className="row">
             <div className="col-md-6">
               <div className="accordion" id="paymentMethodsAccordion">
@@ -113,64 +125,31 @@ function PaymentMethod() {
                   headerId="headingFive"
                   targetId="collapseFive"
                   iconClass="fa-exchange-alt"
-                  title="Chuyển khoản ngân hàng"
+                  title={t('bankTransfer')}
                 >
-                  <div
-                    style={{
-                      fontFamily: "Arial, sans-serif",
-                      lineHeight: "1.6",
-                    }}
-                  >
+                  <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.6' }}>
                     <ol>
                       <li>
-                        Bấm <strong>“ĐẶT CHỖ”</strong> để xác nhận lựa chọn hình
-                        thức thanh toán chuyển khoản ngân hàng.
+                        {t('placeOrder')}
                       </li>
                       <li>
-                        Bạn vui lòng chuyển tiền vào tài khoản CARRENTSG trong
-                        vòng <span style={{ color: "blue" }}>56 phút</span> kể
-                        từ lúc đặt chỗ
+                        {t('transferWithin')}
                       </li>
                     </ol>
-                    <div
-                      style={{
-                        backgroundColor: "#e0f3ff",
-                        padding: "20px",
-                        marginTop: "10px",
-                        borderRadius: "8px",
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <img
-                          src="https://s-vnba-cdn.aicms.vn/vnba-media/23/8/11/2-logo-vietcombank-voi-y-nghia-rieng_64d5f7a4a4311.png"
-                          alt="Vietcombank"
-                          style={{ width: "200px", marginRight: "10px" }}
-                        />
+                    <div style={{ backgroundColor: '#e0f3ff', padding: '20px', marginTop: '10px', borderRadius: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <img src="https://s-vnba-cdn.aicms.vn/vnba-media/23/8/11/2-logo-vietcombank-voi-y-nghia-rieng_64d5f7a4a4311.png" alt="Vietcombank" style={{ width: '200px', marginRight: '10px' }} />
                         <div>
-                          <strong style={{ color: "#3b7dd8" }}>
-                            Ngân hàng: Ngân hàng Vietcombank
-                          </strong>
-                          <p>Số tài khoản: 102-989-1989</p>
-                          <p>Chủ tài khoản: CÔNG TY CỔ PHẦN CARRENTSG</p>
-                          <p>Nội dung chuyển khoản: Tên tài khoản + SĐT</p>
+                          <strong style={{ color: '#3b7dd8' }}>{t('bankInfo.bankName')}</strong>
+                          <p>{t('bankInfo.accountNumber')}</p>
+                          <p>{t('bankInfo.accountHolder')}</p>
+                          <p>{t('bankInfo.transferNote')}</p>
                         </div>
                       </div>
                     </div>
                     <ol start="3">
                       <li>
-                        Chụp lại màn hình{" "}
-                        <strong>“Chuyển khoản thành công”</strong> và gửi đến{" "}
-                        <a href="https://www.facebook.com/mioto.vn">
-                          CARRENTSG fanpage
-                        </a>{" "}
-                        hoặc{" "}
-                        <a href="mailto:contact@mioto.vn">
-                          contact@carrentsg.vn
-                        </a>
-                        . Sau khi nhận được hình chụp từ bạn hoặc có tin nhắn
-                        tiền đã vào tài khoản, CARRENTSG sẽ gửi thông báo đặt
-                        cọc thành công và thông tin chủ xe qua tin nhắn sms và
-                        ứng dụng.
+                        {t('sendScreenshot')}
                       </li>
                     </ol>
                   </div>
@@ -181,27 +160,18 @@ function PaymentMethod() {
                   headerId="headingTwo"
                   targetId="collapseTwo"
                   iconClass="fa-wallet"
-                  title="Thanh toán trực tuyến - Ví điện tử"
+                  title={t('eWallet')}
                 >
                   <div>
                     <ol>
-                      <li>Lựa chọn ví điện tử</li>
-                      <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginBottom: "10px",
-                          }}
-                        >
-                          <label
-                            htmlFor="e-wallet-momo"
-                            style={{ marginLeft: "8px" }}
-                          >
+                      <li>{t('chooseEWallet')}</li>
+                      <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                          <label htmlFor="e-wallet-momo" style={{ marginLeft: '8px' }}>
                             <img
                               src="https://cdn.tgdd.vn/2020/03/GameApp/Untitled-2-200x200.jpg"
                               alt="MoMo"
-                              style={{ width: "100px" }}
+                              style={{ width: '100px' }}
                             />
                           </label>
                           <input
@@ -209,20 +179,16 @@ function PaymentMethod() {
                             id="e-wallet-momo"
                             name="payment-method"
                             value="momo"
-                            style={{ width: "100px" }}
-                            onChange={() => setPaymentMethod("momo")}
+                            style={{ width: '100px' }}
+                            onChange={() => setPaymentMethod('momo')}
                           />
                         </div>
-
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <label
-                            htmlFor="e-wallet-vnpay"
-                            style={{ marginLeft: "8px" }}
-                          >
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <label htmlFor="e-wallet-vnpay" style={{ marginLeft: '8px' }}>
                             <img
                               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp1v7T287-ikP1m7dEUbs2n1SbbLEqkMd1ZA&s"
                               alt="VNPay"
-                              style={{ width: "100px" }}
+                              style={{ width: '100px' }}
                             />
                           </label>
                           <input
@@ -230,54 +196,35 @@ function PaymentMethod() {
                             id="e-wallet-vnpay"
                             name="payment-method"
                             value="vnpay"
-                            style={{ width: "100px" }}
-                            onChange={() => setPaymentMethod("vnpay")}
+                            style={{ width: '100px' }}
+                            onChange={() => setPaymentMethod('vnpay')}
                           />
                         </div>
                       </div>
-
-                      <li>
-                        Bấm <b>"THANH TOÁN"</b> để chuyển hướng về ví điện tử và
-                        tiến hành đặt cọc.
-                      </li>
-                      <li>Nhập thông tin tài khoản hoặc quét mã thanh toán.</li>
-                      <li>
-                        Sau khi thanh toán, bạn sẽ nhận được thông báo đặt xe
-                        thành công và thông tin chủ xe qua tin nhắn và qua ứng
-                        dụng/website CarrentSG.
-                      </li>
+                      <li>{t('payNow')}</li>
+                      <li>{t('enterAccountInfo')}</li>
+                      <li>{t('paymentSuccess')}</li>
                     </ol>
                   </div>
                 </PaymentMethodAccordion>
+
                 <PaymentMethodAccordion
                   id="collapseThree"
                   headerId="headingThree"
                   targetId="collapseThree"
                   iconClass="fa-globe"
-                  title="Thanh toán trực tuyến - Thẻ quốc tế (Visa, Master, JCB)"
+                  title={t('visaMasterCard')}
                 >
                   <div>
                     <ol>
-                      <li>
-                        Trên thẻ phải có các ký hiệu VISA, MASTER để thanh toán
-                        được bằng hình thức này.
-                      </li>
-                      <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginBottom: "10px",
-                          }}
-                        >
-                          <label
-                            htmlFor="e-wallet-momo"
-                            style={{ marginLeft: "8px" }}
-                          >
+                      <li>{t('visaNote')}</li>
+                      <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                          <label htmlFor="e-wallet-momo" style={{ marginLeft: '8px' }}>
                             <img
                               src="https://cdn.tgdd.vn/2020/03/GameApp/Untitled-2-200x200.jpg"
                               alt="MoMo"
-                              style={{ width: "100px" }}
+                              style={{ width: '100px' }}
                             />
                           </label>
                           <input
@@ -285,48 +232,35 @@ function PaymentMethod() {
                             id="e-wallet-momo"
                             name="payment-method"
                             value="momo"
-                            style={{ width: "100px" }}
-                            onChange={() => setPaymentMethod("momo")}
+                            style={{ width: '100px' }}
+                            onChange={() => setPaymentMethod('momo')}
                           />
                         </div>
                       </div>
-
-                      <li>
-                        Bấm <b>"THANH TOÁN"</b> để chuyển hướng về ví điện tử và
-                        tiến hành đặt cọc.
-                      </li>
-                      <li>Nhập thông tin tài khoản hoặc quét mã thanh toán.</li>
-                      <li>
-                        Sau khi thanh toán, bạn sẽ nhận được thông báo đặt xe
-                        thành công và thông tin chủ xe qua tin nhắn và qua ứng
-                        dụng/website CarrentSG.
-                      </li>
+                      <li>{t('payNow')}</li>
+                      <li>{t('enterAccountInfo')}</li>
+                      <li>{t('paymentSuccess')}</li>
                     </ol>
                   </div>
                 </PaymentMethodAccordion>
+
                 <PaymentMethodAccordion
                   id="collapseFour"
                   headerId="headingFour"
                   targetId="collapseFour"
                   iconClass="fa-university"
-                  title="Thanh toán trực tuyến - Thẻ nội địa (ATM)"
+                  title={t('atm')}
                 >
                   <div>
                     <ol>
-                      <li>
-                        Trên thẻ bạn phải có đăng ký dịch vụ thanh toán trực
-                        tuyến với ngân hàng
-                      </li>
-                      <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <label
-                            htmlFor="e-wallet-vnpay"
-                            style={{ marginLeft: "8px" }}
-                          >
+                      <li>{t('atmNote')}</li>
+                      <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <label htmlFor="e-wallet-vnpay" style={{ marginLeft: '8px' }}>
                             <img
                               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp1v7T287-ikP1m7dEUbs2n1SbbLEqkMd1ZA&s"
                               alt="VNPay"
-                              style={{ width: "100px" }}
+                              style={{ width: '100px' }}
                             />
                           </label>
                           <input
@@ -334,22 +268,14 @@ function PaymentMethod() {
                             id="e-wallet-vnpay"
                             name="payment-method"
                             value="vnpay"
-                            style={{ width: "100px" }}
-                            onChange={() => setPaymentMethod("vnpay")}
+                            style={{ width: '100px' }}
+                            onChange={() => setPaymentMethod('vnpay')}
                           />
                         </div>
                       </div>
-
-                      <li>
-                        Bấm <b>"THANH TOÁN"</b> để chuyển hướng về ví điện tử và
-                        tiến hành đặt cọc.
-                      </li>
-                      <li>Nhập thông tin tài khoản hoặc quét mã thanh toán.</li>
-                      <li>
-                        Sau khi thanh toán, bạn sẽ nhận được thông báo đặt xe
-                        thành công và thông tin chủ xe qua tin nhắn và qua ứng
-                        dụng/website CarrentSG.
-                      </li>
+                      <li>{t('payNow')}</li>
+                      <li>{t('enterAccountInfo')}</li>
+                      <li>{t('paymentSuccess')}</li>
                     </ol>
                   </div>
                 </PaymentMethodAccordion>
@@ -359,27 +285,19 @@ function PaymentMethod() {
                   headerId="headingSix"
                   targetId="collapseSix"
                   iconClass="fa-gift"
-                  title="Dùng thẻ quà Got-it"
+                  title={t('gotitCard')}
                 >
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Nhập mã thẻ quà Got-it"
-                  />
-                  <button
-                    className="btn btn-primary mt-2"
-                    style={{ backgroundColor: "#5fcf86" }}
-                  >
-                    Áp Dụng
-                  </button>
+                  <input type="text" className="form-control" placeholder={t('enterGotitCode')} />
+                  <button className="btn btn-primary mt-2" style={{ backgroundColor: '#5fcf86' }}>{t('apply')}</button>
                 </PaymentMethodAccordion>
+
                 <PaymentMethodAccordion
                   id="collapseOne"
                   headerId="headingOne"
                   targetId="collapseOne"
                   iconClass="fa-credit-card"
-                  title="Thanh toán qua thẻ của tôi"
-                ></PaymentMethodAccordion>
+                  title={t('myCard')}
+                />
               </div>
             </div>
 
@@ -424,7 +342,7 @@ function PaymentMethod() {
                 <div className="row mt-5">
                   <div className="col-6">
                     <div className="row">
-                      <div className="col-12">Nhận xe</div>
+                      <div className="col-12">{t('receive')}</div>
                       <div className="col-12">
                         <b>{formatDate(contractDetails.startDate)}</b>
                       </div>
@@ -432,7 +350,7 @@ function PaymentMethod() {
                   </div>
                   <div className="col-6">
                     <div className="row">
-                      <div className="col-12">Trả xe</div>
+                      <div className="col-12">{t('return')}</div>
                       <div className="col-12">
                         <b>{formatDate(contractDetails.endDate)}</b>
                       </div>
@@ -441,7 +359,7 @@ function PaymentMethod() {
                 </div>
                 <div className="col-6 mt-4">
                   <div className="row">
-                    <div className="col-12">Địa điểm nhận xe</div>
+                    <div className="col-12">{t('pickupLocation')}</div>
                     <div className="col-12">
                       <b>
                         {contractDetails.address.street +
@@ -455,21 +373,23 @@ function PaymentMethod() {
                     </div>
                   </div>
                 </div>
-                <div className=" mt-4">
+                <div className="mt-4">
                   <div>
-                    Đơn giá thuê:{" "}
-                    <b>{formatVND(contractDetails.rentCost)} VND / ngày</b>
+                    {t('rentUnitPrice')}{" "}
+                    <b>
+                      {formatVND(contractDetails.rentCost)} {t('currency')} / {t('day')}
+                    </b>
                   </div>
                 </div>
                 <div className="total-price mt-3">
-                  Số ngày thuê: <b>{contractDetails.numberDay} Ngày </b>
+                  {t('rentalDays')}: <b>{contractDetails.numberDay} {t('days')}</b>
                 </div>
                 <div className="total-price mt-3">
-                  Tổng giá trị:{" "}
+                  {t('totalCost')}:{" "}
                   <b>{formatVND(contractDetails.totalRentCost)} VND</b>
                 </div>
                 <div className="total-price mt-3">
-                  Đặt cọc trước:{" "}
+                  {t('deposit')}:{" "}
                   <b>
                     {formatVND((contractDetails.totalRentCost * 20) / 100)} VND
                   </b>
@@ -479,7 +399,7 @@ function PaymentMethod() {
                   style={{ backgroundColor: "#5fcf86" }}
                   onClick={handlePayment}
                 >
-                  Thanh toán
+                  {t('pay')}
                 </button>
               </div>
             </div>

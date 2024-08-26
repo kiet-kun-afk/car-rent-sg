@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, Outlet, Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+
 
 import axiosConfig from "../../config/axiosConfig";
 import { ToastContainer } from "react-toastify";
@@ -12,6 +15,16 @@ import Footer from "./common/footer";
 import "../../style/styleDetailCustomer.css";
 
 function DetailCustomer() {
+  const { t, i18n } = useTranslation();
+  const location = useLocation();
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const language = queryParams.get('lng');
+    if (language) {
+      i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
+    }
+  }, [location, i18n]);
+
   const navigate = useNavigate();
   const errRef = useRef(null);
   const [customer, setCustomer] = useState(null);
@@ -54,19 +67,19 @@ function DetailCustomer() {
   const onPictureChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-  
+
     // Kiểm tra kích thước ảnh
     const img = new Image();
     img.src = URL.createObjectURL(file);
-  
+
     img.onload = () => {
       let width = img.width;
       let height = img.height;
-  
+
       // Kiểm tra nếu ảnh lớn hơn 300x350px
       const maxWidth = 300;
       const maxHeight = 350;
-  
+
       if (width > maxWidth || height > maxHeight) {
         // Tính toán kích thước mới giữ nguyên tỷ lệ
         if (width > height) {
@@ -80,20 +93,20 @@ function DetailCustomer() {
             height = maxHeight;
           }
         }
-  
+
         // Tạo canvas để resize ảnh
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
-  
+
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
-  
+
         // Chuyển canvas thành base64
         canvas.toBlob((blob) => {
           const resizedFile = new File([blob], file.name, { type: file.type });
           setAvatar(resizedFile);
-  
+
           // Đọc ảnh đã resize và cập nhật state
           const reader = new FileReader();
           reader.onloadend = () => {
@@ -135,12 +148,12 @@ function DetailCustomer() {
         );
       }
 
-      ToastComponent("success", "Cập nhật thông tin thành công !");
+      ToastComponent("success", t('customersDetailsValid.inforSuccess'));
       setTimeout(() => {
         window.location.href = "/carrentsg/customer/infor";
       }, 4000);
     } catch (error) {
-      ToastComponent("err", "Cập nhật thông tin thất bại !");
+      ToastComponent("err", t('customersDetailsValid.inforFailure'));
       console.log(error);
     }
   };
@@ -151,13 +164,13 @@ function DetailCustomer() {
     const regex = /^(0\d{9})$/;
 
     if (!regex.test(value)) {
-      setErrorPhone('Số điện thoại không hợp lệ');
-    } else if(!value){
-      setErrorPhone('Vui lòng nhập số điện thoại');
+      setErrorPhone(t('customersDetailsValid.validPhone1'));
+    } else if (!value) {
+      setErrorPhone(t('customersDetailsValid.validPhone2'));
     } else {
       setErrorPhone(''); // Xóa lỗi nếu định dạng đúng
     }
-  };  
+  };
 
   const updatePhone = async (e) => {
     e.preventDefault();
@@ -174,10 +187,10 @@ function DetailCustomer() {
             }
           );
         }
-  
+
         ToastComponent(
           "success",
-          "Cập nhật số điện thoại thành công. Vui lòng đăng nhập lại!"
+          t('customersDetailsValid.phoneSuccess')
         );
         setTimeout(() => {
           handleLogout();
@@ -186,7 +199,7 @@ function DetailCustomer() {
         console.log(error);
       }
     }
-    
+
   };
 
   const [errorEmail, setErrorEmail] = useState('');
@@ -195,13 +208,13 @@ function DetailCustomer() {
     const regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
     if (!regex.test(value)) {
-      setErrorEmail('Email không hợp lệ');
-    } else if(!value){
-      setErrorEmail('Vui lòng nhập Email');
+      setErrorEmail(t('customersDetailsValid.validEmail1'));
+    } else if (!value) {
+      setErrorEmail(t('customersDetailsValid.validEmail2'));
     } else {
       setErrorEmail(''); // Xóa lỗi nếu định dạng đúng
     }
-  }; 
+  };
 
   const updateEmail = async (e) => {
     e.preventDefault();
@@ -218,10 +231,10 @@ function DetailCustomer() {
             }
           );
         }
-  
+
         ToastComponent(
           "success",
-          "Cập nhật email thành công. Vui lòng đăng nhập lại!"
+          t('customersDetailsValid.emailSuccess')
         );
         setTimeout(() => {
           handleLogout();
@@ -231,7 +244,7 @@ function DetailCustomer() {
         console.log(error);
       }
     }
-    
+
   };
 
   const updateImage = async (e) => {
@@ -251,12 +264,12 @@ function DetailCustomer() {
         );
       }
 
-      ToastComponent("success", "Cập nhật ảnh dại diện thành công !");
+      ToastComponent("success", t('customersDetailsValid.avaSuccess'));
       setTimeout(() => {
         window.location.href = "/carrentsg/customer/infor";
       }, 4000);
     } catch (error) {
-      ToastComponent("err", "Cập nhật ảnh dại diện thất bại !");
+      ToastComponent("err", t('customersDetailsValid.avaFailure'));
       console.log(error);
     }
   };
@@ -373,7 +386,7 @@ function DetailCustomer() {
           },
         }
       );
-      ToastComponent("success", "Cập nhật địa chỉ thành công!");
+      ToastComponent("success", t('customersDetailsValid.addressSuccess'));
       setTimeout(() => {
         window.location.href = "/carrentsg/customer/infor";
       }, 4000);
@@ -381,9 +394,9 @@ function DetailCustomer() {
       if (error.response && error.response.data && error.response.data.data) {
         setErrorMessage(error.response.data.data);
       } else {
-        setErrorMessage("Không thể cập nhật địa chỉ");
+        setErrorMessage(t('customersDetailsValid.addressFailure1'));
       }
-      ToastComponent("err", "Cập nhật địa chỉ thất bại !");
+      ToastComponent("err", t('customersDetailsValid.addressFailure1'));
       console.error("Không thể cập nhật địa chỉ", error);
     }
   };
@@ -398,9 +411,8 @@ function DetailCustomer() {
     const year = date.getFullYear();
 
     // Định dạng lại thành dd/MM/yyyy
-    const formattedDate = `${day < 10 ? "0" + day : day}/${
-      month < 10 ? "0" + month : month
-    }/${year}`;
+    const formattedDate = `${day < 10 ? "0" + day : day}/${month < 10 ? "0" + month : month
+      }/${year}`;
 
     return formattedDate;
   };
@@ -420,7 +432,7 @@ function DetailCustomer() {
                     style={{ transform: "translateZ(0px)" }}
                   >
                     <div className="title">
-                      <h1>Xin chào bạn!</h1>
+                      <h1>{t("greeting")}</h1>
                     </div>
                     <div className="sidebar">
                       <Link to="/carrentsg/customer/infor">
@@ -450,7 +462,7 @@ function DetailCustomer() {
                               ></path>
                             </svg>
                           </div>
-                          <p>Tài khoản của tôi</p>
+                          <p>{t("my_account")}</p>
                         </div>
                       </Link>
                       <Link to="/carrentsg/customer/trip">
@@ -507,7 +519,7 @@ function DetailCustomer() {
                               ></path>
                             </svg>
                           </div>
-                          <p>Đơn thuê của tôi</p>
+                          <p>{t("my_rental_application")}</p>
                         </div>
                       </Link>
                       <Link to="/carrentsg/customer/changepass">
@@ -540,7 +552,7 @@ function DetailCustomer() {
                               ></path>
                             </svg>
                           </div>
-                          <p>Đổi mật khẩu</p>
+                          <p>{t("change_password")}</p>
                         </div>
                       </Link>
                       <Link
@@ -582,7 +594,7 @@ function DetailCustomer() {
                               ></path>
                             </svg>
                           </div>
-                          <p>Đăng xuất</p>
+                          <p>{t("sign_out")}</p>
                         </div>
                       </Link>
                     </div>
@@ -626,10 +638,10 @@ function DetailCustomer() {
               </div>
               <div className="form-item">
                 <div className="input-box">
-                  <h4 className="text-center mb-3">Cập nhật thông tin</h4>
+                  <h4 className="text-center mb-3">{t("update_info")}</h4>
                   <form>
                     <div className="mb-3">
-                      <label className="form-label">Họ và tên</label>
+                      <label className="form-label">{t('full_name')}</label>
                       <input
                         type="text"
                         className="form-control"
@@ -638,7 +650,7 @@ function DetailCustomer() {
                       />
                     </div>
                     <div className="mb-3">
-                      <label className="form-label">Ngày sinh</label>
+                      <label className="form-label">{t('birth_date')}</label>
                       <input
                         type="date"
                         className="form-control"
@@ -647,14 +659,14 @@ function DetailCustomer() {
                       />
                     </div>
                     <div className="mb-3">
-                      <label className="form-label">Giới tính</label>
+                      <label className="form-label">{t('gender')}</label>
                       <select
                         className="form-select"
                         value={gender}
                         onChange={onGenderChange}
                       >
-                        <option value={true}>Nam</option>
-                        <option value={false}>Nữ</option>
+                        <option value={true}>{t('male')}</option>
+                        <option value={false}>{t('female')}</option>
                       </select>
                     </div>
                     <div className="input-field mt-3">
@@ -663,7 +675,7 @@ function DetailCustomer() {
                         className="btn-submit"
                         onClick={updateInfor}
                       >
-                        Cập nhật
+                        {t('update')}
                       </button>
                     </div>
                   </form>
@@ -697,10 +709,10 @@ function DetailCustomer() {
               </div>
               <div className="form-item">
                 <div className="input-box">
-                  <h4 className="text-center mb-3">Cập nhật số điện thoại</h4>
+                  <h4 className="text-center mb-3">{t("update_phone")}</h4>
                   <form>
                     <div className="mb-3">
-                      <label className="form-label">Số điện thoại</label>
+                      <label className="form-label">{t("phone_number")}</label>
                       <input
                         type="text"
                         className="form-control"
@@ -715,7 +727,7 @@ function DetailCustomer() {
                         className="btn-submit"
                         onClick={updatePhone}
                       >
-                        Cập nhật
+                        {t('update')}
                       </button>
                     </div>
                   </form>
@@ -749,10 +761,10 @@ function DetailCustomer() {
               </div>
               <div className="form-item">
                 <div className="input-box">
-                  <h4 className="text-center mb-3">Cập nhật email</h4>
+                  <h4 className="text-center mb-3">{t("update_email")}</h4>
                   <form>
                     <div className="mb-3">
-                      <label className="form-label">Email</label>
+                      <label className="form-label">{t("email")}</label>
                       <input
                         type="email"
                         className="form-control"
@@ -767,7 +779,7 @@ function DetailCustomer() {
                         className="btn-submit"
                         onClick={updateEmail}
                       >
-                        Cập nhật
+                        {t("update")}
                       </button>
                     </div>
                   </form>
@@ -803,14 +815,14 @@ function DetailCustomer() {
                 <div className="input-box">
                   <div className="content-item">
                     <div className="content-title">
-                      <h4>Địa chỉ của tôi</h4>
+                      <h4>{t('address')}</h4>
                     </div>
                     <div className="content-item address-list">
                       <div className="content">
                         <form onSubmit={handleChangeAddress}>
                           <div className="address-type m-3">
                             <div className="mb-3">
-                              <label className="form-label">Tên gợi nhớ</label>
+                              <label className="form-label">{t('remember_name')}</label>
                               <input
                                 value={rememberName}
                                 onChange={(e) =>
@@ -818,7 +830,7 @@ function DetailCustomer() {
                                 }
                                 type="text"
                                 className="form-control"
-                                placeholder="Nhập tên cho địa chỉ của bạn"
+                                placeholder={t('address_placeholder')}
                                 required
                               />
                             </div>
@@ -826,7 +838,7 @@ function DetailCustomer() {
                           <div className="row m-3">
                             <div className="address-type col-sm-4 ps-0">
                               <div className="type-title mb-2">
-                                <p>Thành phố</p>
+                                <p>{t('city')}</p>
                               </div>
                               <div className="custom-select">
                                 <select
@@ -835,7 +847,7 @@ function DetailCustomer() {
                                   value={selectedProvince}
                                   onChange={handleProvinceChange}
                                 >
-                                  <option value="">Chọn tỉnh thành phố</option>
+                                  <option value="">{t('select_city')}</option>
                                   {cities.map((province) => (
                                     <option
                                       key={province.Id}
@@ -849,7 +861,7 @@ function DetailCustomer() {
                             </div>
                             <div className="address-type col-sm-4">
                               <div className="type-title mb-2">
-                                <p>Quận&nbsp;/&nbsp;Huyện</p>
+                                <p>{t('district')}</p>
                               </div>
                               <div className="custom-select">
                                 <select
@@ -859,7 +871,7 @@ function DetailCustomer() {
                                   onChange={handleDistrictChange}
                                   disabled={!selectedProvince}
                                 >
-                                  <option value="">Chọn quận huyện</option>
+                                  <option value="">{t('select_district')}</option>
                                   {districts.map((district) => (
                                     <option
                                       key={district.Id}
@@ -873,7 +885,7 @@ function DetailCustomer() {
                             </div>
                             <div className="address-type col-sm-4 pe-0">
                               <div className="type-title mb-2">
-                                <p>Phường&nbsp;/&nbsp;Xã</p>
+                                <p>{t('ward')}</p>
                               </div>
                               <div className="custom-select">
                                 <select
@@ -883,7 +895,7 @@ function DetailCustomer() {
                                   onChange={handleWardChange}
                                   disabled={!selectedDistrict}
                                 >
-                                  <option value="">Chọn phường xã</option>
+                                  <option value="">{t('select_ward')}</option>
                                   {wards.map((ward) => (
                                     <option key={ward.Id} value={ward.Name}>
                                       {ward.Name}
@@ -895,13 +907,13 @@ function DetailCustomer() {
                           </div>
                           <div className="address-type m-3">
                             <div className="mb-3">
-                              <label className="form-label">Địa chỉ</label>
+                              <label className="form-label">{t('street')}</label>
                               <input
                                 value={street}
                                 onChange={(e) => handleStreet(e.target.value)}
                                 type="text"
                                 className="form-control"
-                                placeholder="Nhập tên đường/nhà"
+                                placeholder={t('street_placeholder')}
                                 required
                               />
                             </div>
@@ -913,13 +925,13 @@ function DetailCustomer() {
                               aria-label="Close"
                               type="button"
                             >
-                              Hủy
+                              {t('cancel')}
                             </button>
                             <button
                               type="submit"
                               className="btn btn-success btn--m m-2"
                             >
-                              Xác nhận
+                              {t('submit')}
                             </button>
                           </div>
                         </form>
@@ -958,12 +970,12 @@ function DetailCustomer() {
                 <div className="input-box">
                   <div className="content-item">
                     <div className="content-title">
-                      <h4>Cập nhật ảnh đại diện</h4>
+                      <h4>{t('updateAva')}</h4>
                     </div>
                     <div className="content-item address-list">
                       <div className="content">
                         <div className="fileContainer">
-                          <button className="chooseFile">Chọn ảnh</button>
+                          <button className="chooseFile">{t('selectAva')}</button>
                           <input
                             type="file"
                             accept="image/*"
@@ -984,7 +996,7 @@ function DetailCustomer() {
                                 className="btn-submit"
                                 onClick={updateImage}
                               >
-                                Cập nhật
+                                {t("update")}
                               </button>
                             </div>
                           </>
@@ -1026,12 +1038,12 @@ function DetailCustomer() {
                 <div className="input-box">
                   <div className="content-item">
                     <div className="content-title">
-                      <h4>Đăng xuất</h4>
+                      <h4>{t("sign_out")}</h4>
                     </div>
                     <div className="content-item address-list">
                       <div className="content">
                         <div className="address-type m-3">
-                          <p>Bạn chắc chắn muốn đăng xuất?</p>
+                          <p>{t("sign_out_quest")}</p>
                         </div>
                         <div className="input-field mt-3">
                           <button
@@ -1039,7 +1051,7 @@ function DetailCustomer() {
                             className="btn-submit"
                             onClick={handleLogout}
                           >
-                            Đăng xuất
+                            {t("sign_out")}
                           </button>
                         </div>
                       </div>

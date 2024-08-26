@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+
 import { useParams } from "react-router-dom";
 import Header from "./common/header";
 import Footer from "./common/footer";
@@ -16,6 +19,15 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function DetailCar() {
+  const { t, i18n } = useTranslation();
+  const location = useLocation();
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const language = queryParams.get('lng');
+    if (language) {
+      i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
+    }
+  }, [location, i18n]);
   const { id } = useParams();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -52,7 +64,7 @@ function DetailCar() {
         }
       );
       console.log(response.data);
-      ToastComponent("success", "Bạn đã đặt xe thành công !");
+      ToastComponent("success", t('carDetail.carValidSuccess'));
       setTimeout(() => {
         navigate("/carrentsg/customer/trip");
       }, 4000);
@@ -62,7 +74,7 @@ function DetailCar() {
         //ToastComponent("err", error.response.data.data);
       } else {
         //ToastComponent("err", "Không thể tạo hợp đồng");
-        setErrorMessage("Không thể tạo hợp đồng");
+        setErrorMessage(t('carDetail.carValidFailure'));
       }
       //console.error("Không thể tạo hợp đồng", error);
     }
@@ -123,9 +135,9 @@ function DetailCar() {
         <section className="body mt-4">
           <div className="header-car">
             <div className="m-container">
-              <a href="#outsfeatures">Đặc điểm</a>
-              <a href="#papers">Giấy tờ thuê xe</a>
-              <a href="#carmap">Vị trí xe</a>
+              <a href="#outsfeatures">{t('features')}</a>
+              <a href="#papers">{t('documents')}</a>
+              <a href="#carmap">{t('location')}</a>
             </div>
           </div>
           {car ? (
@@ -166,7 +178,7 @@ function DetailCar() {
                   </div>
                   <div className="line-page"></div>
                   <div className="info-car-desc line-bottom" id="outsfeatures">
-                    <h6>Đặc điểm</h6>
+                    <h6>{t("features")}</h6>
                     <div className="outstanding-features">
                       <div className="outstanding-features__item">
                         <div className="wrap-svg me-2">
@@ -205,9 +217,9 @@ function DetailCar() {
                           </svg>
                         </div>
                         <div className="title">
-                          <p className="sub">Số ghế</p>
+                          <p className="sub">{t("number_of_seats")}</p>
                           <p className="main" text="NUMBER SEATS">
-                            <b>{car.numberOfSeat} chỗ</b>
+                            <b>{car.numberOfSeat} {t("seats")}</b>
                           </p>
                         </div>
                       </div>
@@ -264,7 +276,7 @@ function DetailCar() {
                             </svg>
                           </div>
                           <div className="title">
-                            <p className="sub">Truyền động</p>
+                            <p className="sub">{t("transmission")}</p>
                             <p className="main" text="TRANSACTION">
                               <b>{car.transmission}</b>
                             </p>
@@ -309,7 +321,7 @@ function DetailCar() {
                             </svg>
                           </div>
                           <div className="title">
-                            <p className="sub">Nhiên liệu</p>
+                            <p className="sub">{t("fuel")}</p>
                             <p className="main" text="FUEL TYPE">
                               <b>{car.fuelType}</b>
                             </p>
@@ -318,7 +330,7 @@ function DetailCar() {
                       </div>
 
                       {car.fuelConsumption === null ||
-                      car.fuelConsumption === "NULL" ? (
+                        car.fuelConsumption === "NULL" ? (
                         <div></div>
                       ) : (
                         <div>
@@ -372,7 +384,7 @@ function DetailCar() {
                               </svg>
                             </div>
                             <div className="title">
-                              <p className="sub">NL tiêu hao</p>
+                              <p className="sub">{t("energy_consumed")}</p>
                               <p className="main" text="FUEL CONSUMPTION">
                                 <b>{car.fuelConsumption}</b>
                               </p>
@@ -385,7 +397,7 @@ function DetailCar() {
 
                   <div className="line-page mt-3 mb-3"></div>
                   <div className="info-car-desc" id="carmap">
-                    <h6>Vị trí xe</h6>
+                    <h6>{t('location')}</h6>
                     <div className="car-address">
                       <div className="address">
                         <i className="fa-solid fa-location-dot"></i>
@@ -395,7 +407,7 @@ function DetailCar() {
                   </div>
                   <div className="line-page"></div>
                   <div className="info-car-desc">
-                    <h6>Mô tả</h6>
+                    <h6>{t("describe")}</h6>
                     <pre>
                       <span text="DESCRIPTION">
                         {car.carName}, {car.categoryName}, {car.brandName}.
@@ -403,7 +415,7 @@ function DetailCar() {
                     </pre>
                   </div>
                   <div className="info-car-desc" id="papers">
-                    <h6 className="df-align-center">Giấy tờ thuê xe</h6>
+                    <h6 className="df-align-center">{t('rental_documents')}</h6>
                     <div className="required-papers">
                       <div className="required-papers__item">
                         <div className="type__item">
@@ -421,18 +433,18 @@ function DetailCar() {
                               ></path>
                             </svg>
                           </div>
-                          <p className="font-12">Chọn 1 trong 2 hình thức</p>
+                          <p className="font-12">{t('choose_one')}</p>
                         </div>
                         <div className="type-content">
                           <img loading="lazy" src={cccdImg} />
                           <div className="type-name">
-                            <p>CCCD gắn chip (đối chiếu)</p>
+                            <p>{t('cccd_chip')}</p>
                           </div>
                         </div>
                         <div className="type-content">
                           <img loading="lazy" src={gplxImg} />
                           <div className="type-name">
-                            <p>GPLX (đối chiếu)</p>
+                            <p>{t('gplx')}</p>
                           </div>
                         </div>
                       </div>
@@ -440,48 +452,40 @@ function DetailCar() {
                   </div>
                   <div className="mt-3 mb-3"></div>
                   <div className="info-car-desc">
-                    <h6 className="df-align-center">Tài sản thế chấp</h6>
+                    <h6 className="df-align-center">{t('collateral')}</h6>
                     <div className="required-papers">
-                      <p>
-                        15 triệu (tiền mặt/chuyển khoản cho STK Carrentsg khi
-                        nhận xe) hoặc Xe máy (kèm cà vẹt gốc) giá trị 15 triệu
-                      </p>
+                      <p>{t('collateral_info')}</p>
                     </div>
                   </div>
                   <div className="mt-3 mb-3"></div>
                   <div className="info-car-desc">
-                    <h6>Điều khoản</h6>
+                    <h6>{t('terms_and_conditions')}</h6>
                     <pre>
-                      Quy định khác: <br />
-                      ◦ Sử dụng xe đúng mục đích. <br />
-                      ◦ Không sử dụng xe thuê vào mục đích phi pháp, trái pháp
-                      luật. <br />
-                      ◦ Không sử dụng xe thuê để cầm cố, thế chấp. <br />
-                      ◦ Không hút thuốc, nhả kẹo cao su, xả rác trong xe. <br />
-                      ◦ Không chở hàng quốc cấm dễ cháy nổ. <br />
-                      ◦ Không chở hoa quả, thực phẩm nặng mùi trong xe. <br />
-                      ◦ Khi trả xe, nếu xe bẩn hoặc có mùi trong xe, khách hàng
-                      vui lòng vệ sinh xe sạch sẽ hoặc gửi phụ thu phí vệ sinh
-                      xe. <br />
-                      Trân trọng cảm ơn, chúc quý khách hàng có những chuyến đi
-                      tuyệt vời !
+                      {t('terms_list', { returnObjects: true }).map((term, index) => (
+                        <React.Fragment key={index}>
+                          {term}
+                          <br />
+                        </React.Fragment>
+                      ))}
+                      <br />
+                      {t('thank_you')}
                     </pre>
                   </div>
                   <div className="info-car-desc">
-                    <h6>Chính sách huỷ chuyến</h6>
+                    <h6>{t('cancel_policy')}</h6>
                     <div className="cancel-policy">
                       <div className="column title">
                         <div className="column__item case">
-                          Thời điểm hủy chuyến
+                          {t('time_of_cancellation')}
                         </div>
                         <div className="column__item">
-                          Khách thuê hủy chuyến
-                        </div>
-                        <div className="column__item">Chủ xe hủy chuyến</div>
+                          {t('renter_cancellation')}                        </div>
+                        <div className="column__item">
+                          {t('owner_cancellation')}                          </div>
                       </div>
                       <div className="column">
                         <div className="column__item case">
-                          Trong vòng 1h sau giữ chỗ
+                          {t('within_1_hour')}
                         </div>
                         <div className="column__item">
                           <div className="wrap-svg">
@@ -498,7 +502,7 @@ function DetailCar() {
                               ></path>
                             </svg>
                           </div>
-                          Hoàn tiền giữ chỗ 100%
+                          {t('full_refund')}
                         </div>
                         <div className="column__item">
                           <div className="wrap-svg">
@@ -515,53 +519,53 @@ function DetailCar() {
                               ></path>
                             </svg>
                           </div>
-                          Không tốn phí
-                          <span>(Đánh giá hệ thống 3*)</span>
-                        </div>
-                      </div>
-                      <div className="column">
-                        <div className="column__item case">
-                          Trước chuyến đi &gt;7 ngày
-                        </div>
-                        <div className="column__item">
-                          <div className="wrap-svg">
-                            <svg
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M12.25 2C6.74 2 2.25 6.49 2.25 12C2.25 17.51 6.74 22 12.25 22C17.76 22 22.25 17.51 22.25 12C22.25 6.49 17.76 2 12.25 2ZM15.84 10.59L12.32 14.11C12.17 14.26 11.98 14.33 11.79 14.33C11.6 14.33 11.4 14.26 11.26 14.11L9.5 12.35C9.2 12.06 9.2 11.58 9.5 11.29C9.79 11 10.27 11 10.56 11.29L11.79 12.52L14.78 9.53C15.07 9.24 15.54 9.24 15.84 9.53C16.13 9.82 16.13 10.3 15.84 10.59Z"
-                                fill="#12B76A"
-                              ></path>
-                            </svg>
-                          </div>
-                          Hoàn tiền giữ chỗ 70%
-                        </div>
-                        <div className="column__item">
-                          <div className="wrap-svg">
-                            <svg
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M12.25 2C6.74 2 2.25 6.49 2.25 12C2.25 17.51 6.74 22 12.25 22C17.76 22 22.25 17.51 22.25 12C22.25 6.49 17.76 2 12.25 2ZM15.84 10.59L12.32 14.11C12.17 14.26 11.98 14.33 11.79 14.33C11.6 14.33 11.4 14.26 11.26 14.11L9.5 12.35C9.2 12.06 9.2 11.58 9.5 11.29C9.79 11 10.27 11 10.56 11.29L11.79 12.52L14.78 9.53C15.07 9.24 15.54 9.24 15.84 9.53C16.13 9.82 16.13 10.3 15.84 10.59Z"
-                                fill="#12B76A"
-                              ></path>
-                            </svg>
-                          </div>
-                          Đền tiền 30%
-                          <span>(Đánh giá hệ thống 3*)</span>
+                          {t('no_fee')}
+                          <span>{t("system_rating")} 3*</span>
                         </div>
                       </div>
                       <div className="column">
                         <div className="column__item case">
-                          Trong vòng 7 ngày trước chuyến đi
+                          {t('before_7_days')}
+                        </div>
+                        <div className="column__item">
+                          <div className="wrap-svg">
+                            <svg
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M12.25 2C6.74 2 2.25 6.49 2.25 12C2.25 17.51 6.74 22 12.25 22C17.76 22 22.25 17.51 22.25 12C22.25 6.49 17.76 2 12.25 2ZM15.84 10.59L12.32 14.11C12.17 14.26 11.98 14.33 11.79 14.33C11.6 14.33 11.4 14.26 11.26 14.11L9.5 12.35C9.2 12.06 9.2 11.58 9.5 11.29C9.79 11 10.27 11 10.56 11.29L11.79 12.52L14.78 9.53C15.07 9.24 15.54 9.24 15.84 9.53C16.13 9.82 16.13 10.3 15.84 10.59Z"
+                                fill="#12B76A"
+                              ></path>
+                            </svg>
+                          </div>
+                          {t('refund_70')}
+                        </div>
+                        <div className="column__item">
+                          <div className="wrap-svg">
+                            <svg
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M12.25 2C6.74 2 2.25 6.49 2.25 12C2.25 17.51 6.74 22 12.25 22C17.76 22 22.25 17.51 22.25 12C22.25 6.49 17.76 2 12.25 2ZM15.84 10.59L12.32 14.11C12.17 14.26 11.98 14.33 11.79 14.33C11.6 14.33 11.4 14.26 11.26 14.11L9.5 12.35C9.2 12.06 9.2 11.58 9.5 11.29C9.79 11 10.27 11 10.56 11.29L11.79 12.52L14.78 9.53C15.07 9.24 15.54 9.24 15.84 9.53C16.13 9.82 16.13 10.3 15.84 10.59Z"
+                                fill="#12B76A"
+                              ></path>
+                            </svg>
+                          </div>
+                          {t('compensation_30')}
+                          <span>{t("system_rating")} 3*</span>
+                        </div>
+                      </div>
+                      <div className="column">
+                        <div className="column__item case">
+                          {t('within_7_days')}
                         </div>
                         <div className="column__item">
                           <div className="wrap-svg">
@@ -578,7 +582,7 @@ function DetailCar() {
                               ></path>
                             </svg>
                           </div>
-                          Không hoàn tiền
+                          {t('no_refund')}
                         </div>
                         <div className="column__item">
                           <div className="wrap-svg">
@@ -595,15 +599,12 @@ function DetailCar() {
                               ></path>
                             </svg>
                           </div>
-                          Đền tiền 100%
-                          <span>(Đánh giá hệ thống 2*)</span>
+                          {t('compensation_100')}
+                          <span>{t("system_rating")} 2*</span>
                         </div>
                       </div>
                       <div className="desc-note">
-                        <p>
-                          * Khách thuê không nhận xe sẽ không được hoàn tiền giữ
-                          chỗ
-                        </p>
+                        <p>{t('note')}</p>
                       </div>
                     </div>
                   </div>
@@ -617,8 +618,7 @@ function DetailCar() {
                   >
                     <div className="price">
                       <h4>
-                        <span id="priceRent">{formatVND(car.rentCost)}</span>
-                        đ/ngày
+                        <span id="priceRent">{t('rentCostPerDay', { cost: formatVND(car.rentCost) })}</span>
                       </h4>
                     </div>
                     <button
@@ -636,7 +636,7 @@ function DetailCar() {
                         id="chooseDate"
                       >
                         <div className="form-item">
-                          <label>Nhận xe</label>
+                          <label>{t('receiveCar')}</label>
                           <div className="wrap-date-time justify-content-center">
                             <div className="wrap-date">
                               <input
@@ -651,7 +651,7 @@ function DetailCar() {
                         </div>
                         <div className="line-page mb-2"></div>
                         <div className="form-item">
-                          <label>Trả xe</label>
+                          <label>{t('returnCar')}</label>
                           <div className="wrap-date-time justify-content-center">
                             <div className="wrap-date">
                               <input
@@ -676,36 +676,33 @@ function DetailCar() {
                         )}
                       </div>
                       <div className="dropdown-form">
-                        <label>Địa điểm giao xe</label>
+                        <label>{t('rentalLocation')}</label>
                         <div className="wrap-form ">
                           <span className="value">{car.branchName}</span>
                         </div>
                       </div>
                       <div className="price-container">
                         <div className="price-item">
-                          <p className="df-align-center">Đơn giá thuê</p>
+                          <p className="df-align-center">{t('unitPrice')}</p>
                           <p className="cost">
                             <span id="priceRent1" text="RENT AMOUNT"></span>
-                            {formatVND(car.rentCost)} đ/ngày
+                            {t('rentCostPerDay', { cost: formatVND(car.rentCost) })}
                           </p>
                         </div>
                         <div className="line-page"></div>
                         <div className="price-item">
-                          <p>Tổng cộng</p>
+                          <p>{t('total')}</p>
                           <p className="cost">
                             <span id="priceRent2" text="RENT AMOUNT"></span>
-                            {formatVND(car.rentCost)} đ x{" "}
-                            <span id="countDays">{countDate}</span> ngày
+                            {formatVND(car.rentCost)} {t('dong')} x
+                            <span id="countDays">{countDate}</span> {t('day')}
                           </p>
                         </div>
                         <div className="line-page"></div>
                         <div className="price-item total">
-                          <p>Thành tiền</p>
+                          <p>{t('amount')}</p>
                           <p className="cost">
-                            <span id="totalPrice" text="TOTAL AMOUNT">
-                              {formatVND(totalPrice)}
-                            </span>
-                            đ
+                            <span id="totalPrice" text="TOTAL AMOUNT">{formatVND(totalPrice)}</span>đ
                           </p>
                         </div>
                       </div>
@@ -730,7 +727,7 @@ function DetailCar() {
                             </svg>
                           </div>
                           <span>
-                            <b>CHỌN THUÊ</b>
+                            <b>{t('rent')}</b>
                           </span>
                         </button>
                       ) : (
@@ -740,186 +737,93 @@ function DetailCar() {
                           data-bs-toggle="modal"
                           data-bs-target="#loginWindow"
                         >
-                          Đăng Nhập
+                          {t('login')}
                         </a>
                       )}
                     </form>
                   </div>
                   <div className="surcharge">
                     <p className="title text-primary">
-                      Phụ phí có thể phát sinh
+                      {t('surchargeTitle')}
                     </p>
                     <div className="surcharge-container">
                       <div className="surcharge-item">
                         <div className="wrap-svg">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M8 7.33398V10.4407"
-                              stroke="#666666"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            ></path>
-                            <path
-                              d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z"
-                              fill="#666666"
-                            ></path>
-                            <path
-                              d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z"
-                              stroke="#666666"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            ></path>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 7.33398V10.4407" stroke="#666666" strokeLinecap="round" strokeLinejoin="round"></path>
+                            <path d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z" fill="#666666"></path>
+                            <path d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z" stroke="#666666" strokeLinecap="round" strokeLinejoin="round"></path>
                           </svg>
                         </div>
                         <div className="content">
                           <div className="content-item">
-                            <p className="title">Phí vượt giới hạn</p>
+                            <p className="title">{t('distanceFeeTitle')}</p>
                             <p className="cost">
-                              <span>4 000đ/km</span>
+                              <span>{t('distanceFee')}</span>
                             </p>
                           </div>
                           <div className="content-item">
-                            <p>
-                              Phụ phí phát sinh nếu lộ trình di chuyển vượt quá
-                              <span>300km</span>
-                              khi thuê xe
-                              <span> 1 ngày</span>
-                            </p>
+                            <p>{t('distanceFeeDescription')}</p>
                           </div>
                         </div>
                       </div>
                       <div className="surcharge-item">
                         <div className="wrap-svg">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M8 7.33398V10.4407"
-                              stroke="#666666"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            ></path>
-                            <path
-                              d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z"
-                              fill="#666666"
-                            ></path>
-                            <path
-                              d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z"
-                              stroke="#666666"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            ></path>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 7.33398V10.4407" stroke="#666666" strokeLinecap="round" strokeLinejoin="round"></path>
+                            <path d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z" fill="#666666"></path>
+                            <path d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z" stroke="#666666" strokeLinecap="round" strokeLinejoin="round"></path>
                           </svg>
                         </div>
                         <div className="content">
                           <div className="content-item">
-                            <p className="title">Phí quá giờ</p>
+                            <p className="title">{t('timeFeeTitle')}</p>
                             <p className="cost">
-                              <span>100 000đ/h</span>
+                              <span>{t('timeFee')}</span>
                             </p>
                           </div>
                           <div className="content-item">
-                            <p>
-                              Phụ phí phát sinh nếu hoàn trả xe trễ giờ. Trường
-                              hợp trễ quá
-                              <span> 4 tiếng</span>, phụ phí thêm{" "}
-                              <span>1 ngày</span>
-                              thuê
-                            </p>
+                            <p>{t('timeFeeDescription')}</p>
                           </div>
                         </div>
                       </div>
                       <div className="surcharge-item">
                         <div className="wrap-svg">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M8 7.33398V10.4407"
-                              stroke="#666666"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            ></path>
-                            <path
-                              d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z"
-                              fill="#666666"
-                            ></path>
-                            <path
-                              d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z"
-                              stroke="#666666"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            ></path>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 7.33398V10.4407" stroke="#666666" strokeLinecap="round" strokeLinejoin="round"></path>
+                            <path d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z" fill="#666666"></path>
+                            <path d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z" stroke="#666666" strokeLinecap="round" strokeLinejoin="round"></path>
                           </svg>
                         </div>
                         <div className="content">
                           <div className="content-item">
-                            <p className="title">Phí vệ sinh</p>
+                            <p className="title">{t('cleaningFeeTitle')}</p>
                             <p className="cost">
-                              <span>60 000đ</span>
+                              <span>{t('cleaningFee')}</span>
                             </p>
                           </div>
                           <div className="content-item">
-                            <p>
-                              Phụ phí phát sinh khi xe hoàn trả không đảm bảo vệ
-                              sinh (nhiều vết bẩn, bùn cát, sình lầy...)
-                            </p>
+                            <p>{t('cleaningFeeDescription')}</p>
                           </div>
                         </div>
                       </div>
                       <div className="surcharge-item">
                         <div className="wrap-svg">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M8 7.33398V10.4407"
-                              stroke="#666666"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            ></path>
-                            <path
-                              d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z"
-                              fill="#666666"
-                            ></path>
-                            <path
-                              d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z"
-                              stroke="#666666"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            ></path>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 7.33398V10.4407" stroke="#666666" strokeLinecap="round" strokeLinejoin="round"></path>
+                            <path d="M8 6.05469C8.27614 6.05469 8.5 5.83083 8.5 5.55469C8.5 5.27855 8.27614 5.05469 8 5.05469C7.72386 5.05469 7.5 5.27855 7.5 5.55469C7.5 5.83083 7.72386 6.05469 8 6.05469Z" fill="#666666"></path>
+                            <path d="M7.99967 14.1673C11.4054 14.1673 14.1663 11.4064 14.1663 8.00065C14.1663 4.5949 11.4054 1.83398 7.99967 1.83398C4.59392 1.83398 1.83301 4.5949 1.83301 8.00065C1.83301 11.4064 4.59392 14.1673 7.99967 14.1673Z" stroke="#666666" strokeLinecap="round" strokeLinejoin="round"></path>
                           </svg>
                         </div>
                         <div className="content">
                           <div className="content-item">
-                            <p className="title">Phí khử mùi</p>
+                            <p className="title">{t('odorFeeTitle')}</p>
                             <p className="cost">
-                              <span>300 000đ</span>
+                              <span>{t('odorFee')}</span>
                             </p>
                           </div>
                           <div className="content-item">
-                            <p>
-                              Phụ phí phát sinh khi xe hoàn trả bị ám mùi khó
-                              chịu (mùi thuốc lá, thực phẩm nặng mùi...)
-                            </p>
+                            <p>{t('odorFeeDescription')}</p>
                           </div>
                         </div>
                       </div>
