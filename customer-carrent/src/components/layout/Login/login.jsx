@@ -161,8 +161,7 @@ function Login() {
                       onClick={handleGoogleLogin}
                       className="btn btn-outline-success"
                     >
-                      <i className="fa-brands fa-google"></i> {t("login_with")}{" "}
-                      {t("google")}
+                      <i className="fa-brands fa-google"></i> {t("google")}
                     </a>
                   </div>
                   <div className="suggest-item">
@@ -170,8 +169,7 @@ function Login() {
                       onClick={handleGithubLogin}
                       className="btn btn-outline-success"
                     >
-                      <i class="fa-brands fa-github"></i> {t("login_with")}{" "}
-                      {t("github")}
+                      <i class="fa-brands fa-github"></i> {t("github")}
                     </a>
                   </div>
                 </div>

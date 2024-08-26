@@ -3,8 +3,8 @@ import { useNavigate, Outlet } from "react-router-dom";
 import axiosConfig from "../../../config/axiosConfig";
 import { ToastContainer } from "react-toastify";
 import ToastComponent from "../../../assets/toasty";
-import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import iconUser from "../../images/avatar-4.png";
 
 function InforCustomer() {
@@ -12,7 +12,7 @@ function InforCustomer() {
   const location = useLocation();
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    const language = queryParams.get('lng');
+    const language = queryParams.get("lng");
     if (language) {
       i18n.changeLanguage(language); // Thay đổi ngôn ngữ theo URL
     }
@@ -27,12 +27,10 @@ function InforCustomer() {
   const [expiryDate, setexpiryDate] = useState("");
   const [category, setCategory] = useState("");
 
-  const [error, setError] = useState('');
-
+  const [error, setError] = useState("");
 
   const [profileGPLXFront, setProfileGPLXFront] = useState("");
   const [profileGPLXBack, setProfileGPLXBack] = useState("");
-
 
   const [driverlincense, setDriverlincense] = useState(null);
 
@@ -74,10 +72,20 @@ function InforCustomer() {
 
   const onissueChange = (e) => {
     const date = new Date(e.target.value);
-    const formattedDate = date.toISOString().split("T")[0]; // Chuyển đổi thành chuỗi định dạng YYYY-MM-DD
-    setissueDate(formattedDate);
-    console.log(date);
-    console.log(formattedDate);
+    const today = new Date();
+
+    // So sánh ngày được chọn với ngày hôm nay
+    if (date > today) {
+      // Nếu ngày được chọn là trong tương lai, đặt giá trị ngày về rỗng
+      setissueDate("");
+      console.error("Ngày không thể là ngày trong tương lai.");
+    } else {
+      // Chuyển đổi thành chuỗi định dạng YYYY-MM-DD nếu ngày hợp lệ
+      const formattedDate = date.toISOString().split("T")[0];
+      setissueDate(formattedDate);
+      console.log(date);
+      console.log(formattedDate);
+    }
   };
 
   const onexpiryChange = (e) => {
@@ -134,9 +142,9 @@ function InforCustomer() {
     const regex = /^(?:\d{12}|\d{9})$/;
 
     if (!regex.test(value)) {
-      setError('Số GPLX không hợp lệ. Vui lòng nhập 9 hoặc 12 chữ số.');
+      setError("Số GPLX không hợp lệ. Vui lòng nhập 9 hoặc 12 chữ số.");
     } else {
-      setError(''); // Xóa lỗi nếu định dạng đúng
+      setError(""); // Xóa lỗi nếu định dạng đúng
     }
   };
 
@@ -161,17 +169,16 @@ function InforCustomer() {
               },
             }
           );
-          ToastComponent("success", t('inforCusValid.successfull'));
+          ToastComponent("success", t("inforCusValid.successfull"));
           setTimeout(() => {
             window.location.href = "/carrentsg/customer/infor";
           }, 4000);
         } catch (error) {
-          ToastComponent("err", t('inforCusValid.failed'));
+          ToastComponent("err", t("inforCusValid.failed"));
           console.log(error);
         }
       }
     }
-
   };
 
   useEffect(() => {
@@ -221,8 +228,9 @@ function InforCustomer() {
     const year = date.getFullYear();
 
     // Định dạng lại thành dd/MM/yyyy
-    const formattedDate = `${day < 10 ? "0" + day : day}/${month < 10 ? "0" + month : month
-      }/${year}`;
+    const formattedDate = `${day < 10 ? "0" + day : day}/${
+      month < 10 ? "0" + month : month
+    }/${year}`;
 
     return formattedDate;
   };
@@ -295,13 +303,15 @@ function InforCustomer() {
                     </p>
                   </div>
                   <div className="info-box__item">
-                    <p>{t('gender')}</p>
-                    <p className="main">{customer.gender ? t('male') : t('female')}</p>
+                    <p>{t("gender")}</p>
+                    <p className="main">
+                      {customer.gender ? t("male") : t("female")}
+                    </p>
                   </div>
                 </div>
                 <div className="info-desc">
                   <div className="info-desc__item">
-                    <div className="title-item">{t('phone_number')}</div>
+                    <div className="title-item">{t("phone_number")}</div>
                     <div className="name">
                       {customer.phoneNumber}
                       <div className="wrap-svg">
@@ -333,7 +343,7 @@ function InforCustomer() {
                     </div>
                   </div>
                   <div className="info-desc__item">
-                    <div className="title-item">{t('email')}</div>
+                    <div className="title-item">{t("email")}</div>
                     <div className="name">
                       {customer.email}
                       <div className="wrap-svg">
@@ -365,15 +375,15 @@ function InforCustomer() {
                     </div>
                   </div>
                   <div className="info-desc__item">
-                    <div className="title-item">{t('address')}</div>
+                    <div className="title-item">{t("address")}</div>
                     <div className="name">
                       {addresss
                         ? addresss.street +
-                        ", " +
-                        addresss.ward +
-                        ", " +
-                        addresss.district
-                        : t('nonUpdate')}
+                          ", " +
+                          addresss.ward +
+                          ", " +
+                          addresss.district
+                        : t("nonUpdate")}
                       <div className="wrap-svg">
                         <a
                           href="#"
@@ -410,17 +420,17 @@ function InforCustomer() {
           <div className="content-item driver-license">
             <div className="title">
               <div className="title-item">
-                <h6>{t('driver_license')}</h6>
+                <h6>{t("driver_license")}</h6>
               </div>
               <div className="d-flex flex-row editbtnDiss" id="confirmGPLX">
                 <div className="p-2">
                   <a className="btn btn-outline-dark" onClick={handleCancel}>
-                    {t('cancel')}
+                    {t("cancel")}
                   </a>
                 </div>
                 <div className="p-2">
                   <a className="btn btn-success" onClick={handleUpdateGPLX}>
-                    {t('confirm')}
+                    {t("confirm")}
                   </a>
                 </div>
               </div>
@@ -429,7 +439,7 @@ function InforCustomer() {
                 id="editGPLX"
                 onClick={handleEdit}
               >
-                {t('edit')} <i className="fa-regular fa-pen-to-square"></i>
+                {t("edit")} <i className="fa-regular fa-pen-to-square"></i>
               </a>
             </div>
             <div className="row m-0">
@@ -457,7 +467,7 @@ function InforCustomer() {
                       </div>
                     </label>
                     <div className="info-license__title text-center">
-                      <p>{t('font')}</p>
+                      <p>{t("font")}</p>
                     </div>
                   </div>
                   {/* GPLX Sau */}
@@ -481,7 +491,7 @@ function InforCustomer() {
                       </div>
                     </label>
                     <div className="info-license__title text-center">
-                      <p>{t('back')}</p>
+                      <p>{t("back")}</p>
                     </div>
                   </div>
                 </div>
@@ -494,7 +504,7 @@ function InforCustomer() {
                     <div className="custom-input">
                       <div className="wrap-info">
                         <div className="title-status">
-                          <p>{t('license_number')}</p>
+                          <p>{t("license_number")}</p>
                         </div>
                         <div className="desc text-success"></div>
                       </div>
@@ -509,7 +519,7 @@ function InforCustomer() {
                             className="form-control"
                             type="text"
                             name="licenseNumber"
-                            placeholder={t('license_number_placeholder')}
+                            placeholder={t("license_number_placeholder")}
                             readOnly="true"
                             required
                           />
@@ -524,7 +534,7 @@ function InforCustomer() {
                         <div className="custom-input">
                           <div className="wrap-info">
                             <div className="title-status">
-                              <p>{t('full_name')}</p>
+                              <p>{t("full_name")}</p>
                             </div>
                             <div className="desc text-success"></div>
                           </div>
@@ -536,7 +546,7 @@ function InforCustomer() {
                                 className="form-control"
                                 type="text"
                                 name="licenseName"
-                                placeholder={t('fullname_placeholder')}
+                                placeholder={t("fullname_placeholder")}
                                 readOnly
                               />
                             </div>
@@ -547,14 +557,14 @@ function InforCustomer() {
                         <div className="custom-input">
                           <div className="wrap-info">
                             <div className="title-status">
-                              <p>{t('licenseRank')}</p>
+                              <p>{t("licenseRank")}</p>
                             </div>
                             <div className="desc text-success"></div>
                           </div>
                           <div className="">
                             <div className="wrap-text">
                               <select id="licenseType" className="form-select">
-                                <option value="">{t('selectionRank')}</option>
+                                <option value="">{t("selectionRank")}</option>
                                 <option value="B1">B1</option>
                                 <option value="B2">B2</option>
                                 <option value="C">C</option>
@@ -573,7 +583,7 @@ function InforCustomer() {
                         <div className="custom-input">
                           <div className="wrap-info">
                             <div className="title-status">
-                              <p>{t('dateOfIssue')}</p>
+                              <p>{t("dateOfIssue")}</p>
                             </div>
                             <div className="desc text-success"></div>
                           </div>
@@ -582,7 +592,11 @@ function InforCustomer() {
                               <input
                                 className="form-control"
                                 type="date"
-                                value={driverlincense ? driverlincense.issueDate : issueDate || "2024-01-01"}
+                                value={
+                                  driverlincense
+                                    ? driverlincense.issueDate
+                                    : issueDate || "2024-01-01"
+                                }
                                 onChange={onissueChange}
                               />
                             </div>
@@ -593,7 +607,7 @@ function InforCustomer() {
                         <div className="custom-input">
                           <div className="wrap-info">
                             <div className="title-status">
-                              <p>{t('expirationDate')}</p>
+                              <p>{t("expirationDate")}</p>
                             </div>
                             <div className="desc text-success"></div>
                           </div>
@@ -602,7 +616,11 @@ function InforCustomer() {
                               <input
                                 className="form-control"
                                 type="date"
-                                value={driverlincense ? driverlincense.expiryDate : expiryDate || "2024-01-01"}
+                                value={
+                                  driverlincense
+                                    ? driverlincense.expiryDate
+                                    : expiryDate || "2024-01-01"
+                                }
                                 onChange={onexpiryChange}
                               />
                             </div>

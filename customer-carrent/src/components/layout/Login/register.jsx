@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { ToastContainer } from "react-toastify";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 import ToastComponent from "../../../assets/toasty";
 
@@ -43,42 +43,41 @@ function Register() {
 
     // Validate email
     if (!email) {
-      formErrors.email = t('registerValid.email1');
+      formErrors.email = t("registerValid.email1");
     } else if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
-      formErrors.email = t('registerValid.email2');
+      formErrors.email = t("registerValid.email2");
     }
 
     // Validate phone number (example for a 10-digit number)
     if (!phoneNumber) {
-      formErrors.phoneNumber = t('registerValid.phone1');
+      formErrors.phoneNumber = t("registerValid.phone1");
     } else if (!/^\d{10}$/.test(phoneNumber)) {
-      formErrors.phoneNumber = t('registerValid.phone2');
+      formErrors.phoneNumber = t("registerValid.phone2");
     }
 
     // Validate full name
     if (!fullName) {
-      formErrors.fullName = t('registerValid.fullName1');
+      formErrors.fullName = t("registerValid.fullName1");
     } else if (fullName.length < 2) {
-      formErrors.fullName = t('registerValid.fullName2');
+      formErrors.fullName = t("registerValid.fullName2");
     }
 
     // Validate password
     if (!password) {
-      formErrors.password = t('registerValid.password1');
+      formErrors.password = t("registerValid.password1");
     } else if (
       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,18}$/.test(
         password
       )
     ) {
-      formErrors.password =
-        t('registerValid.password2');
+      formErrors.password = t("registerValid.password2");
     }
 
     // Validate rePassword
     if (!rePassword) {
-      formErrors.rePassword = t('registerValid.confirmPassword1');
+      formErrors.rePassword = t("registerValid.confirmPassword1");
     } else if (rePassword !== password) {
-      formErrors.rePassword = t('registerValid.confirmPassword2');
+      formErrors.rePassword = t("registerValid.confirmPassword2");
     }
 
     setErrors(formErrors);
@@ -152,7 +151,7 @@ function Register() {
             </div>
             <div className="form-item">
               <div className="input-box">
-                <h5 className="item-title">{t('register')}</h5>
+                <h5 className="item-title">{t("register")}</h5>
                 <form onSubmit={handleRegister}>
                   <div className="item-form">
                     <div>
@@ -168,14 +167,13 @@ function Register() {
                           autoComplete="off"
                         />
                         <label htmlFor="sdt">
-                          <i className="fa-solid fa-phone"></i> {t('phone_number')}
+                          <i className="fa-solid fa-phone"></i>{" "}
+                          {t("phone_number")}
                         </label>
                       </div>
                       <div className="form-error {errors.phoneNumber==null?'d-lg-none':'' }">
                         <span className="error-item1">
-                          <p>
-                            {errors.phoneNumber}
-                          </p>
+                          <p>{errors.phoneNumber}</p>
                         </span>
                       </div>
                     </div>
@@ -206,7 +204,7 @@ function Register() {
                           autoComplete="off"
                         />
                         <label htmlFor="email">
-                          <i className="fa-solid fa-envelope"></i>{t('email')}
+                          <i className="fa-solid fa-envelope"></i> {t("email")}
                         </label>
                       </div>
                       <div className="form-error {errors.email==null?'d-lg-none':'' }">
@@ -227,7 +225,7 @@ function Register() {
                           required
                         />
                         <label htmlFor="fullName">
-                          <i className="fa-solid fa-user"></i> {t('full_name')}
+                          <i className="fa-solid fa-user"></i> {t("full_name")}
                         </label>
                       </div>
                       <div className="form-error {errors.fullName==null?'d-lg-none':'' }">
@@ -248,7 +246,7 @@ function Register() {
                           required
                         />
                         <label htmlFor="password">
-                          <i className="fa-solid fa-lock"></i> {t('password')}
+                          <i className="fa-solid fa-lock"></i> {t("password")}
                         </label>
                       </div>
                       <div className="form-error {errors.password==null?'d-lg-none':'' }">
@@ -269,7 +267,8 @@ function Register() {
                           required
                         />
                         <label htmlFor="rePassword">
-                          <i className="fa-solid fa-unlock"></i> {t('confirm_password')}
+                          <i className="fa-solid fa-unlock"></i>{" "}
+                          {t("confirm_password")}
                         </label>
                       </div>
                       <div className="form-error {errors.rePassword==null?'d-lg-none':'' }">
@@ -287,7 +286,7 @@ function Register() {
                           className="form-check-input"
                         />
                         <span className="form-check-label">
-                          {t('terms_agreement')}{" "}
+                          {t("terms_agreement")}{" "}
                         </span>
                       </div>
                     </div>
@@ -297,7 +296,7 @@ function Register() {
                         id="register-submit"
                         disabled
                       >
-                        {t('register_button')}
+                        {t("register_button")}
                       </button>
                     </div>
                     <div className="form-suggest-row">
@@ -314,7 +313,7 @@ function Register() {
                           onClick={handleGithubLogin}
                           className="btn btn-outline-success"
                         >
-                          <i className="fa-brands fa-google"></i> Github
+                          <i class="fa-brands fa-github"></i> Github
                         </a>
                       </div>
                     </div>

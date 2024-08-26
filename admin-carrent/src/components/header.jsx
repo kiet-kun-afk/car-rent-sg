@@ -36,7 +36,7 @@ function Header() {
 
   return (
     <nav>
-      <i className="bx bx-menu" id="btn-menu"></i>
+      {/* <i className="bx bx-menu" id="btn-menu"></i>
       <form action="#">
         <div className="form-input">
           <input type="search" placeholder="Search..." />
@@ -44,7 +44,7 @@ function Header() {
             <i className="bx bx-search"></i>
           </button>
         </div>
-      </form>
+      </form> */}
       {/* <div className="mode">
                 <div className="moon-sun">
                     <i className='bx bx-moon moon'></i>
@@ -60,7 +60,7 @@ function Header() {
                             <i className='bx bxs-bell' ></i>
                             <span className="num">99</span>
                         </a> */}
-          <div href="#" className="profile">
+          <div href="#" className=" profile ms-auto">
             <span>{user.fullName}</span>
             <img
               src={user.avatarImage == null ? avatarIMG : user.avatarImage}

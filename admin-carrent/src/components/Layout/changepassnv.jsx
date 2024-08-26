@@ -69,7 +69,7 @@ function Changepassword() {
         }
         ToastComponent("success", "Đổi mật khẩu thành công !");
         setTimeout(() => {
-          window.location.href = "/admin/login";
+          window.location.href = "/admin/trangchu";
         }, 4000);
       } catch (error) {
         setErrorPass(true);

@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Xe() {
   const sNotify = () =>
-    toast.success("Success !", {
+    toast.success("Thành Công !", {
       position: "top-right",
       autoClose: 3000,
       hideProgressBar: false,
@@ -22,7 +22,7 @@ function Xe() {
       transition: Bounce,
     });
   const errNotify = () =>
-    toast.error("Error !", {
+    toast.error("Thất Bại !", {
       position: "top-right",
       autoClose: 3000,
       hideProgressBar: false,
@@ -327,6 +327,13 @@ function Xe() {
     }
     if (!registrationDate) {
       formErrors.registrationDate = "Vui lòng nhập ngày đăng kiểm xe";
+    } else {
+      const today = new Date();
+      const selectedDate = new Date(registrationDate);
+
+      if (selectedDate > today) {
+        formErrors.registrationDate = "Kiểm tra lại ngày đăng kiểm.";
+      }
     }
 
     setErrors(formErrors);
