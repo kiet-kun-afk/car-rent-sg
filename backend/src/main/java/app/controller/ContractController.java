@@ -80,7 +80,7 @@ public class ContractController {
         }
     }
 
-    @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{contractId}")
     public ResponseEntity<ResponseObject> deleteContract(@PathVariable("contractId") Integer contractId) {
         try {

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 import axios from "axios";
 
@@ -92,7 +92,7 @@ function Login() {
 						</div>
 						<div className="form-item">
 							<div className="input-box">
-								<h5 className="item-title">{t('login')}</h5>
+								<h5 className="item-title">{t("login")}</h5>
 								<form onSubmit={handleLogin}>
 									<div className="input-field">
 										<input
@@ -107,7 +107,7 @@ function Login() {
 										/>
 										<label htmlFor="un">
 											<i className="fa-solid fa-user"></i>{" "}
-											{t('email_or_phone')}
+											{t("email_or_phone")}
 										</label>
 									</div>
 									<div className="input-field">
@@ -126,7 +126,7 @@ function Login() {
 										/>
 										<label htmlFor="pw">
 											<i className="fa-solid fa-lock"></i>{" "}
-											{t('password')}
+											{t("password")}
 										</label>
 									</div>
 									<div
@@ -138,14 +138,16 @@ function Login() {
 											id="err-message"
 										>
 											<i className="fa-solid fa-circle-info"></i>{" "}
-											{t('incorrect_credentials')}
+											{t("incorrect_credentials")}
 										</p>
 									</div>
 									<div className="form-suggest-right">
 										<span className="suggest-item">
-											<a href={`/carrentsg/forgot?lng=${i18n.language}`}
-												target="_blank">
-												{t('forgot_password_login')}
+											<a
+												href={`/carrentsg/forgot?lng=${i18n.language}`}
+												target="_blank"
+											>
+												{t("forgot_password_login")}
 											</a>
 										</span>
 									</div>
@@ -154,16 +156,20 @@ function Login() {
 											type="submit"
 											className="btn-submit"
 										>
-											{t('login_button')}
+											{t("login_button")}
 										</button>
 									</div>
 								</form>
 								<div className="form-suggest">
 									<span className="suggest-item">
-										{t('not_a_member')}{" "}
-										<a href="/carrentsg/register"
+										{t("not_a_member")}{" "}
+										<a
+											href="/carrentsg/register"
 											data-bs-toggle="modal"
-											data-bs-target="#regisWindow">{t('register_now')}</a>
+											data-bs-target="#regisWindow"
+										>
+											{t("register_now")}
+										</a>
 									</span>
 								</div>
 								<div className="form-suggest-row">
@@ -173,7 +179,7 @@ function Login() {
 											className="btn btn-outline-success"
 										>
 											<i className="fa-brands fa-google"></i>{" "}
-											{t('login_with')} {t('google')}
+											{t("google")}
 										</a>
 									</div>
 									<div className="suggest-item">
@@ -182,7 +188,7 @@ function Login() {
 											className="btn btn-outline-success"
 										>
 											<i className="fa-brands fa-google"></i>{" "}
-											{t('login_with')} {t('github')}
+											{t("github")}
 										</a>
 									</div>
 								</div>
