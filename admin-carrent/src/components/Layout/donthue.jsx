@@ -262,7 +262,7 @@ function HopDong() {
       <main>
         <div className="head-title">
           <div className="left">
-            <h1>Hợp Đồng</h1>
+            <h1>Đơn Thuê</h1>
             <ul className="breadcrumb">
               <li>
                 <a href="#">Trang chủ</a>
@@ -272,14 +272,18 @@ function HopDong() {
               </li>
               <li>
                 <a className="active" href="#">
-                  Hợp đồng
+                  Đơn Thuê
                 </a>
               </li>
             </ul>
           </div>
-          <a href="#" className="btn-download">
+          <a
+            target={"_blank"}
+            href="https://drive.google.com/file/d/1p8gLd3hdLdSNOD3hEedHUjqFdj9l9x_w/view?usp=sharing"
+            className="btn-download"
+          >
             <i className="bx bxs-cloud-download"></i>
-            <span className="text">Download PDF</span>
+            <span className="text">Tạo Biểu Mẫu</span>
           </a>
         </div>
 

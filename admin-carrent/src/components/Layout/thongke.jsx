@@ -164,7 +164,7 @@ function ThongKe() {
               </li>
             </ul>
           </div>
-          <button onClick={exportToExcel} href="#" className="btn-download">
+          <button onClick={exportToExcel} className="btn btn-download">
             <i className="bx bxs-cloud-download"></i>
             <span className="text">Xuất File Excel</span>
           </button>
@@ -206,8 +206,9 @@ function ThongKe() {
         <div className="table-data">
           <div className="order">
             <div className="head">
-              <h3>Thông Kê Doanh Thu</h3>
+              <h3>Thống Kê Doanh Thu</h3>
 
+              <label class="form-label">Ngày bắt đầu</label>
               <input
                 className="form-control  w-25"
                 type="date"
@@ -216,7 +217,7 @@ function ThongKe() {
                 placeholder="Ngày bắt đầu "
                 onChange={(e) => setStartDate(e.target.value)}
               />
-
+              <label class="form-label">Ngày kết thúc</label>
               <input
                 className="form-control  w-25"
                 type="date"

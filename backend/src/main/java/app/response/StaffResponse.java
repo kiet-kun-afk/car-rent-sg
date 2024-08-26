@@ -6,6 +6,7 @@ import java.util.List;
 
 import app.model.Role;
 import app.model.Staff;
+import app.model.cards.CitizenCard;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,7 +36,12 @@ public class StaffResponse {
 
     private Integer address;
 
-    private Integer citizenCard;
+    private String province;
+    private String district;
+    private String ward;
+    private String street;
+
+    private CitizenCardResponse citizenCard;
 
     private LocalDateTime createdAt;
 
@@ -51,8 +57,19 @@ public class StaffResponse {
         this.roles = staff.getRoles().stream().map(Role::getName).toList();
         this.status = staff.getStatus();
         this.avatarImage = staff.getAvatarImage();
+        // load địa chỉ
         this.address = staff.getAddress() == null ? null : staff.getAddress().getAddressId();
-        this.citizenCard = staff.getCitizenCard() == null ? null : staff.getCitizenCard().getCitizenId();
+        this.province = staff.getAddress() == null ? null : staff.getAddress().getProvince();
+        this.district = staff.getAddress() == null ? null : staff.getAddress().getDistrict();
+        this.ward = staff.getAddress() == null ? null : staff.getAddress().getWard();
+        this.street = staff.getAddress() == null ? null : staff.getAddress().getStreet();
+        if (staff.getCitizenCard() == null) {
+            this.citizenCard = new CitizenCardResponse(0, "chưa cập nhật", avatarImage, avatarImage, LocalDate.now(),
+                    LocalDate.now());
+        } else {
+            this.citizenCard = CitizenCardResponse.fromCitizenCard(staff.getCitizenCard());
+        }
+
         this.createdAt = staff.getCreatedAt();
         this.updatedAt = staff.getUpdatedAt();
     }

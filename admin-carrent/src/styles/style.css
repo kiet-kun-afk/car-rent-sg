@@ -576,6 +576,20 @@ body.dark .mode .moon-sun .moon {
 	font-weight: 500;
 }
 
+#content main .head-title .btn-download-green {
+	height: 36px;
+	padding: 0 16px;
+	border-radius: 36px;
+	background: var(--green);
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	grid-gap: 10px;
+	font-weight: 500;
+}
+
+
 
 
 

@@ -33,6 +33,7 @@ function Xe() {
       theme: "colored",
       transition: Bounce,
     });
+  const [errors, setErrors] = useState({});
 
   // chuyển kiểu date
   const formatDate = (localdatetime) => {
@@ -61,6 +62,7 @@ function Xe() {
   const [searchQuery, setSearchQuery] = useState("");
   const [CarsWithRegistrationPlate, setcarsWithRegistrationPlate] =
     useState(null);
+  const [sortedCars, setSortedCars] = useState([]);
   // const [selectedBrandId, setSelectedBrandId] = useState("");
   // const [selectedCategoryId, SetselectedCategoryId] = useState("");
   // const [selectedBranchId, SetselectedBranchId] = useState("");
@@ -74,18 +76,14 @@ function Xe() {
 
   const [registrationPlate, setRegistrationPlate] = useState("");
   const [carName, setCarName] = useState("");
-
   const [transmission, setTransmission] = useState("");
-
   const [fuelType, setFuelType] = useState("");
   const [fuelConsumption, setFuelConsumption] = useState("");
-
   const [rentCost, setRentCost] = useState("");
   const [brandId, setBrandId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [branchId, setBranchId] = useState("");
   const [numberOfSeat, setNumberOfSeat] = useState("");
-
   const [registrationDate, setRegistrationDate] = useState("");
   const [describe, setDescribe] = useState("");
   const [features, setFeatures] = useState("");
@@ -108,47 +106,52 @@ function Xe() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const numberOfSeatInteger = parseInt(numberOfSeat, 10) || 0;
-    const rentCostInteger = parseInt(rentCost, 10) || 0;
-    const brandIdInteger = parseInt(brandId, 10) || 0;
-    const categoryIdInteger = parseInt(categoryId, 10) || 0;
-    const branchIdInteger = parseInt(branchId, 10) || 0;
+    if (validate()) {
+      const numberOfSeatInteger = parseInt(numberOfSeat, 10) || 0;
+      const rentCostInteger = parseInt(rentCost, 10) || 0;
+      const brandIdInteger = parseInt(brandId, 10) || 0;
+      const categoryIdInteger = parseInt(categoryId, 10) || 0;
+      const branchIdInteger = parseInt(branchId, 10) || 0;
 
-    console.log("tên:" + fuelType);
-    const formData = new FormData();
-    for (const key in images) {
-      formData.append(key, images[key]);
-    }
+      console.log("tên:" + fuelType);
+      const formData = new FormData();
+      for (const key in images) {
+        formData.append(key, images[key]);
+      }
 
-    formData.append("brandId", brandIdInteger);
-    formData.append("categoryId", categoryIdInteger);
-    formData.append("registrationPlate", registrationPlate);
-    formData.append("carName", carName);
-    formData.append("numberOfSeat", numberOfSeatInteger);
-    formData.append("transmission", transmission);
-    formData.append("fuelType", fuelType);
-    formData.append("fuelConsumption", fuelConsumption);
-    formData.append("rentCost", rentCostInteger);
-    formData.append("branchId", branchIdInteger);
-    formData.append("registrationDate", registrationDate);
-    formData.append("describe", describe);
-    formData.append("features", features);
+      formData.append("brandId", brandIdInteger);
+      formData.append("categoryId", categoryIdInteger);
+      formData.append("registrationPlate", registrationPlate);
+      formData.append("carName", carName);
+      formData.append("numberOfSeat", numberOfSeatInteger);
+      formData.append("transmission", transmission);
+      formData.append("fuelType", fuelType);
+      formData.append("fuelConsumption", fuelConsumption);
+      formData.append("rentCost", rentCostInteger);
+      formData.append("branchId", branchIdInteger);
+      formData.append("registrationDate", registrationDate);
+      formData.append("describe", describe);
+      formData.append("features", features);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/cars/create",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      sNotify();
-      console.log(response.data);
-    } catch (error) {
-      console.error("There was an error submitting the form!", error);
-      errNotify();
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/v1/cars/create",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        var btnclose = document.getElementById("closecreate");
+        btnclose.click();
+        LoadListCar();
+        sNotify();
+        console.log(response.data);
+      } catch (error) {
+        console.error("There was an error submitting the form!", error);
+        errNotify();
+      }
     }
   };
 
@@ -157,6 +160,7 @@ function Xe() {
     console.log(result.data.data);
 
     setCars(result.data.data);
+    setSortedCars(result.data.data);
   };
 
   const loadListCarWithRegistrationPlate = async (registrationPlate) => {
@@ -236,7 +240,7 @@ function Xe() {
   //   console.log("Selected Branch ID:", selectedId);
   // };
 
-  const filteredCars = Cars.filter((car) => {
+  const filteredCars = sortedCars.filter((car) => {
     const normalizedSearchQuery = searchQuery.toLowerCase();
     return (
       (car.registrationPlate &&
@@ -247,6 +251,89 @@ function Xe() {
         car.brandName.toLowerCase().includes(normalizedSearchQuery))
     );
   });
+
+  // sort
+
+  const sortByPriceAsc = () => {
+    const sortedData = [...Cars].sort((a, b) => a.rentCost - b.rentCost);
+    setSortedCars(sortedData);
+  };
+
+  const sortByPriceDesc = () => {
+    const sortedData = [...Cars].sort((a, b) => b.rentCost - a.rentCost);
+    setSortedCars(sortedData);
+  };
+
+  const validate = () => {
+    let formErrors = {};
+
+    // validate file hinh
+    if (!images.frontImage) {
+      formErrors.frontImage = "Vui lòng chọn ảnh đại diện";
+    }
+    if (!images.backImage) {
+      formErrors.backImage = "Vui lòng chọn ảnh đại diện";
+    }
+    if (!images.leftImage) {
+      formErrors.leftImage = "Vui lòng chọn ảnh đại diện";
+    }
+    if (!images.rightImage) {
+      formErrors.rightImage = "Vui lòng chọn ảnh đại diện";
+    }
+
+    // validate registrationPlate
+    if (!registrationPlate) {
+      formErrors.registrationPlate = "Vui lòng nhập biển số xe";
+    } else if (
+      !/^[0-9]{2}[A-Z]{1,2}\s*-\s*[0-9]{3}\.[0-9]{2}$/.test(registrationPlate)
+    ) {
+      formErrors.registrationPlate = "Sai đinh dạnh biển số ";
+    }
+    // validate carname
+    if (!carName) {
+      formErrors.carName = "Vui lòng nhập tên xe";
+    }
+    // validate numberOfSeat
+    if (!numberOfSeat) {
+      formErrors.numberOfSeat = "Vui lòng nhập số chỗ xe";
+    }
+    // validate transmission
+    if (!transmission) {
+      formErrors.transmission = "Vui lòng nhập truyền động  xe";
+    }
+    // validate fuelType
+    if (!fuelType) {
+      formErrors.fuelType = "Vui lòng chọn nhiên liệu xe";
+    }
+    // validate fuelConsumption
+    if (!fuelConsumption) {
+      formErrors.fuelConsumption = "Vui lòng nhập nhiên liệu tiêu hao xe";
+    }
+    // validate registrationPlate
+    if (!brandId) {
+      formErrors.brandId = "Vui lòng chọn hãng xe xe";
+    }
+    // validate registrationPlate
+    if (!categoryId) {
+      formErrors.categoryId = "Vui lòng chọn loại xe xe";
+    }
+    // validate registrationPlate
+    if (!branchId) {
+      formErrors.branchId = "Vui lòng chọn chi nhánh cửa hàng";
+    }
+    // validate registrationPlate
+    if (!rentCost) {
+      formErrors.rentCost = "Vui lòng nhập giá tiền cho thuê xe";
+    }
+    if (!registrationDate) {
+      formErrors.registrationDate = "Vui lòng nhập ngày đăng kiểm xe";
+    }
+
+    setErrors(formErrors);
+
+    // Return true if no errors
+    return Object.keys(formErrors).length === 0;
+  };
 
   useEffect(() => {
     LoadListCar();
@@ -289,10 +376,10 @@ function Xe() {
               </li>
             </ul>
           </div>
-          <a href="#" className="btn-download">
+          <a className="btn-download-green ">
             <i className="bx bxs-cloud-download"></i>
             <button
-              class="btn "
+              class="btn text-white "
               data-bs-toggle="modal"
               data-bs-target="#createCar"
             >
@@ -327,9 +414,12 @@ function Xe() {
                   <i className="bx bx-filter"></i>
                 </button>
                 <div className="dropdown-content">
-                  <a href="#">Sắp xếp trạng thái</a>
-                  <a href="#">Sắp xếp giá thuê giảm</a>
-                  <a href="#">Sắp xếp giá thuê tăng</a>
+                  <a href="#" onClick={sortByPriceDesc}>
+                    Sắp xếp giá thuê giảm
+                  </a>
+                  <a href="# " onClick={sortByPriceAsc}>
+                    Sắp xếp giá thuê tăng
+                  </a>
                 </div>
               </div>
             </div>
@@ -646,7 +736,7 @@ function Xe() {
                 <button
                   type="button"
                   class="btn-close"
-                  id="closebtn"
+                  id="closecreate"
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 ></button>
@@ -657,7 +747,7 @@ function Xe() {
                   <div className="container-custom">
                     <div className="row">
                       <div className="col-md-6">
-                        <div className="form-group mt-3">
+                        <div className="form-group">
                           <label htmlFor="frontImage">Hình Trước Xe</label>
                           <input
                             type="file"
@@ -665,6 +755,11 @@ function Xe() {
                             className="form-control"
                             onChange={handleImageChange}
                           />
+                          <div className="form-error {errors.frontImage==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.frontImage}</p>
+                            </span>
+                          </div>
                         </div>
                         <div className="form-group mt-3">
                           <label htmlFor="leftImage">Hình Trái Xe</label>
@@ -674,6 +769,11 @@ function Xe() {
                             className="form-control"
                             onChange={handleImageChange}
                           />
+                          <div className="form-error {errors.leftImage==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.leftImage}</p>
+                            </span>
+                          </div>
                         </div>
                         <div className="form-group mt-3">
                           <label htmlFor="rightImage">Hình Phải Xe</label>
@@ -683,6 +783,11 @@ function Xe() {
                             className="form-control"
                             onChange={handleImageChange}
                           />
+                          <div className="form-error {errors.rightImage==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.rightImage}</p>
+                            </span>
+                          </div>
                         </div>
                         <div className="form-group mt-3">
                           <label htmlFor="backImage">Hình Sau Xe</label>
@@ -692,6 +797,11 @@ function Xe() {
                             className="form-control"
                             onChange={handleImageChange}
                           />
+                          <div className="form-error {errors.backImage==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.backImage}</p>
+                            </span>
+                          </div>
                         </div>
                         <div className="form-group mt-3">
                           <label htmlFor="brand-select">Thương Hiệu</label>
@@ -700,20 +810,27 @@ function Xe() {
                             value={brandId}
                             onChange={(e) => handleChange(e, setBrandId)}
                           >
+                            <option selected>Tất cả</option>
                             {Brand.map((brand) => (
                               <option key={brand.brandId} value={brand.brandId}>
                                 {brand.brandName}
                               </option>
                             ))}
                           </select>
+                          <div className="form-error {errors.brandId==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.brandId}</p>
+                            </span>
+                          </div>
                         </div>
                         <div className="form-group mt-3">
-                          <label htmlFor="category-select">Thể Loại</label>
+                          <label htmlFor="category-select">Loại Xe</label>
                           <select
                             className="form-select"
                             value={categoryId}
                             onChange={(e) => handleChange(e, setCategoryId)}
                           >
+                            <option selected>Tất cả</option>
                             {Categories.map((category) => (
                               <option
                                 key={category.categoryId}
@@ -723,6 +840,11 @@ function Xe() {
                               </option>
                             ))}
                           </select>
+                          <div className="form-error {errors.categoryId==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.categoryId}</p>
+                            </span>
+                          </div>
                         </div>
 
                         <div className="form-group mt-3">
@@ -749,7 +871,7 @@ function Xe() {
                       </div>
                       <div className="col-md-6 contact-info">
                         <div className="contact-detail">
-                          <div className="form-group mt-3">
+                          <div className="form-group">
                             <label htmlFor="licensePlate">Biển Số</label>
                             <input
                               type="text"
@@ -760,6 +882,11 @@ function Xe() {
                                 handleChange(e, setRegistrationPlate)
                               }
                             />
+                            <div className="form-error {errors.registrationPlate==null?'d-lg-none':'' }">
+                              <span className="error-item1 text-danger">
+                                <p>{errors.registrationPlate}</p>
+                              </span>
+                            </div>
                           </div>
                           <div className="form-group mt-3">
                             <label htmlFor="carName">Tên Xe</label>
@@ -770,13 +897,18 @@ function Xe() {
                               value={carName}
                               onChange={(e) => handleChange(e, setCarName)}
                             />
+                            <div className="form-error {errors.carName==null?'d-lg-none':'' }">
+                              <span className="error-item1 text-danger">
+                                <p>{errors.carName}</p>
+                              </span>
+                            </div>
                           </div>
                           <div className="row mt-3">
                             <div className="col-sm-6">
                               <div className="form-group">
                                 <label htmlFor="numberOfSeat">Số Chỗ</label>
                                 <input
-                                  type="text"
+                                  type="number"
                                   id="numberOfSeat"
                                   className="form-control"
                                   value={numberOfSeat}
@@ -784,6 +916,11 @@ function Xe() {
                                     handleChange(e, setNumberOfSeat)
                                   }
                                 />
+                                <div className="form-error {errors.numberOfSeat==null?'d-lg-none':'' }">
+                                  <span className="error-item1 text-danger">
+                                    <p>{errors.numberOfSeat}</p>
+                                  </span>
+                                </div>
                               </div>
                             </div>
                             <div className="col-sm-6">
@@ -800,6 +937,11 @@ function Xe() {
                                     handleChange(e, setTransmission)
                                   }
                                 />
+                                <div className="form-error {errors.transmission==null?'d-lg-none':'' }">
+                                  <span className="error-item1 text-danger">
+                                    <p>{errors.transmission}</p>
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -844,6 +986,11 @@ function Xe() {
                                   <label htmlFor="electric">Điện</label>
                                 </div>
                               </div>
+                              <div className="form-error {errors.fuelType==null?'d-lg-none':'' }">
+                                <span className="error-item1 text-danger">
+                                  <p>{errors.fuelType}</p>
+                                </span>
+                              </div>
                             </div>
                           </div>
 
@@ -860,6 +1007,11 @@ function Xe() {
                                 handleChange(e, setFuelConsumption)
                               }
                             />
+                            <div className="form-error {errors.fuelConsumption==null?'d-lg-none':'' }">
+                              <span className="error-item1 text-danger">
+                                <p>{errors.fuelConsumption}</p>
+                              </span>
+                            </div>
                           </div>
 
                           <div className="form-group mt-3">
@@ -869,6 +1021,7 @@ function Xe() {
                               value={branchId}
                               onChange={(e) => handleChange(e, setBranchId)}
                             >
+                              <option selected>Tất cả</option>
                               {Branch.map((branch) => (
                                 <option
                                   key={branch.branchId}
@@ -878,6 +1031,11 @@ function Xe() {
                                 </option>
                               ))}
                             </select>
+                            <div className="form-error {errors.branchId==null?'d-lg-none':'' }">
+                              <span className="error-item1 text-danger">
+                                <p>{errors.branchId}</p>
+                              </span>
+                            </div>
                           </div>
 
                           <div className="form-group mt-3">
@@ -889,6 +1047,11 @@ function Xe() {
                               value={rentCost}
                               onChange={(e) => handleChange(e, setRentCost)}
                             />
+                            <div className="form-error {errors.rentCost==null?'d-lg-none':'' }">
+                              <span className="error-item1 text-danger">
+                                <p>{errors.rentCost}</p>
+                              </span>
+                            </div>
                           </div>
                           <div className="form-group mt-3">
                             <label htmlFor="registrationDate">
@@ -904,6 +1067,11 @@ function Xe() {
                                 handleChange(e, setRegistrationDate)
                               }
                             />
+                            <div className="form-error {errors.registrationDate==null?'d-lg-none':'' }">
+                              <span className="error-item1 text-danger">
+                                <p>{errors.registrationDate}</p>
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>

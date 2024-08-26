@@ -56,9 +56,9 @@ function Mainboard() {
     }
   }, []);
 
-  if (!user) {
-    return navigate("/admin/login");
-  }
+  // if (user == null ) {
+  //   return navigate("/admin/login");
+  // }
 
   return (
     <div id="mainboard" className="mainboard">

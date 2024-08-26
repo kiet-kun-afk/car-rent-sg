@@ -1,12 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import DatePicker from "react-datepicker";
+import { ToastContainer } from "react-toastify";
+import ToastComponent from "../../assets/toasty";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 function NhanVien() {
   const [selectedDate, setSelectedDate] = useState(null);
+  const [staffs, setStaffs] = useState([]);
+  const [sortedStaffs, setSortedStaffs] = useState([]);
+  const [nameFilter, setNameFilter] = useState("");
+  const [phoneFilter, setPhoneFilter] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [staff, setStaff] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const [images, setImages] = useState({
+    avatarImg: null,
+    frontSide: null,
+    backSide: null,
+  });
+
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [gender, setGender] = useState(null);
+  const [idCard, setIdCard] = useState("");
+  const [issueDate, setIssueDate] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [province, setProvince] = useState("");
+  const [district, setDistrict] = useState("");
+  const [ward, setWard] = useState("");
+  const [street, setStreet] = useState("");
+
   const chooseDate = (date) => {
     setSelectedDate(date);
   };
@@ -27,40 +55,67 @@ function NhanVien() {
     return ngayThangNam;
   }
 
-  const [staffs, setStaffs] = useState([]);
   const loadListStaff = async () => {
     const result = await axios.get("http://localhost:8080/api/v1/staffs");
     console.log(result.data.data);
 
     setStaffs(result.data.data);
+    setSortedStaffs(result.data.data);
   };
 
-  const handleCarID = (e) => {
-    const staffID = e.currentTarget.getAttribute("data-id");
-    console.log(staffID);
-    if (staffID) {
-      loadStaff(staffID);
-    } else {
-      alert("Please enter a user ID");
-    }
-  };
-
-  const [staff, setStaff] = useState(null);
   const loadStaff = async (staffID) => {
     try {
       const res = await axios.get(
         `http://localhost:8080/api/v1/staffs/${staffID}`
       );
       setStaff(res.data.data);
-      console.log(staff);
+      console.log(res.data.data);
+      console.log(res.data.data.avatarImg);
     } catch (error) {
       console.log(error);
     }
   };
-
   useEffect(() => {
     loadListStaff();
   }, []);
+
+  const DeleteStaff = async (staffID) => {
+    try {
+      const result2 = await axios.delete(
+        `http://localhost:8080/api/v1/staffs/${staffID}`
+      );
+      console.log(result2.data.message);
+      // sNotify();
+      var btnclose = document.getElementById("closebtn");
+      btnclose.click();
+      loadListStaff();
+    } catch (error) {
+      // errNotify();
+    }
+  };
+
+  const sortAZ = () => {
+    const sortedData = [...staffs].sort((a, b) =>
+      a.fullName.localeCompare(b.fullName)
+    );
+    setSortedStaffs(sortedData);
+  };
+
+  const sortZA = () => {
+    const sortedData = [...staffs].sort((a, b) =>
+      b.fullName.localeCompare(a.fullName)
+    );
+    setSortedStaffs(sortedData);
+  };
+  const getFilteredStaffs = () => {
+    return sortedStaffs.filter(
+      (staff) =>
+        (staff.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          staff.phoneNumber.includes(searchTerm)) &&
+        staff.fullName.toLowerCase().includes(nameFilter.toLowerCase()) &&
+        staff.phoneNumber.includes(phoneFilter)
+    );
+  };
 
   const formatDate = (localdatetime) => {
     // Tạo một đối tượng Date từ localdatetime
@@ -80,26 +135,6 @@ function NhanVien() {
   };
 
   // thêm nhân viên
-  const [images, setImages] = useState({
-    avatarImg: null,
-    frontSide: null,
-    backSide: null,
-  });
-
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [fullname, setFullname] = useState("");
-  const [gender, setGender] = useState(null);
-
-  const [idCard, setIdCard] = useState("");
-  const [issueDate, setIssueDate] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
-
-  const [province, setProvince] = useState("");
-  const [district, setDistrict] = useState("");
-  const [ward, setWard] = useState("");
-  const [street, setStreet] = useState("");
 
   const handleChange = (e, setter) => {
     setter(e.target.value);
@@ -120,41 +155,161 @@ function NhanVien() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(district);
-    const formData = new FormData();
-    for (const key in images) {
-      formData.append(key, images[key]);
+    if (validate()) {
+      console.log(district);
+      const formData = new FormData();
+      for (const key in images) {
+        formData.append(key, images[key]);
+      }
+
+      formData.append("fullname", fullname);
+      formData.append("phoneNumber", phoneNumber);
+      formData.append("email", email);
+      formData.append("birthday", birthday);
+      formData.append("idCard", idCard);
+      formData.append("issueDate", issueDate);
+      formData.append("expiryDate", expiryDate);
+      formData.append("gender", gender);
+      formData.append("street", street);
+      formData.append("ward", ward);
+      formData.append("district", district);
+      formData.append("province", province);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/v1/staff/register",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        var btnclose = document.getElementById("closecreate");
+        btnclose.click();
+        loadListStaff();
+        ToastComponent("success", "Đăng ký nhân viên thành công !");
+        console.log(response.data);
+      } catch (error) {
+        console.error("There was an error submitting the form!", error);
+        ToastComponent("error", "Đăng ký nhân viên thất bại!");
+      }
+    }
+  };
+
+  const handleCarID = (e) => {
+    const staffID = e.currentTarget.getAttribute("data-id");
+    console.log(staffID);
+    if (staffID) {
+      loadStaff(staffID);
+    } else {
+      alert("Please enter a user ID");
+    }
+  };
+  const DeleteButtonClick = async (email) => {
+    await DeleteStaff(email);
+  };
+
+  const validate = () => {
+    let formErrors = {};
+
+    //validate hinh đại diện
+    if (!images.avatarImg) {
+      formErrors.avatarImg = "Hình đại diện không được để trống.";
     }
 
-    formData.append("fullname", fullname);
-    formData.append("phoneNumber", phoneNumber);
-    formData.append("email", email);
-    formData.append("birthday", birthday);
-    formData.append("idCard", idCard);
-    formData.append("issueDate", issueDate);
-    formData.append("expiryDate", expiryDate);
-    formData.append("gender", gender);
-    formData.append("street", street);
-    formData.append("ward", ward);
-    formData.append("district", district);
-    formData.append("province", province);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/staff/register",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      //   sNotify();
-      console.log(response.data);
-    } catch (error) {
-      console.error("There was an error submitting the form!", error);
-      //   errNotify();
+    // vailidate fullname
+    if (!fullname) {
+      formErrors.fullname = "Tên nhân viên không được để trống.";
+    } else if (fullname.length < 3) {
+      formErrors.fullname = "Tên nhân viên phải có ít nhất 3 kí tự.";
     }
+
+    // validate số điện thoại
+    if (!phoneNumber) {
+      formErrors.phoneNumber = "Số điện thoại không được để trống.";
+    } else if (!/^\d{10}$/.test(phoneNumber)) {
+      formErrors.phoneNumber = "Số điện thoại không hợp lệ.";
+    }
+
+    // validate email
+    if (!email) {
+      formErrors.email = "email không được để trống";
+    } else if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+      formErrors.email = "email không hợp lệ";
+    }
+
+    // validate ngày sinh
+    if (!birthday) {
+      formErrors.birthday = "Ngày sinh không được để trống.";
+    } else {
+      // Kiểm tra nếu ngày sinh là ngày trong tương lai
+      const today = new Date();
+      const selectedDate = new Date(birthday);
+
+      if (selectedDate > today) {
+        formErrors.birthday = "Ngày sinh không thể là ngày trong tương lai.";
+      }
+    }
+
+    // validate giới tính
+    if (!gender) {
+      formErrors.gender = "Giới tính không được để trống.";
+    }
+
+    // vadidate mặt trước
+    if (!images.frontSide) {
+      formErrors.frontSide = "Giới tính không được để trống.";
+    }
+
+    // vadidate mặt sau
+    if (!images.backSide) {
+      formErrors.backSide = "Giới tính không được để trống.";
+    }
+
+    // validate số CMND
+    if (!idCard) {
+      formErrors.idCard = "Số CMND không được để trống.";
+    } else if (!/^[0-9]{12}$/.test(idCard)) {
+      formErrors.idCard = "Số CMND phải có 12 chữ số.";
+    }
+
+    // validate ngày cấp
+    if (!issueDate) {
+      formErrors.issueDate = "Ngày cấp CMND không được để trống.";
+    }
+
+    // validate ngày hết hạn
+    if (!expiryDate) {
+      formErrors.expiryDate = "Ngày hết hạn CMND không được để trống.";
+    }
+
+    // validate địa chỉ
+    if (!street) {
+      formErrors.street = "Địa chỉ không được để trống.";
+    } else if (street.length < 5) {
+      formErrors.street = "Địa chỉ phải có ít nhất 5 kí tự.";
+    }
+    if (!ward) {
+      formErrors.ward = "Phường/xã không được để trống.";
+    } else if (ward.length < 5) {
+      formErrors.ward = "Phường/xã phải có ít nhất 5 kí tự.";
+    }
+    if (!district) {
+      formErrors.district = "Quận/huyện không được để trống.";
+    } else if (district.length < 5) {
+      formErrors.district = "Quận/huyện phải có ít nhất 5 kí tự.";
+    }
+    if (!province) {
+      formErrors.province = "Tỉnh/thành phố không được để trống.";
+    } else if (province.length < 5) {
+      formErrors.province = "Tỉnh/thành phố phải có ít nhất 5 kí tự.";
+    }
+
+    setErrors(formErrors);
+
+    // Return true if no errors
+    return Object.keys(formErrors).length === 0;
   };
 
   return (
@@ -177,10 +332,10 @@ function NhanVien() {
               </li>
             </ul>
           </div>
-          <a href="#" className="btn-download">
+          <a className="btn-download-green">
             <i className="bx bxs-cloud-download"></i>
             <button
-              class="btn "
+              class="btn text-white "
               data-bs-toggle="modal"
               data-bs-target="#createStaff"
             >
@@ -193,13 +348,21 @@ function NhanVien() {
           <div className="order">
             <div className="head">
               <h3>Danh sách nhân viên</h3>
-              <form action="" id="search-box">
+              <form
+                action=""
+                id="search-box"
+                onSubmit={(e) => e.preventDefault()}
+              >
                 <input
                   type="text"
                   id="search-text"
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Bạn cần tìm kiếm gì nhỉ?"
                 />
-                <button id="search-btn">
+                <button
+                  id="search-btn"
+                  onClick={() => setSearchTerm(searchTerm)}
+                >
                   <i className="bx bx-search"></i>
                 </button>
               </form>
@@ -209,9 +372,12 @@ function NhanVien() {
                   <i className="bx bx-filter"></i>
                 </button>
                 <div className="dropdown-content">
-                  <a href="#">Sắp xếp trạng thái</a>
-                  <a href="#">Sắp xếp giá thuê giảm</a>
-                  <a href="#">Sắp xếp giá thuê tăng</a>
+                  <a href="#" onClick={sortAZ}>
+                    Từ A - Z
+                  </a>
+                  <a href="#" onClick={sortZA}>
+                    Từ Z - A
+                  </a>
                 </div>
               </div>
             </div>
@@ -231,7 +397,7 @@ function NhanVien() {
                   </tr>
                 </thead>
                 <tbody>
-                  {staffs.map((staff, index) => (
+                  {getFilteredStaffs().map((staff, index) => (
                     <tr>
                       <td className="text-center">{index + 1}</td>
                       <td className="text-start">
@@ -295,6 +461,7 @@ function NhanVien() {
                   className="btn-close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
+                  id="closebtn"
                 ></button>
               </div>
               {staff ? (
@@ -303,10 +470,7 @@ function NhanVien() {
                     <div className="row">
                       <div className="col-md-6 ">
                         <div className="profile-info">
-                          <img
-                            src="https://n1-cstg.mioto.vn/m/avatars/avatar-3.png"
-                            alt="Profile Picture"
-                          />
+                          <img src={staff.avatarImage} alt="avt" />
                         </div>
                         <div className="profile-details">
                           <div className="row">
@@ -383,7 +547,12 @@ function NhanVien() {
                               id="address"
                               className="form-control"
                               value={
-                                staff.address ? "Quận 12, TP.HCM" : "TP.HCM"
+                                staff.street &&
+                                staff.ward &&
+                                staff.district &&
+                                staff.province
+                                  ? `${staff.street}, ${staff.ward}, ${staff.district}, ${staff.province}`
+                                  : "Chưa cập nhật địa chỉ"
                               }
                             />
                           </div>
@@ -408,6 +577,7 @@ function NhanVien() {
                             type="text"
                             id="name"
                             className="form-control"
+                            value={staff.fullName}
                           />
                         </div>
                         <div className="row mt-3">
@@ -418,16 +588,18 @@ function NhanVien() {
                                 type="text"
                                 id="gplx"
                                 className="form-control"
+                                value={staff.citizenCard.idCard}
                               />
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
-                              <label htmlFor="dob">Ngày sinh</label>
+                              <label htmlFor="dob">Ngày cấp</label>
                               <input
                                 type="date"
                                 id="dob"
                                 className="form-control"
+                                value={staff.citizenCard.issueDate}
                               />
                             </div>
                           </div>
@@ -438,13 +610,14 @@ function NhanVien() {
                             type="text"
                             id="dob"
                             className="form-control"
+                            value={"Công An" + " " + staff.province}
                           />
                         </div>
                       </div>
                       <div className="col-md-4 left">
                         <img
                           className="img-fluid rounded mx-auto"
-                          src="https://n1-cstg.mioto.vn/m/avatars/avatar-3.png"
+                          src={staff.citizenCard.frontImage}
                           alt="Upload Icon"
                         />
                       </div>
@@ -601,10 +774,15 @@ function NhanVien() {
               )}
               <div className="modal-footer">
                 {/* <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button> */}
-                <button type="button" className="btn btn-success">
+                {/* <button type="button" className="btn btn-success">
                   Cập nhật thông tin
-                </button>
-                <button type="button" className="btn btn-danger">
+                </button> */}
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => DeleteButtonClick(staff.email)}
+                  disabled={!staff || !staff.status}
+                >
                   Vô hiệu hóa tài khoản
                 </button>
               </div>
@@ -631,7 +809,7 @@ function NhanVien() {
                 <button
                   type="button"
                   class="btn-close"
-                  id="closebtn"
+                  id="closecreate"
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 ></button>
@@ -651,6 +829,11 @@ function NhanVien() {
                             className="form-control"
                             onChange={handleImageChange}
                           />
+                          <div className="form-error {errors.avatarImg==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.avatarImg}</p>
+                            </span>
+                          </div>
                         </div>
 
                         <div className="form-group mt-3">
@@ -662,6 +845,11 @@ function NhanVien() {
                             value={fullname}
                             onChange={(e) => handleChange(e, setFullname)}
                           />
+                          <div className="form-error {errors.fullname==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.fullname}</p>
+                            </span>
+                          </div>
                         </div>
 
                         <div className="form-group mt-3">
@@ -673,6 +861,11 @@ function NhanVien() {
                             value={phoneNumber}
                             onChange={(e) => handleChange(e, setPhoneNumber)}
                           />
+                          <div className="form-error {errors.phoneNumber==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.phoneNumber}</p>
+                            </span>
+                          </div>
                         </div>
 
                         <div className="form-group mt-3">
@@ -684,6 +877,11 @@ function NhanVien() {
                             value={email}
                             onChange={(e) => handleChange(e, setEmail)}
                           />
+                          <div className="form-error {errors.email==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.email}</p>
+                            </span>
+                          </div>
                         </div>
 
                         <div className="form-group mt-3">
@@ -695,6 +893,11 @@ function NhanVien() {
                             value={birthday}
                             onChange={(e) => handleChange(e, setBirthday)}
                           />
+                          <div className="form-error {errors.birthday==null?'d-lg-none':'' }">
+                            <span className="error-item1 text-danger">
+                              <p>{errors.birthday}</p>
+                            </span>
+                          </div>
                         </div>
                         <label htmlFor="fuelType">Giới Tính</label>
                         <div className="form-group d-flex mt-3">
@@ -719,6 +922,11 @@ function NhanVien() {
                             <label htmlFor="diesel">Nữ</label>
                           </div>
                         </div>
+                        <div className="form-error {errors.gender==null?'d-lg-none':'' }">
+                          <span className="error-item1 text-danger">
+                            <p>{errors.gender}</p>
+                          </span>
+                        </div>
                       </div>
 
                       <div className="col-md-6 contact-info">
@@ -732,6 +940,11 @@ function NhanVien() {
                               className="form-control"
                               onChange={handleImageChange}
                             />
+                            <div className="form-error {errors.frontSide==null?'d-lg-none':'' }">
+                              <span className="error-item1 text-danger">
+                                <p>{errors.frontSide}</p>
+                              </span>
+                            </div>
                           </div>
 
                           <div className="form-group mt-3">
@@ -742,6 +955,11 @@ function NhanVien() {
                               className="form-control"
                               onChange={handleImageChange}
                             />
+                            <div className="form-error {errors.backSide==null?'d-lg-none':'' }">
+                              <span className="error-item1 text-danger">
+                                <p>{errors.backSide}</p>
+                              </span>
+                            </div>
                           </div>
 
                           <div className="form-group mt-3">
@@ -753,6 +971,11 @@ function NhanVien() {
                               value={idCard}
                               onChange={(e) => handleChange(e, setIdCard)}
                             />
+                            <div className="form-error {errors.idCard==null?'d-lg-none':'' }">
+                              <span className="error-item1 text-danger">
+                                <p>{errors.idCard}</p>
+                              </span>
+                            </div>
                           </div>
                           <div className="row mt-3">
                             <div className="col-sm-6">
@@ -767,6 +990,11 @@ function NhanVien() {
                                     handleChange(e, setIssueDate)
                                   }
                                 />
+                                <div className="form-error {errors.issueDate==null?'d-lg-none':'' }">
+                                  <span className="error-item1 text-danger">
+                                    <p>{errors.issueDate}</p>
+                                  </span>
+                                </div>
                               </div>
                             </div>
                             <div className="col-sm-6">
@@ -783,6 +1011,11 @@ function NhanVien() {
                                     handleChange(e, setExpiryDate)
                                   }
                                 />
+                                <div className="form-error {errors.expiryDate==null?'d-lg-none':'' }">
+                                  <span className="error-item1 text-danger">
+                                    <p>{errors.expiryDate}</p>
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -801,6 +1034,11 @@ function NhanVien() {
                                   value={street}
                                   onChange={(e) => handleChange(e, setStreet)}
                                 />
+                                <div className="form-error {errors.street==null?'d-lg-none':'' }">
+                                  <span className="error-item1 text-danger">
+                                    <p>{errors.street}</p>
+                                  </span>
+                                </div>
                               </div>
 
                               <div className="form-group  mt-3">
@@ -813,6 +1051,11 @@ function NhanVien() {
                                   value={ward}
                                   onChange={(e) => handleChange(e, setWard)}
                                 />
+                                <div className="form-error {errors.ward==null?'d-lg-none':'' }">
+                                  <span className="error-item1 text-danger">
+                                    <p>{errors.ward}</p>
+                                  </span>
+                                </div>
                               </div>
                             </div>
 
@@ -827,6 +1070,11 @@ function NhanVien() {
                                   value={district}
                                   onChange={(e) => handleChange(e, setDistrict)}
                                 />
+                                <div className="form-error {errors.district==null?'d-lg-none':'' }">
+                                  <span className="error-item1 text-danger">
+                                    <p>{errors.district}</p>
+                                  </span>
+                                </div>
                               </div>
 
                               <div className="form-group  mt-3">
@@ -839,6 +1087,11 @@ function NhanVien() {
                                   value={province}
                                   onChange={(e) => handleChange(e, setProvince)}
                                 />
+                                <div className="form-error {errors.province==null?'d-lg-none':'' }">
+                                  <span className="error-item1 text-danger">
+                                    <p>{errors.province}</p>
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>

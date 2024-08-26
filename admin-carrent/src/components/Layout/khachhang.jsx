@@ -10,6 +10,7 @@ function KhachHang() {
   const [customersWithPhone, setcustomersWithPhone] = useState(null);
   const [addresss, setAddresss] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortedCustomers, setSortedCustomers] = useState([]);
 
   // chuyển kiểu date
   const formatDate = (localdatetime) => {
@@ -37,6 +38,7 @@ function KhachHang() {
     console.log(result1.data);
 
     setCustomers(result1.data.data);
+    setSortedCustomers(result1.data.data);
   };
 
   const loadListCustomerPhonenumber = async (phoneNumber) => {
@@ -85,7 +87,7 @@ function KhachHang() {
     setSearchQuery(event.target.value);
   };
 
-  const filteredCustomer = customers.filter((customer) => {
+  const filteredCustomer = sortedCustomers.filter((customer) => {
     const normalizedSearchQuery = searchQuery.toLowerCase();
     return (
       (customer.fullName &&
@@ -94,6 +96,21 @@ function KhachHang() {
         customer.phoneNumber.toLowerCase().includes(normalizedSearchQuery))
     );
   });
+
+  const sortAZ = () => {
+    const sortedData = [...customers].sort((a, b) =>
+      a.fullName.localeCompare(b.fullName)
+    );
+    setSortedCustomers(sortedData);
+  };
+
+  // Sort customers from Z-A
+  const sortZA = () => {
+    const sortedData = [...customers].sort((a, b) =>
+      b.fullName.localeCompare(a.fullName)
+    );
+    setSortedCustomers(sortedData);
+  };
 
   useEffect(() => {
     loadListCustomer();
@@ -119,10 +136,10 @@ function KhachHang() {
               </li>
             </ul>
           </div>
-          <a href="#" className="btn-download">
+          {/* <a href="#" className="btn-download">
             <i className="bx bxs-cloud-download"></i>
             <span className="text">Download PDF</span>
-          </a>
+          </a> */}
         </div>
 
         <div className="table-data">
@@ -151,8 +168,12 @@ function KhachHang() {
                   <i className="bx bx-filter"></i>
                 </button>
                 <div className="dropdown-content">
-                  <a href="#">Sắp xếp A-Z</a>
-                  <a href="#">Sắp xếp Z-A</a>
+                  <a href="#" onClick={sortAZ}>
+                    Sắp xếp A-Z
+                  </a>
+                  <a href="#" onClick={sortZA}>
+                    Sắp xếp Z-A
+                  </a>
                 </div>
               </div>
             </div>

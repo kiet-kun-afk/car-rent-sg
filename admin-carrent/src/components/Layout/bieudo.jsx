@@ -249,33 +249,33 @@ const ChartComponent = () => {
               </li>
             </ul>
           </div>
-          <a href="#" className="btn-download">
+          {/* <a href="#" className="btn-download">
             <i className="bx bxs-cloud-download"></i>
             <span className="text">Download PDF</span>
-          </a>
+          </a> */}
         </div>
 
         <div className="table-data">
           <div className="order">
             <h3>Biểu Đồ Doanh Thu</h3>
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-end mb-3">
               <button
                 class="btn btn-primary mx-3"
                 onClick={() => handleFilterChange("day")}
               >
-                Day
+                Ngày
               </button>
               <button
                 class="btn btn-primary mx-3"
                 onClick={() => handleFilterChange("week")}
               >
-                Week
+                Tuần
               </button>
               <button
                 class="btn btn-primary "
                 onClick={() => handleFilterChange("month")}
               >
-                Month
+                Tháng
               </button>
             </div>
             <Bar data={chartData} />

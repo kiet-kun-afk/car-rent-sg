@@ -1,6 +1,7 @@
 package app.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -60,8 +61,9 @@ public class CarServiceImpl implements CarService {
 
 	@Override
 	public List<CarResponse> getAll() {
-
-		return carres.findAll().stream().map(CarResponse::fromCarResponse).toList();
+		List<Car> cars = carres.findAll();
+		cars.sort(Comparator.comparing(Car::getCreatedAt).reversed());
+		return cars.stream().map(CarResponse::fromCarResponse).toList();
 	}
 
 	@Override
@@ -355,7 +357,8 @@ public class CarServiceImpl implements CarService {
 				.map(CarResponse::fromCarResponse)
 				.collect(Collectors.toList());
 
-		// Tạo đối tượng PageImpl với danh sách đã phân trang và tổng số lượng phần tử trong danh sách đã lọc
+		// Tạo đối tượng PageImpl với danh sách đã phân trang và tổng số lượng phần tử
+		// trong danh sách đã lọc
 		return new PageImpl<>(filteredAndPagedCars, pageable, carsWithoutOverlappingContracts.size());
 	}
 
